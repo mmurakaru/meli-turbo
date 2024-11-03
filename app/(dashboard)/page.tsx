@@ -54,7 +54,7 @@ export default function HomePage() {
               >
                 Stop Onboarding
               </button>
-              <p className="mt-3 text-base text-gray-500">Give it a try!</p>
+              <p className="mt-3 text-base text-center text-gray-500">Give it a try!</p>
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
               <Terminal />
