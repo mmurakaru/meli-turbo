@@ -1,31 +1,26 @@
 'use client';
 
-import Vapi from '@vapi-ai/web';
-import { useEffect, useState } from 'react';
-import { create } from '../actions';
-import { Terminal } from './terminal';
-
 export default function HomePage() {
-  const [assistantId, setAssistantId] = useState();
-  const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
+  // const [assistantId, setAssistantId] = useState();
+  // const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 
-  if (!publicVapiKey) {
-    throw new Error('NEXT_PUBLIC_VAPI_PUBLIC_KEY is not defined.');
-  }
+  // if (!publicVapiKey) {
+  //   throw new Error('NEXT_PUBLIC_VAPI_PUBLIC_KEY is not defined.');
+  // }
 
-  const vapi = new Vapi(publicVapiKey);
+  // const vapi = new Vapi(publicVapiKey);
 
-  async function handleStart() {
-    await vapi.start(assistantId);
-  }
+  // async function handleStart() {
+  //   await vapi.start(assistantId);
+  // }
 
-  async function handleStop() {
-    await vapi.stop();
-  }
+  // async function handleStop() {
+  //   await vapi.stop();
+  // }
 
-  useEffect(() => {
-    create().then((data) => setAssistantId(data.id));
-  }, []);
+  // useEffect(() => {
+  //   create().then((data) => setAssistantId(data.id));
+  // }, []);
 
   return (
     <main>
@@ -41,7 +36,7 @@ export default function HomePage() {
                 Launch your SaaS product tour in record time with our powerful voice agent.
               </p>
             </div>
-            <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
+            {/* <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
               <button
                 className="bg-purple-400 p-2 rounded-lg"
                 onClick={handleStart}
@@ -58,7 +53,7 @@ export default function HomePage() {
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
               <Terminal />
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
