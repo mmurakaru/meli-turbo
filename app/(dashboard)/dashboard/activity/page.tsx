@@ -1,18 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getActivityLogs } from '@/lib/db/queries';
+import { ActivityType } from '@/lib/db/schema';
 import {
-  Settings,
-  LogOut,
-  UserPlus,
-  Lock,
-  UserCog,
   AlertCircle,
-  UserMinus,
-  Mail,
   CheckCircle,
+  Lock,
+  LogOut,
+  Mail,
+  Settings,
+  UserCog,
+  UserMinus,
+  UserPlus,
   type LucideIcon,
 } from 'lucide-react';
-import { ActivityType } from '@/lib/db/schema';
-import { getActivityLogs } from '@/lib/db/queries';
 
 const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.SIGN_UP]: UserPlus,
@@ -87,8 +87,8 @@ export default async function ActivityPage() {
                     key={log.id}
                     className="flex items-center space-x-4"
                   >
-                    <div className="bg-orange-100 rounded-full p-2">
-                      <Icon className="w-5 h-5 text-orange-600" />
+                    <div className="bg-purple-100 rounded-full p-2">
+                      <Icon className="w-5 h-5 text-purple-600" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
@@ -103,7 +103,7 @@ export default async function ActivityPage() {
             </ul>
           ) : (
             <div className="flex flex-col items-center justify-center text-center py-12">
-              <AlertCircle className="h-12 w-12 text-orange-500 mb-4" />
+              <AlertCircle className="h-12 w-12 text-purple-500 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">No activity yet</h3>
               <p className="text-sm text-gray-500 max-w-sm">
                 When you perform actions like signing in or updating your account, they'll appear here.

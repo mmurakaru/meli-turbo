@@ -1,12 +1,12 @@
 'use client';
 
+import { deleteAccount, updatePassword } from '@/app/(login)/actions';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, Trash2, Loader2 } from 'lucide-react';
+import { Loader2, Lock, Trash2 } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
-import { updatePassword, deleteAccount } from '@/app/(login)/actions';
 
 type ActionState = {
   error?: string;
@@ -96,7 +96,7 @@ export default function SecurityPage() {
             {passwordState.success && <p className="text-green-500 text-sm">{passwordState.success}</p>}
             <Button
               type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              className="bg-purple-500 hover:bg-purple-600 text-white"
               disabled={isPasswordPending}
             >
               {isPasswordPending ? (

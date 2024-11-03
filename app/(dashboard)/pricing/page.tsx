@@ -1,6 +1,6 @@
 import { checkoutAction } from '@/lib/payments/actions';
-import { Check } from 'lucide-react';
 import { getStripePrices, getStripeProducts } from '@/lib/payments/stripe';
+import { Check } from 'lucide-react';
 import { SubmitButton } from './submit-button';
 
 // Prices are fresh for one hour max
@@ -67,7 +67,7 @@ function PricingCard({
             key={index}
             className="flex items-start"
           >
-            <Check className="h-5 w-5 text-orange-500 mr-2 mt-0.5 flex-shrink-0" />
+            <Check className="h-5 w-5 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
             <span className="text-gray-700">{feature}</span>
           </li>
         ))}

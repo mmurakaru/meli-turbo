@@ -7,3 +7,4 @@
 .changeset/*.md
 
 pnpm-lock.yaml
+docker-compose.yml

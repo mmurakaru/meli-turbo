@@ -1,14 +1,14 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Loader2, PlusCircle } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { useActionState } from 'react';
 import { inviteTeamMember } from '@/app/(login)/actions';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useUser } from '@/lib/auth';
+import { Loader2, PlusCircle } from 'lucide-react';
+import { useActionState } from 'react';
 
 type ActionState = {
   error?: string;
@@ -72,7 +72,7 @@ export function InviteTeamMember() {
           {inviteState?.success && <p className="text-green-500">{inviteState.success}</p>}
           <Button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white"
+            className="bg-purple-500 hover:bg-purple-600 text-white"
             disabled={isInvitePending || !isOwner}
           >
             {isInvitePending ? (

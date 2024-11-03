@@ -6,7 +6,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Meli',
-  description: 'AI product tour agent',
+  description: 'Voice AI product tour',
 };
 
 export const viewport: Viewport = {

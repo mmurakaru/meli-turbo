@@ -1,13 +1,13 @@
 'use client';
 
-import { startTransition, useActionState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
-import { useUser } from '@/lib/auth';
 import { updateAccount } from '@/app/(login)/actions';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useUser } from '@/lib/auth';
+import { Loader2 } from 'lucide-react';
+import { startTransition, useActionState } from 'react';
 
 type ActionState = {
   error?: string;
@@ -73,7 +73,7 @@ export default function GeneralPage() {
             {state.success && <p className="text-green-500 text-sm">{state.success}</p>}
             <Button
               type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              className="bg-purple-500 hover:bg-purple-600 text-white"
               disabled={isPending}
             >
               {isPending ? (
