@@ -7,19 +7,6 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "dashboard#build": {
-      "dependsOn": ["^build"],
-      "env": [
-        "POSTGRES_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_WEBHOOK_SECRET",
-        "BASE_URL",
-        "AUTH_SECRET",
-        "NEXT_PUBLIC_VAPI_PUBLIC_KEY",
-        "VAPI_PRIVATE_KEY"
-      ],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
     "lint": {
       "dependsOn": ["^lint"]
     },
