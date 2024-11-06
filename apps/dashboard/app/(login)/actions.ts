@@ -1,27 +1,27 @@
 'use server';
 
-import { z } from 'zod';
-import { and, eq, sql } from 'drizzle-orm';
+import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
+import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
 import { db } from '@/lib/db/drizzle';
+import { getUser, getUserWithTeam } from '@/lib/db/queries';
 import {
-  User,
-  users,
-  teams,
-  teamMembers,
   activityLogs,
-  type NewUser,
-  type NewTeam,
-  type NewTeamMember,
-  type NewActivityLog,
   ActivityType,
   invitations,
+  teamMembers,
+  teams,
+  User,
+  users,
+  type NewActivityLog,
+  type NewTeam,
+  type NewTeamMember,
+  type NewUser,
 } from '@/lib/db/schema';
-import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { createCheckoutSession } from '@/lib/payments/stripe';
-import { getUser, getUserWithTeam } from '@/lib/db/queries';
-import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
+import { and, eq, sql } from 'drizzle-orm';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
 async function logActivity(teamId: number | null | undefined, userId: number, type: ActivityType, ipAddress?: string) {
   if (teamId === null || teamId === undefined) {
@@ -173,10 +173,11 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 });
 
 export async function signOut() {
+  const cookieStore = await cookies();
   const user = (await getUser()) as User;
   const userWithTeam = await getUserWithTeam(user.id);
   await logActivity(userWithTeam?.teamId, user.id, ActivityType.SIGN_OUT);
-  cookies().delete('session');
+  cookieStore.delete('session');
 }
 
 const updatePasswordSchema = z
@@ -230,6 +231,8 @@ export const deleteAccount = validatedActionWithUser(deleteAccountSchema, async 
 
   const userWithTeam = await getUserWithTeam(user.id);
 
+  const cookieStore = await cookies();
+
   await logActivity(userWithTeam?.teamId, user.id, ActivityType.DELETE_ACCOUNT);
 
   // Soft delete
@@ -247,7 +250,7 @@ export const deleteAccount = validatedActionWithUser(deleteAccountSchema, async 
       .where(and(eq(teamMembers.userId, user.id), eq(teamMembers.teamId, userWithTeam.teamId)));
   }
 
-  cookies().delete('session');
+  cookieStore.delete('session');
   redirect('/sign-in');
 });
 
