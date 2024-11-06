@@ -1,7 +1,7 @@
+import { NewUser } from '@/lib/db/schema';
 import { compare, hash } from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
-import { NewUser } from '@/lib/db/schema';
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -35,7 +35,8 @@ export async function verifyToken(input: string) {
 }
 
 export async function getSession() {
-  const session = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value;
   if (!session) return null;
   return await verifyToken(session);
 }
@@ -47,7 +48,8 @@ export async function setSession(user: NewUser) {
     expires: expiresInOneDay.toISOString(),
   };
   const encryptedSession = await signToken(session);
-  cookies().set('session', encryptedSession, {
+  const cookieStore = await cookies();
+  cookieStore.set('session', encryptedSession, {
     expires: expiresInOneDay,
     httpOnly: true,
     secure: true,
