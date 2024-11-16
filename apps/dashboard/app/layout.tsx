@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 
 import 'shepherd.js/dist/css/shepherd.css';
-import './globals.css';
+import './globals.scss';
 
 export const metadata: Metadata = {
   title: 'Meli',
