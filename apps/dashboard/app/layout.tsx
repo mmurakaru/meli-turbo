@@ -2,6 +2,8 @@ import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
+
+import 'shepherd.js/dist/css/shepherd.css';
 import './globals.css';
 
 export const metadata: Metadata = {

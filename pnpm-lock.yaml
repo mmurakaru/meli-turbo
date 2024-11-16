@@ -110,6 +110,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      shepherd.js:
+        specifier: ^14.1.0
+        version: 14.1.0
       stripe:
         specifier: ^17.3.1
         version: 17.3.1
@@ -1265,6 +1268,9 @@ packages:
   '@rushstack/eslint-patch@1.10.4':
     resolution: {integrity: sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==}
 
+  '@scarf/scarf@1.4.0':
+    resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
+
   '@sentry-internal/feedback@7.119.2':
     resolution: {integrity: sha512-bnR1yJWVBZfXGx675nMXE8hCXsxluCBfIFy9GQT8PTN/urxpoS9cGz+5F7MA7Xe3Q06/7TT0Mz3fcDvjkqTu3Q==}
     engines: {node: '>=12'}
@@ -1866,6 +1872,10 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
+
+  deepmerge-ts@7.1.3:
+    resolution: {integrity: sha512-qCSH6I0INPxd9Y1VtAiLpnYvz5O//6rCfJXKk0z66Up9/VOSr+1yS8XSKA5IWRxjocFGlzPyaZYe+jxq7OOLtQ==}
+    engines: {node: '>=16.0.0'}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
@@ -3344,6 +3354,10 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
+  shepherd.js@14.1.0:
+    resolution: {integrity: sha512-nFJElQ0KLF0zaDBINHpnUeBQVEOfRPyDrYkJkOj4ziQIyvSkQeJogEIAWwtpCEIxZOWNXxMYXcPVErjGE9EP6Q==}
+    engines: {node: 18.* || >= 20}
+
   side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
     engines: {node: '>= 0.4'}
@@ -4778,6 +4792,8 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.4': {}
 
+  '@scarf/scarf@1.4.0': {}
+
   '@sentry-internal/feedback@7.119.2':
     dependencies:
       '@sentry/core': 7.119.2
@@ -5533,6 +5549,8 @@ snapshots:
       ms: 2.1.3
 
   deep-is@0.1.4: {}
+
+  deepmerge-ts@7.1.3: {}
 
   define-data-property@1.1.4:
     dependencies:
@@ -7122,6 +7140,12 @@ snapshots:
   shebang-regex@1.0.0: {}
 
   shebang-regex@3.0.0: {}
+
+  shepherd.js@14.1.0:
+    dependencies:
+      '@floating-ui/dom': 1.6.12
+      '@scarf/scarf': 1.4.0
+      deepmerge-ts: 7.1.3
 
   side-channel@1.0.6:
     dependencies:

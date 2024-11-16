@@ -39,7 +39,7 @@ function Header() {
         <div className="flex items-center space-x-4">
           <Link
             href="/pricing"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900"
+            className="pricing-link text-sm font-medium text-gray-700 hover:text-gray-900"
           >
             Pricing
           </Link>
@@ -93,7 +93,12 @@ function Header() {
               asChild
               className="bg-black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full"
             >
-              <Link href="/sign-up">Sign Up</Link>
+              <Link
+                href="/sign-up"
+                className="signup-link"
+              >
+                Sign Up
+              </Link>
             </Button>
           )}
         </div>
