@@ -1,5 +1,7 @@
 'use client';
 
+// import Vapi from '@vapi-ai/web';
+
 export default function HomePage() {
   // const [assistantId, setAssistantId] = useState();
   // const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;

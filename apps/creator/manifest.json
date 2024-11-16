@@ -1,17 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Creator",
-  "description": "Base Level Extension",
+  "name": "Meli",
+  "description": "Product tour creator",
   "version": "1.0",
-  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "downloads"],
   "action": {
     "default_popup": "creator.html",
     "default_icon": "creator_extensions.png"
   },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "all_frames": true,
-      "js": ["scripts/content.js"],
+      "js": ["scripts/element-collector.js"],
       "matches": ["<all_urls>"]
     }
   ]
