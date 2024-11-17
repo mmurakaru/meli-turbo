@@ -1,15 +1,15 @@
 'use client';
 
 import { signOut } from '@/app/(login)/actions';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { useUser } from '@/lib/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
+import { Button } from '@repo/ui/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useUser } from '@/lib/auth';
+} from '@repo/ui/components/ui/dropdown-menu';
 import { Anchor, Home, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

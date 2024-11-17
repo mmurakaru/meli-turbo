@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { ShepherdJourneyProvider, useShepherd } from '@/context';
+import { Button } from '@repo/ui/components/ui/button';
 
 import Vapi from '@vapi-ai/web';
 import { useEffect, useState } from 'react';

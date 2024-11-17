@@ -1,12 +1,12 @@
 'use client';
 
 import { inviteTeamMember } from '@/app/(login)/actions';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useUser } from '@/lib/auth';
+import { Button } from '@repo/ui/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { Input } from '@repo/ui/components/ui/input';
+import { Label } from '@repo/ui/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@repo/ui/components/ui/radio-group';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { useActionState } from 'react';
 

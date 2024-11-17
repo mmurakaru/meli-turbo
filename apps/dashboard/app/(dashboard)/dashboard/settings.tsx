@@ -1,12 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { customerPortalAction } from '@/lib/payments/actions';
-import { useActionState } from 'react';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { removeTeamMember } from '@/app/(login)/actions';
+import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { customerPortalAction } from '@/lib/payments/actions';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
+import { Button } from '@repo/ui/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { useActionState } from 'react';
 import { InviteTeamMember } from './invite-team';
 
 type ActionState = {
@@ -70,7 +70,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                 <div className="flex items-center space-x-4">
                   <Avatar>
                     <AvatarImage
-                      src={'/placeholder.svg?height=32&width=32'}
+                      src={'/avatars/placeholder.svg?height=32&width=32'}
                       alt={getUserDisplayName(member.user)}
                     />
                     <AvatarFallback>
