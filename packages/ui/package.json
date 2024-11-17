@@ -6,8 +6,7 @@
   "scripts": {
     "ui": "pnpm dlx shadcn@latest",
     "dev": "tsc --watch",
-    "build": "tsc",
-    "lint": "eslint ."
+    "build": "tsc"
   },
   "exports": {
     "./globals.scss": "./src/globals.scss",
