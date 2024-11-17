@@ -1,0 +1,667 @@
+---
+stage: none
+group: unassigned
+info: Any user with at least the Maintainer role can merge updates to this content.
+---
+
+# Accessibility best practices
+
+## Quick summary
+
+Since [no ARIA is better than bad ARIA](https://w3c.github.io/aria-practices/#no_aria_better_bad_aria),
+review the following recommendations before using `aria-*`, `role`, and `tabindex`.
+Use semantic HTML, which has accessibility semantics baked in, and ideally test with
+[relevant combinations of screen readers and browsers](https://www.accessibility-developer-guide.com/knowledge/screen-readers/relevant-combinations/).
+
+In [WebAIM's accessibility analysis of the top million home pages](https://webaim.org/projects/million/#aria),
+they found that "ARIA correlated to higher detectable errors".
+It is likely that _misuse_ of ARIA is a big cause of increased errors,
+so when in doubt don't use `aria-*`, `role`, and `tabindex` and stick with semantic HTML.
+
+## Enable keyboard navigation on macOS
+
+By default, macOS limits the <kbd>tab</kbd> key to **Text boxes and lists only**. To enable full keyboard navigation:
+
+1. Open **System Preferences**.
+1. Select **Keyboard**.
+1. Open the **Shortcuts** tab.
+1. Enable the setting **Use keyboard navigation to move focus between controls**.
+
+You can read more about enabling browser-specific keyboard navigation on [a11yproject](https://www.a11yproject.com/posts/macos-browser-keyboard-navigation/).
+
+## Quick checklist
+
+- [Text](#text-inputs-with-accessible-names),
+  [select](#select-inputs-with-accessible-names),
+  [checkbox](#checkbox-inputs-with-accessible-names),
+  [radio](#radio-inputs-with-accessible-names),
+  [file](#file-inputs-with-accessible-names),
+  and [toggle](#gltoggle-components-with-accessible-names) inputs have accessible names.
+- [Buttons](#buttons-and-links-with-descriptive-accessible-names),
+  [links](#buttons-and-links-with-descriptive-accessible-names),
+  and [images](#images-with-accessible-names) have descriptive accessible names.
+- Icons
+  - [Non-decorative icons](#icons-that-convey-information) have an `aria-label`.
+  - [Clickable icons](#icons-that-are-clickable) are buttons, that is, `<meli-button icon="close" />` is used and not `<meli-icon />`.
+  - Icon-only buttons have an `aria-label`.
+- Interactive elements can be [accessed with the Tab key](#support-keyboard-only-use) and have a visible focus state.
+- Elements with [tooltips](#tooltips) are focusable using the Tab key.
+- Are any `role`, `tabindex` or `aria-*` attributes unnecessary?
+- Can any `div` or `span` elements be replaced with a more semantic [HTML element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element) like `p`, `button`, or `time`?
+
+## Provide a good document outline
+
+[Headings are the primary mechanism used by screen reader users to navigate content](https://webaim.org/projects/screenreadersurvey8/#finding).
+Therefore, the structure of headings on a page should make sense, like a good table of contents.
+We should ensure that:
+
+- There is only one `h1` element on the page.
+- Heading levels are not skipped.
+- Heading levels are nested correctly.
+
+## Provide accessible names for screen readers
+
+To provide markup with accessible names, ensure every:
+
+- input has an [associated `label`](#examples-of-providing-accessible-names).
+- button and link have [visible text](#buttons-and-links-with-descriptive-accessible-names), or `aria-label` when there is no visible text, such as for an icon button with no content.
+- image has an [`alt` attribute](#images-with-accessible-names).
+- `fieldset` has `legend` as its first child.
+- `figure` has `figcaption` as its first child.
+- `table` has `caption` as its first child.
+
+Groups of checkboxes and radio inputs should be grouped together in a `fieldset` with a `legend`.
+`legend` gives the group of checkboxes and radio inputs a label.
+
+If the `label`, child text, or child element is not visually desired,
+use `.meli-sr-only` to hide the element from everything but screen readers.
+
+### Examples of providing accessible names
+
+The following subsections contain examples of markup that render HTML elements with accessible names.
+
+Note that [when using `GlFormGroup`](https://bootstrap-vue.org/docs/components/form-group#accessibility):
+
+- Passing only a `label` prop renders a `fieldset` with a `legend` containing the `label` value.
+- Passing both a `label` and a `label-for` prop renders a `label` that points to the form input with the same `label-for` ID.
+
+#### Text inputs with accessible names
+
+When using `GlFormGroup`, the `label` prop alone does not give the input an accessible name.
+The `label-for` prop must also be provided to give the input an accessible name.
+
+Text input examples:
+
+```html
+<!-- Input with label -->
+<meli-form-group
+  :label="__('Issue title')"
+  label-for="issue-title"
+>
+  <meli-form-input
+    id="issue-title"
+    v-model="title"
+  />
+</meli-form-group>
+
+<!-- Input with hidden label -->
+<meli-form-group
+  :label="__('Issue title')"
+  label-for="issue-title"
+  label-sr-only
+>
+  <meli-form-input
+    id="issue-title"
+    v-model="title"
+  />
+</meli-form-group>
+```
+
+`textarea` examples:
+
+```html
+<!-- textarea with label -->
+<meli-form-group
+  :label="__('Issue description')"
+  label-for="issue-description"
+>
+  <meli-form-textarea
+    id="issue-description"
+    v-model="description"
+  />
+</meli-form-group>
+
+<!-- textarea with hidden label -->
+<meli-form-group
+  :label="__('Issue description')"
+  label-for="issue-description"
+  label-sr-only
+>
+  <meli-form-textarea
+    id="issue-description"
+    v-model="description"
+  />
+</meli-form-group>
+```
+
+Alternatively, you can use a plain `label` element:
+
+```html
+<!-- Input with label using `label` -->
+<label for="issue-title">{{ __('Issue title') }}</label>
+<meli-form-input
+  id="issue-title"
+  v-model="title"
+/>
+
+<!-- Input with hidden label using `label` -->
+<label
+  for="issue-title"
+  class="meli-sr-only"
+  >{{ __('Issue title') }}</label
+>
+<meli-form-input
+  id="issue-title"
+  v-model="title"
+/>
+```
+
+#### Select inputs with accessible names
+
+Select input examples:
+
+```html
+<!-- Select input with label -->
+<meli-form-group
+  :label="__('Issue status')"
+  label-for="issue-status"
+>
+  <meli-form-select
+    id="issue-status"
+    v-model="status"
+    :options="options"
+  />
+</meli-form-group>
+
+<!-- Select input with hidden label -->
+<meli-form-group
+  :label="__('Issue status')"
+  label-for="issue-status"
+  label-sr-only
+>
+  <meli-form-select
+    id="issue-status"
+    v-model="status"
+    :options="options"
+  />
+</meli-form-group>
+```
+
+#### Checkbox inputs with accessible names
+
+Single checkbox:
+
+```html
+<!-- Single checkbox with label -->
+<meli-form-checkbox
+  v-model="status"
+  value="task-complete"
+>
+  {{ __('Task complete') }}
+</meli-form-checkbox>
+
+<!-- Single checkbox with hidden label -->
+<meli-form-checkbox
+  v-model="status"
+  value="task-complete"
+>
+  <span class="meli-sr-only">{{ __('Task complete') }}</span>
+</meli-form-checkbox>
+```
+
+Multiple checkboxes:
+
+```html
+<!-- Multiple labeled checkboxes grouped within a fieldset -->
+<meli-form-group :label="__('Task list')">
+  <meli-form-checkbox value="task-1">{{ __('Task 1') }}</meli-form-checkbox>
+  <meli-form-checkbox value="task-2">{{ __('Task 2') }}</meli-form-checkbox>
+</meli-form-group>
+
+<!-- Or -->
+<meli-form-group :label="__('Task list')">
+  <meli-form-checkbox-group
+    v-model="selected"
+    :options="options"
+  />
+</meli-form-group>
+
+<!-- Multiple labeled checkboxes grouped within a fieldset with hidden legend -->
+<meli-form-group
+  :label="__('Task list')"
+  label-sr-only
+>
+  <meli-form-checkbox value="task-1">{{ __('Task 1') }}</meli-form-checkbox>
+  <meli-form-checkbox value="task-2">{{ __('Task 2') }}</meli-form-checkbox>
+</meli-form-group>
+
+<!-- Or -->
+<meli-form-group
+  :label="__('Task list')"
+  label-sr-only
+>
+  <meli-form-checkbox-group
+    v-model="selected"
+    :options="options"
+  />
+</meli-form-group>
+```
+
+#### Radio inputs with accessible names
+
+Single radio input:
+
+```html
+<!-- Single radio with a label -->
+<meli-form-radio
+  v-model="status"
+  value="opened"
+>
+  {{ __('Opened') }}
+</meli-form-radio>
+
+<!-- Single radio with a hidden label -->
+<meli-form-radio
+  v-model="status"
+  value="opened"
+>
+  <span class="meli-sr-only">{{ __('Opened') }}</span>
+</meli-form-radio>
+```
+
+Multiple radio inputs:
+
+```html
+<!-- Multiple labeled radio inputs grouped within a fieldset -->
+<meli-form-group :label="__('Issue status')">
+  <meli-form-radio value="opened">{{ __('Opened') }}</meli-form-radio>
+  <meli-form-radio value="closed">{{ __('Closed') }}</meli-form-radio>
+</meli-form-group>
+
+<!-- Or -->
+<meli-form-group :label="__('Issue status')">
+  <meli-form-radio-group
+    v-model="selected"
+    :options="options"
+  />
+</meli-form-group>
+
+<!-- Multiple labeled radio inputs grouped within a fieldset with hidden legend -->
+<meli-form-group
+  :label="__('Issue status')"
+  label-sr-only
+>
+  <meli-form-radio value="opened">{{ __('Opened') }}</meli-form-radio>
+  <meli-form-radio value="closed">{{ __('Closed') }}</meli-form-radio>
+</meli-form-group>
+
+<!-- Or -->
+<meli-form-group
+  :label="__('Issue status')"
+  label-sr-only
+>
+  <meli-form-radio-group
+    v-model="selected"
+    :options="options"
+  />
+</meli-form-group>
+```
+
+#### File inputs with accessible names
+
+File input examples:
+
+```html
+<!-- File input with a label -->
+<label for="attach-file">{{ __('Attach a file') }}</label>
+<input
+  id="attach-file"
+  type="file"
+/>
+
+<!-- File input with a hidden label -->
+<label
+  for="attach-file"
+  class="meli-sr-only"
+  >{{ __('Attach a file') }}</label
+>
+<input
+  id="attach-file"
+  type="file"
+/>
+```
+
+#### GlToggle components with accessible names
+
+`GlToggle` examples:
+
+```html
+<!-- GlToggle with label -->
+<meli-toggle
+  v-model="notifications"
+  :label="__('Notifications')"
+/>
+
+<!-- GlToggle with hidden label -->
+<meli-toggle
+  v-model="notifications"
+  :label="__('Notifications')"
+  label-position="hidden"
+/>
+```
+
+#### GlFormCombobox components with accessible names
+
+`GlFormCombobox` example:
+
+```html
+<!-- GlFormCombobox with label -->
+<meli-form-combobox
+  :label-text="__('Key')"
+  :token-list="$options.tokenList"
+/>
+```
+
+#### Images with accessible names
+
+Image examples:
+
+```html
+<img
+  :src="imagePath"
+  :alt="__('A description of the image')"
+/>
+
+<!-- SVGs implicitly have a graphics role so if it is semantically an image we should apply `role="img"` -->
+<svg
+  role="img"
+  :alt="__('A description of the image')"
+/>
+
+<!-- A decorative image, hidden from screen readers -->
+<img
+  :src="imagePath"
+  :alt=""
+/>
+```
+
+#### Buttons and links with descriptive accessible names
+
+Buttons and links should have accessible names that are descriptive enough to be understood in isolation.
+
+```html
+<!-- bad -->
+<meli-button @click="handleClick">{{ __('Submit') }}</meli-button>
+
+<meli-link :href="url">{{ __('page') }}</meli-link>
+
+<!-- good -->
+<meli-button @click="handleClick">{{ __('Submit review') }}</meli-button>
+
+<meli-link :href="url">{{ __("GitLab's accessibility page") }}</meli-link>
+```
+
+#### Links styled like buttons
+
+Links can be styled like buttons using `GlButton`.
+
+```html
+<meli-button :href="url">{{ __('Link styled as a button') }}</meli-button>
+```
+
+## Role
+
+In general, avoid using `role`.
+Use semantic HTML elements that implicitly have a `role` instead.
+
+| Bad                         | Good                               |
+| --------------------------- | ---------------------------------- |
+| `<div role="button">`       | `<button>`                         |
+| `<div role="img">`          | `<img>`                            |
+| `<div role="link">`         | `<a>`                              |
+| `<div role="header">`       | `<h1>` to `<h6>`                   |
+| `<div role="textbox">`      | `<input>` or `<textarea>`          |
+| `<div role="article">`      | `<article>`                        |
+| `<div role="list">`         | `<ol>` or `<ul>`                   |
+| `<div role="listitem">`     | `<li>`                             |
+| `<div role="table">`        | `<table>`                          |
+| `<div role="rowgroup">`     | `<thead>`, `<tbody>`, or `<tfoot>` |
+| `<div role="row">`          | `<tr>`                             |
+| `<div role="columnheader">` | `<th>`                             |
+| `<div role="cell">`         | `<td>`                             |
+
+## Support keyboard-only use
+
+Keyboard users rely on focus outlines to understand where they are on the page. Therefore, if an
+element is interactive you must ensure:
+
+- It can receive keyboard focus.
+- It has a visible focus state.
+
+Use semantic HTML, such as `a` (`GlLink`) and `button` (`GlButton`), which provides these behaviours by default.
+
+Keep in mind that:
+
+- <kbd>Tab</kbd> and <kbd>Shift-Tab</kbd> should only move between interactive elements, not static content.
+- When you add `:hover` styles, in most cases you should add `:focus` styles too so that the styling is applied for both mouse **and** keyboard users.
+- If you remove an interactive element's `outline`, make sure you maintain visual focus state in another way such as with `box-shadow`.
+
+See the [Pajamas Keyboard-only page](https://design.gitlab.com/accessibility/keyboard-only) for more detail.
+
+## `tabindex`
+
+Prefer **no** `tabindex` to using `tabindex`, since:
+
+- Using semantic HTML such as `button` (`GlButton`) implicitly provides `tabindex="0"`.
+- Tabbing order should match the visual reading order and positive `tabindex`s interfere with this.
+
+### Avoid using `tabindex="0"` to make an element interactive
+
+Use interactive elements instead of `div` and `span` tags.
+For example:
+
+- If the element should be clickable, use a `button` (`GlButton`).
+- If the element should be text editable, use an [`input` or `textarea`](#text-inputs-with-accessible-names).
+
+Once the markup is semantically complete, use CSS to update it to its desired visual state.
+
+```html
+<!-- bad -->
+<div
+  role="button"
+  tabindex="0"
+  @click="expand"
+>
+  Expand
+</div>
+
+<!-- good -->
+<meli-button
+  class="meli-p-0!"
+  category="tertiary"
+  @click="expand"
+  >Expand</meli-button
+>
+```
+
+### Do not use `tabindex="0"` on interactive elements
+
+Interactive elements are already tab accessible so adding `tabindex` is redundant.
+
+```html
+<!-- bad -->
+<meli-link
+  href="help"
+  tabindex="0"
+  >Help</meli-link
+>
+<meli-button tabindex="0">Submit</meli-button>
+
+<!-- good -->
+<meli-link href="help">Help</meli-link>
+<meli-button>Submit</meli-button>
+```
+
+### Do not use `tabindex="0"` on elements for screen readers to read
+
+Screen readers can read text that is not tab accessible.
+The use of `tabindex="0"` is unnecessary and can cause problems,
+as screen reader users then expect to be able to interact with it.
+
+```html
+<!-- bad -->
+<p
+  tabindex="0"
+  :aria-label="message"
+>
+  {{ message }}
+</p>
+
+<!-- good -->
+<p>{{ message }}</p>
+```
+
+### Do not use a positive `tabindex`
+
+[Always avoid using `tabindex="1"`](https://webaim.org/techniques/keyboard/tabindex#overview)
+or greater.
+
+## Icons
+
+Icons can be split into three different types:
+
+- Icons that are decorative
+- Icons that convey meaning
+- Icons that are clickable
+
+### Icons that are decorative
+
+Icons are decorative when there's no loss of information to the user when they are removed from the UI.
+
+As the majority of icons within GitLab are decorative, `GlIcon` automatically hides its rendered icons from screen readers.
+Therefore, you do not need to add `aria-hidden="true"` to `GlIcon`, as this is redundant.
+
+```html
+<!-- unnecessary — meli-icon hides icons from screen readers by default -->
+<meli-icon
+  name="rocket"
+  aria-hidden="true"
+/>
+
+<!-- good -->
+<meli-icon name="rocket" />
+```
+
+### Icons that convey information
+
+Icons convey information if there is loss of information to the user when they are removed from the UI.
+
+An example is a confidential icon that conveys the issue is confidential, and does not have the text "Confidential" next to it.
+
+Icons that convey information must have an accessible name so that the information is conveyed to screen reader users too.
+
+```html
+<!-- bad -->
+<meli-icon name="eye-slash" />
+
+<!-- good -->
+<meli-icon
+  name="eye-slash"
+  :aria-label="__('Confidential issue')"
+/>
+```
+
+### Icons that are clickable
+
+Icons that are clickable are semantically buttons, so they should be rendered as buttons, with an accessible name.
+
+```html
+<!-- bad -->
+<meli-icon
+  name="close"
+  :aria-label="__('Close')"
+  @click="handleClick"
+/>
+
+<!-- good -->
+<meli-button
+  icon="close"
+  category="tertiary"
+  :aria-label="__('Close')"
+  @click="handleClick"
+/>
+```
+
+## Tooltips
+
+When adding tooltips, we must ensure that the element with the tooltip can receive focus so keyboard users can see the tooltip.
+If the element is a static one, such as an icon, we can enclose it in a button, which already is
+focusable, so we don't have to add `tabindex=0` to the icon.
+
+The following code snippet is a good example of an icon with a tooltip.
+
+- It is automatically focusable, as it is a button.
+- It is given an accessible name with `aria-label`, as it is a button with no text.
+
+```html
+<button
+  v-meli-tooltip
+  class="meli-border-0 meli-bg-transparent meli-p-0 meli-leading-0"
+  :title="tooltipText"
+  :aria-label="__('Warning')"
+>
+  <meli-icon name="warning" />
+</button>
+```
+
+## Hiding elements
+
+Use the following table to hide elements from users, when appropriate.
+
+| Hide from sighted users | Hide from screen readers | Hide from both sighted and screen reader users               |
+| ----------------------- | ------------------------ | ------------------------------------------------------------ |
+| `.meli-sr-only`         | `aria-hidden="true"`     | `display: none`, `visibility: hidden`, or `hidden` attribute |
+
+### Hide decorative images from screen readers
+
+To reduce noise for screen reader users, hide decorative images using `alt=""`.
+If the image is not an `img` element, such as an inline SVG, you can hide it by adding both `role="img"` and `alt=""`.
+
+`meli-icon` components automatically hide their icons from screen readers so `aria-hidden="true"` is
+unnecessary when using `meli-icon`.
+
+```html
+<!-- good - decorative images hidden from screen readers -->
+
+<img
+  src="decorative.jpg"
+  alt=""
+/>
+
+<svg
+  role="img"
+  alt=""
+/>
+
+<meli-icon name="epic" />
+```
+
+## When to use ARIA
+
+No ARIA is required when using semantic HTML, because it already incorporates accessibility.
+
+However, there are some UI patterns that do not have semantic HTML equivalents.
+General examples of these are dialogs (modals) and tabs.
+GitLab-specific examples are assignee and label dropdowns.
+Building such widgets require ARIA to make them understandable to screen readers.
+Proper research and testing should be done to ensure compliance with [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/).

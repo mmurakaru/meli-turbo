@@ -3,6 +3,7 @@ import tailwindcssAnimate from 'tailwindcss-animate';
 import tailwindcssReactAriaComponents from 'tailwindcss-react-aria-components';
 
 const config: Config = {
+  // prefix: 'meli-',
   darkMode: ['class'],
   content: ['./components/**/*.{js,ts,jsx,tsx,mdx}', './app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
