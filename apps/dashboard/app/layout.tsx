@@ -2,7 +2,7 @@ import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
-import './globals.css';
+import './globals.scss';
 
 export const metadata: Metadata = {
   title: 'Meli',

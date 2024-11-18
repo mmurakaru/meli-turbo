@@ -1,26 +1,99 @@
 'use client';
 
+import { ShepherdJourneyProvider, useShepherd } from '@/context';
+import { Button } from '@repo/ui/components/ui/button';
+
+import Vapi from '@vapi-ai/web';
+import { useEffect, useState } from 'react';
+import { create } from '../actions';
+
+const tourOptions = {
+  defaultStepOptions: {
+    cancelIcon: {
+      enabled: true,
+    },
+  },
+  useModalOverlay: true,
+};
+
+function StartTourButton() {
+  const Shepherd = useShepherd();
+  const tour = new Shepherd.Tour({
+    ...tourOptions,
+    steps: [
+      {
+        attachTo: { element: '.pricing-link', on: 'bottom-start' },
+        title: 'Pricing',
+        text: 'Get started. Click here to find out more about our pricing.',
+        buttons: [
+          {
+            secondary: true,
+            text: 'Go to pricing',
+            action() {
+              return (window.location.href = '/pricing');
+            },
+          },
+          {
+            secondary: false,
+            text: 'Next',
+            action() {
+              return this.next();
+            },
+          },
+        ],
+      },
+    ],
+  });
+
+  tour.addStep({
+    id: 'Signup',
+    title: 'Signup',
+    text: 'Leverage AI to analyze your webapp structure and content, automatically generating tour steps and content suggestions. The finalized tour is implemented with voice AI assistance.',
+    attachTo: {
+      element: '.signup-link',
+      on: 'bottom',
+    },
+    buttons: [
+      {
+        text: 'Back',
+        secondary: true,
+        action: () => tour.back(),
+      },
+      {
+        text: 'Signup',
+        action() {
+          return (window.location.href = '/sign-up');
+        },
+      },
+    ],
+  });
+
+  return <Button onClick={tour.start}>Give it a try!</Button>;
+}
+
 export default function HomePage() {
-  // const [assistantId, setAssistantId] = useState();
-  // const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
+  const [assistantId, setAssistantId] = useState();
+  const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
 
-  // if (!publicVapiKey) {
-  //   throw new Error('NEXT_PUBLIC_VAPI_PUBLIC_KEY is not defined.');
-  // }
+  if (!publicVapiKey) {
+    throw new Error('NEXT_PUBLIC_VAPI_PUBLIC_KEY is not defined.');
+  }
 
-  // const vapi = new Vapi(publicVapiKey);
+  const vapi = new Vapi(publicVapiKey);
 
-  // async function handleStart() {
-  //   await vapi.start(assistantId);
-  // }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function startAssistance() {
+    await vapi.start(assistantId);
+  }
 
-  // async function handleStop() {
-  //   await vapi.stop();
-  // }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function stopAssistance() {
+    await vapi.stop();
+  }
 
-  // useEffect(() => {
-  //   create().then((data) => setAssistantId(data.id));
-  // }, []);
+  useEffect(() => {
+    create().then((data) => setAssistantId(data.id));
+  }, []);
 
   return (
     <main>
@@ -36,22 +109,13 @@ export default function HomePage() {
                 Launch your SaaS product tour in record time with our powerful voice agent.
               </p>
             </div>
-            {/* <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
-              <button
-                className="bg-purple-400 p-2 rounded-lg"
-                onClick={handleStart}
-              >
-                Start Onboarding
-              </button>
-              <button
-                className="border border-purple-400 p-2 rounded-lg"
-                onClick={handleStop}
-              >
-                Stop Onboarding
-              </button>
-              <p className="mt-3 text-base text-center text-gray-500">Give it a try!</p>
+
+            <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
+              <ShepherdJourneyProvider>
+                <StartTourButton />
+              </ShepherdJourneyProvider>
             </div>
-            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
+            {/* <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
               <Terminal />
             </div> */}
           </div>

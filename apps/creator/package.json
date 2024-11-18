@@ -1,0 +1,31 @@
+{
+  "name": "creator-chrome",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@repo/ui": "workspace:*",
+    "@types/chrome": "^0.0.283",
+    "next": "15.0.3",
+    "react": "18.03.01",
+    "react-dom": "18.03.01",
+    "react-router-dom": "^6.28.0",
+    "sass": "^1.81.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8",
+    "saas": "^1.0.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
