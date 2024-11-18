@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Meli",
+  "version": "1.0",
+  "description": "Product tour creator",
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "downloads"],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icons/16.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

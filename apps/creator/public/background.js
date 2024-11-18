@@ -1,4 +1,5 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+// Example code
+chrome.runtime.onMessage.addListener((message, sender) => {
   if (message.action === "collectElements") {
     (async () => {
       const [tab] = await chrome.tabs.query({
