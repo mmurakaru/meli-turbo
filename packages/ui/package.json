@@ -4,7 +4,7 @@
   "description": "Meli ui - collection of UI components",
   "type": "module",
   "scripts": {
-    "ui": "pnpm dlx shadcn@latest",
+    "ui": "pnpx shadcn@latest",
     "dev": "tsc --watch",
     "build": "tsc"
   },
