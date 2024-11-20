@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
+    "dev": "npm-watch",
+    "build": "next build && npm run lint:build",
+    "start": "pnpx serve@latest out",
+    "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",
     "lint": "next lint"
   },
   "dependencies": {
@@ -23,9 +24,32 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
+    "npm-watch": "^0.13.0",
     "postcss": "^8",
     "saas": "^1.0.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        ".",
+        "styles/**",
+        "pages/**",
+        "public/**"
+      ],
+      "ignore": [
+        "out",
+        "node_modules",
+        ".next"
+      ],
+      "extensions": [
+        "js",
+        "json",
+        "lock",
+        "tsx",
+        "ts"
+      ]
+    }
   }
 }
