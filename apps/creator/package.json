@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm-watch",
-    "build": "next build && npm run lint:build",
+    "build": "next build && npm run lint:build && node clean-html.js",
     "start": "pnpx serve@latest out",
     "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",
     "lint": "next lint"
@@ -12,6 +12,7 @@
   "dependencies": {
     "@repo/ui": "workspace:*",
     "@types/chrome": "^0.0.283",
+    "lucide-react": "^0.454.0",
     "next": "15.0.3",
     "react": "18.03.01",
     "react-dom": "18.03.01",
@@ -22,6 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cheerio": "^1.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "npm-watch": "^0.13.0",
