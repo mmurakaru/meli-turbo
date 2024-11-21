@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, install dependencies and build the project:
 
 ```bash
-pnpm install && pnpm build
+brew install gsed && pnpm install && pnpm build
 ```
 
 This will create an `/out` directory that can you can add to Chrome as an extension. The `manifest.json` links `pages/index.js` to the generated `index.html`. On top of that, the `/public/content.js` script is configured to run on any host url.
