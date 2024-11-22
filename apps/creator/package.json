@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm-watch",
+    "dev:extension": "npm-watch",
+    "dev:web": "next dev",
     "build": "next build && npm run lint:build && node clean-html.js",
     "start": "pnpx serve@latest out",
     "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",

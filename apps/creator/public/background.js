@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         active: true,
         lastFocusedWindow: true,
       });
-      console.log(message.query);
+
       await chrome.tabs.sendMessage(tab.id, {
         action: "collectElements",
         query: message.query,
@@ -34,7 +34,6 @@ chrome.runtime.onMessage.addListener((message, sender) => {
       });
     })();
   } else if (message.action === "downloadBlob") {
-    // Use the chrome.downloads API to download the Blob URL
     chrome.downloads
       .download({
         url: message.blobURL,

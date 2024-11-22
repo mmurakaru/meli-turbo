@@ -10,10 +10,16 @@ brew install gsed && pnpm install && pnpm build
 
 This will create an `/out` directory that can you can add to Chrome as an extension. The `manifest.json` links `pages/index.js` to the generated `index.html`. On top of that, the `/public/content.js` script is configured to run on any host url.
 
-Second, run the development server:
+Second, run the development server for the Browser UI (or Chrome Extension Context):
 
 ```bash
-pnpm dev
+pnpm dev:extension
+```
+
+or, run the development server for the Content Area (or Web Page Viewport):
+
+```bash
+pnpm dev:web
 ```
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
