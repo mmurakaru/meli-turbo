@@ -26,9 +26,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-96 h-96 grid bg-gray-50 p-2`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-96 h-96 bg-gray-50 p-4`}
       >
-        {children}
+        <div className="grid">{children}</div>
       </body>
     </html>
   );
