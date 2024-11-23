@@ -3,24 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:extension": "nodemon --watch . --ext js,json,tsx,ts --ignore out --ignore node_modules --ignore .next --exec 'npm run build'",
+    "dev:extension": "nodemon --watch . --ext js,json,tsx,ts --ignore out --ignore node_modules --ignore .next --exec 'pnpm build'",
     "dev:web": "next dev",
-    "build": "next build && npm run lint:build && node clean-html.js",
+    "build": "next build  && pnpm compile && pnpm lint:build && node clean-html.js",
+    "compile": "rm -rf js && npx tsc && mv js/public/*.js out && rm -rf js && rm -rf out/*.ts",
     "start": "pnpx serve@latest out",
     "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",
     "lint": "next lint"
   },
   "dependencies": {
+    "@mozilla/readability": "^0.5.0",
     "@repo/ui": "workspace:*",
-    "@types/chrome": "^0.0.283",
     "lucide-react": "^0.454.0",
     "next": "15.0.3",
     "react": "18.03.01",
     "react-dom": "18.03.01",
-    "react-router-dom": "^6.28.0",
     "sass": "^1.81.0"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.283",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

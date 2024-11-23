@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.scss";
 
 const geistSans = localFont({
@@ -25,6 +26,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script defer src="/popup.js"></Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-96 h-96 bg-gray-50 p-4`}
       >

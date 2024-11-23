@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-[100dvh">
+    <div className="flex flex-col h-full w-full">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex justify-center">
@@ -21,12 +21,10 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      {/* 
-      {content?.text ? (
-        <p className="text-base text-gray-500 pb-8">{content.text}</p>
-      ) : (
-        <p className="text-base text-gray-500 pb-8">Loading content...</p>
-      )} */}
+
+      <div className="h-full w-full grid place-items-center">
+        <p id="textContent" className="text-base text-gray-500" />
+      </div>
     </div>
   );
 }

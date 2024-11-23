@@ -17,8 +17,8 @@ function processHtmlFile(filePath) {
     // Remove all script tags
     $("script").remove();
 
-    // Remove specific link tags
-    // $('link[rel="preload"][as="script"]').remove();
+    // Remove rel attribute in link tags
+    $('link[rel="preload"]').removeAttr("rel");
 
     // Remove meta[name="next-size-adjust"]
     // $('meta[name="next-size-adjust"]').remove();
