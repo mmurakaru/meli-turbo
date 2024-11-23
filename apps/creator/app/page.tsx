@@ -23,7 +23,7 @@ export default function Home() {
       </div>
 
       <div className="h-full w-full grid place-items-center">
-        <p id="textContent" className="text-base text-gray-500" />
+        <p id="domText" className="text-base text-gray-500" />
       </div>
     </div>
   );

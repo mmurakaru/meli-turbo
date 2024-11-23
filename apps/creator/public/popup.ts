@@ -1,17 +1,15 @@
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  const activeTab = tabs[0];
-
-  if (activeTab) {
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(
-      activeTab.id,
-      { message: "renderContent" },
+      tabs[0].id,
+      { message: "getDOMText" },
       (response) => {
-        if (response && response.status === "success") {
-          console.log("Content rendered successfully.");
+        if (response && response.text) {
+          document.getElementById("domText").textContent = response.text; // Display in popup
         } else {
-          console.error("Failed to render content.");
+          document.getElementById("domText").textContent = "No text found.";
         }
       }
     );
-  }
+  });
 });

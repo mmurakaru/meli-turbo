@@ -20,6 +20,12 @@ function processHtmlFile(filePath) {
     // Remove rel attribute in link tags
     $('link[rel="preload"]').removeAttr("rel");
 
+    // Find the <link> tag and create a <script> tag
+    $('link[href="/popup.js"]').each(function () {
+      const scriptTag = `<script src="${$(this).attr("href")}" defer></script>`;
+      $(this).replaceWith(scriptTag); // Replace <link> with <script>
+    });
+
     // Remove meta[name="next-size-adjust"]
     // $('meta[name="next-size-adjust"]').remove();
 

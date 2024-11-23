@@ -26,7 +26,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Script defer src="/popup.js"></Script>
+      <Script defer src="/popup.js" nonce="XUENAJFW"></Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-96 h-96 bg-gray-50 p-4`}
       >
