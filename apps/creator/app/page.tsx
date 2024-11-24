@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@repo/ui/components/ui/button";
 import { AnchorIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -23,7 +24,8 @@ export default function Home() {
       </div>
 
       <div className="h-full w-full grid place-items-center">
-        <p id="domText" className="text-base text-gray-500" />
+        <Button id="createTourButton">Create tour</Button>
+        <ul id="links" className="text-base text-gray-500" />
       </div>
     </div>
   );

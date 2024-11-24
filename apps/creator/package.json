@@ -5,8 +5,9 @@
   "scripts": {
     "dev:extension": "nodemon --watch . --ext js,json,tsx,ts --ignore out --ignore node_modules --ignore .next --exec 'pnpm build'",
     "dev:web": "next dev",
-    "build": "next build  && pnpm compile && pnpm lint:build && node clean-html.js",
+    "build": "next build  && pnpm compile && pnpm bundle && pnpm lint:build && node clean-html.js",
     "compile": "rm -rf js && npx tsc && mv js/public/*.js out && rm -rf js && rm -rf out/*.ts",
+    "bundle": "webpack --config webpack.config.mjs",
     "start": "pnpx serve@latest out",
     "lint:build": "mv out/_next out/assets && gsed -i 's/\\/_next/\\/assets/g' out/**.html",
     "lint": "next lint"

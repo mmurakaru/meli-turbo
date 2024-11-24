@@ -22,7 +22,7 @@ function processHtmlFile(filePath) {
 
     // Find the <link> tag and create a <script> tag
     $('link[href="/popup.js"]').each(function () {
-      const scriptTag = `<script src="${$(this).attr("href")}" defer></script>`;
+      const scriptTag = `<script src="${$(this).attr("href")}" defer="true"></script>`;
       $(this).replaceWith(scriptTag); // Replace <link> with <script>
     });
 
