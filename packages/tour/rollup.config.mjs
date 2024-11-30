@@ -2,7 +2,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
 
-const is_prod = process.env.build === "prod";
+const is_prod = process.env.BUILD === "prod";
 
 const dev_plugins = [
   nodeResolve({
