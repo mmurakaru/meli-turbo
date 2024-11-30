@@ -1,0 +1,24 @@
+{
+  "name": "tour",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup --config",
+    "bundle": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.12"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "rollup": "^4.28.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^5.7.2"
+  }
+}
