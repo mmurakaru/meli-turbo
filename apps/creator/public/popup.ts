@@ -54,7 +54,7 @@ function highlightElementOnPage(url) {
         },
         (response) => {
           resolve(response.savedInfo); // Resolve with saved info from content script
-        }
+        },
       );
     });
   });

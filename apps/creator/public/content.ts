@@ -3,7 +3,7 @@ console.log("Content script works!");
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "getLinks") {
     const links = Array.from(document.querySelectorAll("a")).map(
-      (anchor) => anchor.href
+      (anchor) => anchor.href,
     );
     sendResponse({ links: links });
   }
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function highlightElement(url) {
   // Use querySelector to find the link by its href attribute
   const linkElement = document.querySelector(
-    `a[href="${url}"]`
+    `a[href="${url}"]`,
   ) as HTMLElement | null;
 
   if (linkElement) {
