@@ -1,14 +1,14 @@
 import { db } from '@/lib/db/drizzle';
 import { teams, tours } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface Params {
   uuid: string;
 }
 
-export async function GET({ params }: { params: Params }) {
-  const { uuid } = params;
+export async function GET(request: NextRequest, { params }: { params: Promise<Params> }) {
+  const { uuid } = await params;
 
   try {
     const tourConfig = await db
