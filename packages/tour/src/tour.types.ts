@@ -1,7 +1,7 @@
 export interface Step {
   selector: string;
   title: string;
-  description: string;
+  text: string;
 }
 
 export interface Config {
@@ -11,4 +11,5 @@ export interface Config {
 export interface TourState {
   config: Config | null;
   currentStep: number;
+  cleanup: (() => void) | null;
 }

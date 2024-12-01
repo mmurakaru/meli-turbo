@@ -22,9 +22,10 @@ function StartTourButton() {
     ...tourOptions,
     steps: [
       {
-        attachTo: { element: '.pricing-link', on: 'bottom-start' },
+        id: 'Pricing',
         title: 'Pricing',
         text: 'Get started. Click here to find out more about our pricing.',
+        attachTo: { element: '.pricing-link', on: 'bottom-start' },
         buttons: [
           {
             secondary: true,
@@ -42,28 +43,27 @@ function StartTourButton() {
           },
         ],
       },
-    ],
-  });
-
-  tour.addStep({
-    id: 'Signup',
-    title: 'Signup',
-    text: 'Leverage AI to analyze your webapp structure and content, automatically generating tour steps and content suggestions. The finalized tour is implemented with voice AI assistance.',
-    attachTo: {
-      element: '.signup-link',
-      on: 'bottom',
-    },
-    buttons: [
       {
-        text: 'Back',
-        secondary: true,
-        action: () => tour.back(),
-      },
-      {
-        text: 'Signup',
-        action() {
-          return (window.location.href = '/sign-up');
+        id: 'Signup',
+        title: 'Signup',
+        text: 'Leverage AI to analyze your webapp structure and content, automatically generating tour steps and content suggestions. The finalized tour is implemented with voice AI assistance.',
+        attachTo: {
+          element: '.signup-link',
+          on: 'bottom',
         },
+        buttons: [
+          {
+            text: 'Back',
+            secondary: true,
+            action: () => tour.back(),
+          },
+          {
+            text: 'Signup',
+            action() {
+              return (window.location.href = '/sign-up');
+            },
+          },
+        ],
       },
     ],
   });

@@ -1,5 +1,5 @@
-import { pgTable, serial, varchar, text, timestamp, integer } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+import { integer, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -61,6 +61,20 @@ export const invitations = pgTable('invitations', {
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
 
+export const tours = pgTable('tours', {
+  id: serial('id').primaryKey(),
+  uuid: varchar('uuid', { length: 36 }).notNull().unique(),
+  teamId: integer('team_id')
+    .notNull()
+    .references(() => teams.id),
+  title: varchar('title', { length: 100 }).notNull(),
+  description: text('description').notNull(),
+  steps: text('steps').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
+});
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
@@ -105,6 +119,13 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   }),
 }));
 
+export const toursRelations = relations(tours, ({ one }) => ({
+  team: one(teams, {
+    fields: [tours.teamId],
+    references: [teams.id],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Team = typeof teams.$inferSelect;
@@ -119,6 +140,19 @@ export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
+};
+// TODO: add endpoint to create tour
+export type Tour = typeof tours.$inferSelect;
+export type NewTour = typeof tours.$inferInsert;
+export type TourWithTeam = Tour & {
+  team: Pick<Team, 'id' | 'name'>;
+};
+export type TourWithSteps = Tour & {
+  steps: Array<{
+    selector: string;
+    title: string;
+    text: string;
+  }>;
 };
 
 export enum ActivityType {

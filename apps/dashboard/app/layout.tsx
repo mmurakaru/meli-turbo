@@ -3,6 +3,7 @@ import { getUser } from '@/lib/db/queries';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import './globals.scss';
+import ScriptLoader from './script-loader';
 
 export const metadata: Metadata = {
   title: 'Meli',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-[100dvh] bg-gray-50">
         <UserProvider userPromise={userPromise}>{children}</UserProvider>
+        <ScriptLoader />
       </body>
     </html>
   );

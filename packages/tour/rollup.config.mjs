@@ -1,5 +1,6 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
+import scss from "rollup-plugin-scss";
 import { terser } from "rollup-plugin-terser";
 
 const is_prod = process.env.BUILD === "prod";
@@ -9,6 +10,10 @@ const dev_plugins = [
     jsnext: true,
   }),
   typescript(),
+  scss({
+    fileName: is_prod ? "bundle.min.css" : "bundle.css",
+    outputStyle: is_prod ? "compressed" : null,
+  }),
 ];
 
 const prod_plugins = [terser()];
