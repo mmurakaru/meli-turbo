@@ -1,6 +1,25 @@
 .product-tour-overlay {
-  background-color: #a855f7;
+  border: 1px solid #a855f7;
   padding: 0.8rem;
+  border-radius: 0.2rem;
+  background: #f9fafb;
+}
+
+.next-btn {
+  --radius: 0.5rem;
+
+  color: #f8fafc;
+  font-weight: 500;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background-color: #0f172a;
+  border-radius: calc(var(--radius) - 2px);
+  white-space: nowrap;
+  height: 2.25rem;
+  gap: 0.5rem;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
 }
 
 #floating {

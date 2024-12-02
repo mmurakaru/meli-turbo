@@ -8,7 +8,9 @@
     "strict": true,
     "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.types.ts"]

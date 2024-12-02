@@ -29,6 +29,6 @@ export default {
   },
   plugins,
   watch: {
-    exclude: ["node_modules/**"],
+    exclude: ["node_modules/**", "floating-ui/*"],
   },
 };

@@ -2,9 +2,6 @@ import { Config, Step, TourState } from "./tour.types";
 
 import "./tour.scss";
 
-// TODO: Write unit tests
-// CORS tour script > dashboard app
-
 let state: TourState = {
   config: null,
   currentStep: 0,
@@ -34,7 +31,6 @@ async function init(configUrl: string): Promise<void> {
 async function fetchConfig(url: string): Promise<Config> {
   //const response = await fetch(url);
   //return response.json();
-  console.log(url);
   const config = { ...CONFIG_MOCK };
 
   return config;
@@ -71,9 +67,11 @@ function createOverlayElement(step: Step): HTMLDivElement {
 }
 
 function positionOverlay(reference: HTMLElement, overlay: HTMLElement): void {
-  // TODO: check why computePosition is not working
+  if (!reference || !overlay) return;
+
   /*   state.cleanup = autoUpdate(reference, overlay, () => {
     computePosition(reference, overlay, {
+      platform,
       middleware: [offset(10), flip(), shift()],
     }).then(({ x, y }) => {
       Object.assign(overlay.style, {
@@ -82,11 +80,6 @@ function positionOverlay(reference: HTMLElement, overlay: HTMLElement): void {
       });
     });
   }); */
-
-  if (!reference || !overlay) {
-    console.error("Reference or overlay is null.");
-    return;
-  }
 
   const rect = reference.getBoundingClientRect();
 
@@ -125,8 +118,14 @@ function end(): void {
 }
 
 declare global {
+  interface TourMeli {
+    scriptUrl: string;
+    configUrl: string;
+  }
+
   interface Window {
     initProductTour: typeof init;
+    tourMeli: TourMeli;
   }
 }
 
