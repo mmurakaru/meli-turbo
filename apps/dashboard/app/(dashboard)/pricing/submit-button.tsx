@@ -1,17 +1,18 @@
 'use client';
 
 import { Button } from '@repo/ui/components/ui/button';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
-export function SubmitButton() {
+export function SubmitButton({ plan }: { plan: string }) {
   const { pending } = useFormStatus();
+  const isFreePlan = plan === 'Free';
 
   return (
     <Button
       type="submit"
       disabled={pending}
-      className="w-full bg-white hover:bg-gray-100 text-black border border-gray-200 rounded-full flex items-center justify-center"
+      variant={isFreePlan ? 'outline' : 'default'}
     >
       {pending ? (
         <>
@@ -19,10 +20,7 @@ export function SubmitButton() {
           Loading...
         </>
       ) : (
-        <>
-          Get Started
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </>
+        <>{isFreePlan ? 'Get Started' : `Choose ${plan}`}</>
       )}
     </Button>
   );

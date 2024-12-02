@@ -17,13 +17,21 @@ export default async function PricingPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="grid md:grid-cols-2 gap-8 max-w-xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <PricingCard
+          name="Free"
+          price={0}
+          interval="month"
+          trialDays={0}
+          features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
+          priceId="free_price"
+        />
         <PricingCard
           name={basePlan?.name || 'Base'}
           price={basePrice?.unitAmount || 800}
           interval={basePrice?.interval || 'month'}
           trialDays={basePrice?.trialPeriodDays || 7}
-          features={['Unlimited Usage', 'Unlimited Workspace Members', 'Email Support']}
+          features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
           priceId={basePrice?.id}
         />
         <PricingCard
@@ -31,7 +39,12 @@ export default async function PricingPage() {
           price={plusPrice?.unitAmount || 1200}
           interval={plusPrice?.interval || 'month'}
           trialDays={plusPrice?.trialPeriodDays || 7}
-          features={['Everything in Base, and:', 'Early Access to New Features', '24/7 Support + Slack Access']}
+          features={[
+            'Everything in Base, and:',
+            'Unlimited Workspace Members',
+            'Product tour Analytics',
+            'Priority support',
+          ]}
           priceId={plusPrice?.id}
         />
       </div>
@@ -59,9 +72,20 @@ function PricingCard({
       <h2 className="text-2xl font-medium text-gray-900 mb-2">{name}</h2>
       <p className="text-sm text-gray-600 mb-4">with {trialDays} day free trial</p>
       <p className="text-4xl font-medium text-gray-900 mb-6">
-        ${price / 100} <span className="text-xl font-normal text-gray-600">per user / {interval}</span>
+        €{price / 100} <span className="text-xl font-normal text-gray-600">per user / {interval}</span>
       </p>
-      <ul className="space-y-4 mb-8">
+      <form
+        action={checkoutAction}
+        className="mb-8"
+      >
+        <input
+          type="hidden"
+          name="priceId"
+          value={priceId}
+        />
+        <SubmitButton plan={name} />
+      </form>
+      <ul className="space-y-4">
         {features.map((feature, index) => (
           <li
             key={index}
@@ -72,14 +96,6 @@ function PricingCard({
           </li>
         ))}
       </ul>
-      <form action={checkoutAction}>
-        <input
-          type="hidden"
-          name="priceId"
-          value={priceId}
-        />
-        <SubmitButton />
-      </form>
     </div>
   );
 }

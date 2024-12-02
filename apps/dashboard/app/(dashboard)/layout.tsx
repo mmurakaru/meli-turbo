@@ -89,17 +89,27 @@ function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
-              asChild
-              className="bg-black hover:bg-gray-800 text-white text-sm px-4 py-2 rounded-full"
-            >
-              <Link
-                href="/sign-up"
-                className="signup-link"
+            <>
+              <Button
+                variant="outline"
+                asChild
               >
-                Sign Up
-              </Link>
-            </Button>
+                <Link
+                  href="/sign-in"
+                  className="signin-link"
+                >
+                  Log in
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link
+                  href="/sign-up"
+                  className="signup-link"
+                >
+                  Sign Up
+                </Link>
+              </Button>
+            </>
           )}
         </div>
       </div>
