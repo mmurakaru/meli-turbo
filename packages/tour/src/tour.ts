@@ -52,7 +52,9 @@ function renderOverlay(): void {
 
   positionOverlay(referenceElement as HTMLElement, overlay);
 
-  overlay.querySelector(".next-btn")?.addEventListener("click", nextStep);
+  overlay
+    .querySelector(".tour-overlay--button-primary")
+    ?.addEventListener("click", nextStep);
 }
 
 function createOverlayElement(step: Step): HTMLDivElement {
