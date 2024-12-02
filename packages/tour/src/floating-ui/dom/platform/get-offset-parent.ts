@@ -17,7 +17,7 @@ type Polyfill = (element: HTMLElement) => Element | null;
 
 function getTrueOffsetParent(
   element: Element,
-  polyfill: Polyfill | undefined
+  polyfill: Polyfill | undefined,
 ): Element | null {
   if (
     !isHTMLElement(element) ||
@@ -47,7 +47,7 @@ function getTrueOffsetParent(
 // such as table ancestors and cross browser bugs.
 export function getOffsetParent(
   element: Element,
-  polyfill?: Polyfill
+  polyfill?: Polyfill,
 ): Element | Window {
   const win = getWindow(element);
 

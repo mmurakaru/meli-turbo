@@ -30,7 +30,7 @@ export interface HideOptions extends DetectOverflowOptions {
  * when it is not in the same clipping context as the reference element.
  */
 export const hide = (
-  options: HideOptions | Derivable<HideOptions> = {}
+  options: HideOptions | Derivable<HideOptions> = {},
 ): Middleware => ({
   name: "hide",
   options,
@@ -39,7 +39,7 @@ export const hide = (
 
     const { strategy = "referenceHidden", ...detectOverflowOptions } = evaluate(
       options,
-      state
+      state,
     );
 
     switch (strategy) {

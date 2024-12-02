@@ -39,7 +39,7 @@ export interface ShiftOptions extends DetectOverflowOptions {
  * keep it in view when it will overflow the clipping boundary.
  */
 export const shift = (
-  options: ShiftOptions | Derivable<ShiftOptions> = {}
+  options: ShiftOptions | Derivable<ShiftOptions> = {},
 ): Middleware => ({
   name: "shift",
   options,
@@ -137,7 +137,7 @@ export interface LimitShiftOptions {
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
 export const limitShift = (
-  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {}
+  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {},
 ): {
   options: any;
   fn: (state: MiddlewareState) => Coords;

@@ -4,7 +4,7 @@ import { getWindowScrollBarX } from "./get-window-scroll-bar-x.util";
 export function getHTMLOffset(
   documentElement: HTMLElement,
   scroll: NodeScroll,
-  ignoreScrollbarX = false
+  ignoreScrollbarX = false,
 ) {
   const htmlRect = documentElement.getBoundingClientRect();
   const x =

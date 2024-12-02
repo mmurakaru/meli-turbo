@@ -21,7 +21,7 @@ export interface SizeOptions extends DetectOverflowOptions {
     args: MiddlewareState & {
       availableWidth: number;
       availableHeight: number;
-    }
+    },
   ): void | Promise<void>;
 }
 
@@ -31,7 +31,7 @@ export interface SizeOptions extends DetectOverflowOptions {
  * width of the reference element.
  */
 export const size = (
-  options: SizeOptions | Derivable<SizeOptions> = {}
+  options: SizeOptions | Derivable<SizeOptions> = {},
 ): Middleware => ({
   name: "size",
   options,
@@ -40,7 +40,7 @@ export const size = (
 
     const { apply = () => {}, ...detectOverflowOptions } = evaluate(
       options,
-      state
+      state,
     );
 
     const overflow = await detectOverflow(state, detectOverflowOptions);
@@ -69,11 +69,11 @@ export const size = (
 
     const overflowAvailableHeight = min(
       height - overflow[heightSide],
-      maximumClippingHeight
+      maximumClippingHeight,
     );
     const overflowAvailableWidth = min(
       width - overflow[widthSide],
-      maximumClippingWidth
+      maximumClippingWidth,
     );
 
     const noShift = !state.middlewareData.shift;

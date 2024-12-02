@@ -16,7 +16,7 @@ import { getWindowScrollBarX } from "./get-window-scroll-bar-x.util";
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
-  strategy: Strategy
+  strategy: Strategy,
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
@@ -39,7 +39,7 @@ export function getRectRelativeToOffsetParent(
         offsetParent,
         true,
         isFixed,
-        offsetParent
+        offsetParent,
       );
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;

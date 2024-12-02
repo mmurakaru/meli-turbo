@@ -32,7 +32,7 @@ export const alignments: Alignment[] = ["start", "end"];
 export const placements: Placement[] = sides.reduce(
   (acc: Placement[], side) =>
     acc.concat(side, `${side}-${alignments[0]}`, `${side}-${alignments[1]}`),
-  []
+  [],
 );
 
 export const min = Math.min;
@@ -90,7 +90,7 @@ export function getAlignmentAxis(placement: Placement): Axis {
 export function getAlignmentSides(
   placement: Placement,
   rects: ElementRects,
-  rtl = false
+  rtl = false,
 ): [Side, Side] {
   const alignment = getAlignment(placement);
   const alignmentAxis = getAlignmentAxis(placement);
@@ -123,11 +123,11 @@ export function getExpandedPlacements(placement: Placement): Array<Placement> {
 }
 
 export function getOppositeAlignmentPlacement<T extends string>(
-  placement: T
+  placement: T,
 ): T {
   return placement.replace(
     /start|end/g,
-    (alignment) => oppositeAlignmentMap[alignment as Alignment]
+    (alignment) => oppositeAlignmentMap[alignment as Alignment],
   ) as T;
 }
 
@@ -154,7 +154,7 @@ export function getOppositeAxisPlacements(
   placement: Placement,
   flipAlignment: boolean,
   direction: "none" | Alignment,
-  rtl?: boolean
+  rtl?: boolean,
 ): Placement[] {
   const alignment = getAlignment(placement);
   let list = getSideList(getSide(placement), direction === "start", rtl);
@@ -173,7 +173,7 @@ export function getOppositeAxisPlacements(
 export function getOppositePlacement<T extends string>(placement: T): T {
   return placement.replace(
     /left|right|bottom|top/g,
-    (side) => oppositeSideMap[side as Side]
+    (side) => oppositeSideMap[side as Side],
   ) as T;
 }
 

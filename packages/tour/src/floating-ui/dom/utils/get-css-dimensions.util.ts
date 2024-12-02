@@ -3,7 +3,7 @@ import { round } from "../../utils";
 import { getComputedStyle, isHTMLElement } from "../../utils/dom.util";
 
 export function getCssDimensions(
-  element: Element
+  element: Element,
 ): Dimensions & { $: boolean } {
   const css = getComputedStyle(element);
   // In testing environments, the `width` and `height` properties are empty

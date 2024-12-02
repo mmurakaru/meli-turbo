@@ -84,7 +84,7 @@ export function isTopLayer(element: Element): boolean {
 }
 
 export function isContainingBlock(
-  elementOrCss: Element | CSSStyleDeclaration
+  elementOrCss: Element | CSSStyleDeclaration,
 ): boolean {
   const webkit = isWebKit();
   const css = isElement(elementOrCss)
@@ -99,10 +99,10 @@ export function isContainingBlock(
     (!webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false)) ||
     (!webkit && (css.filter ? css.filter !== "none" : false)) ||
     ["transform", "perspective", "filter"].some((value) =>
-      (css.willChange || "").includes(value)
+      (css.willChange || "").includes(value),
     ) ||
     ["paint", "layout", "strict", "content"].some((value) =>
-      (css.contain || "").includes(value)
+      (css.contain || "").includes(value),
     )
   );
 }
@@ -190,7 +190,7 @@ export function getNearestOverflowAncestor(node: Node): HTMLElement {
 export function getOverflowAncestors(
   node: Node,
   list: OverflowAncestors = [],
-  traverseIframes = true
+  traverseIframes = true,
 ): OverflowAncestors {
   const scrollableAncestor = getNearestOverflowAncestor(node);
   const isBody = false;
@@ -202,13 +202,13 @@ export function getOverflowAncestors(
       win,
       win.visualViewport || [],
       isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
-      frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []
+      frameElement && traverseIframes ? getOverflowAncestors(frameElement) : [],
     );
   }
 
   return list.concat(
     scrollableAncestor,
-    getOverflowAncestors(scrollableAncestor, [], traverseIframes)
+    getOverflowAncestors(scrollableAncestor, [], traverseIframes),
   );
 }
 

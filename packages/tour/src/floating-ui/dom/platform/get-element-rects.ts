@@ -4,7 +4,7 @@ import { getOffsetParent } from "./get-offset-parent";
 
 export const getElementRects: Platform["getElementRects"] = async function (
   this: Platform,
-  data
+  data,
 ) {
   const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
   const getDimensionsFn = this.getDimensions;
@@ -14,7 +14,7 @@ export const getElementRects: Platform["getElementRects"] = async function (
     reference: getRectRelativeToOffsetParent(
       data.reference,
       await getOffsetParentFn(data.floating),
-      data.strategy
+      data.strategy,
     ),
     floating: {
       x: 0,

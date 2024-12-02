@@ -11,7 +11,7 @@ import type { ComputePosition, Middleware, MiddlewareData } from "./core.types";
 export const computePosition: ComputePosition = async (
   reference,
   floating,
-  config
+  config,
 ) => {
   const {
     placement = "bottom",

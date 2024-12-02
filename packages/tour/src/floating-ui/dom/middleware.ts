@@ -40,7 +40,7 @@ import type {
  */
 export const detectOverflow: (
   state: MiddlewareState,
-  options?: DetectOverflowOptions | Derivable<DetectOverflowOptions>
+  options?: DetectOverflowOptions | Derivable<DetectOverflowOptions>,
 ) => Promise<SideObject> = detectOverflowCore;
 
 /**
@@ -57,7 +57,7 @@ export const offset: (options?: OffsetOptions) => Middleware = offsetCore;
  * preferred placement. Alternative to `flip`.
  */
 export const autoPlacement: (
-  options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>
+  options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
 ) => Middleware = autoPlacementCore;
 
 /**
@@ -65,7 +65,7 @@ export const autoPlacement: (
  * keep it in view when it will overflow the clipping boundary.
  */
 export const shift: (
-  options?: ShiftOptions | Derivable<ShiftOptions>
+  options?: ShiftOptions | Derivable<ShiftOptions>,
 ) => Middleware = shiftCore;
 
 /**
@@ -74,7 +74,7 @@ export const shift: (
  * clipping boundary. Alternative to `autoPlacement`.
  */
 export const flip: (
-  options?: FlipOptions | Derivable<FlipOptions>
+  options?: FlipOptions | Derivable<FlipOptions>,
 ) => Middleware = flipCore;
 
 /**
@@ -83,7 +83,7 @@ export const flip: (
  * width of the reference element.
  */
 export const size: (
-  options?: SizeOptions | Derivable<SizeOptions>
+  options?: SizeOptions | Derivable<SizeOptions>,
 ) => Middleware = sizeCore;
 
 /**
@@ -91,7 +91,7 @@ export const size: (
  * when it is not in the same clipping context as the reference element.
  */
 export const hide: (
-  options?: HideOptions | Derivable<HideOptions>
+  options?: HideOptions | Derivable<HideOptions>,
 ) => Middleware = hideCore;
 
 /**
@@ -99,7 +99,7 @@ export const hide: (
  * appears centered to the reference element.
  */
 export const arrow: (
-  options: ArrowOptions | Derivable<ArrowOptions>
+  options: ArrowOptions | Derivable<ArrowOptions>,
 ) => Middleware = arrowCore;
 
 /**
@@ -107,14 +107,14 @@ export const arrow: (
  * over multiple lines, such as hyperlinks or range selections.
  */
 export const inline: (
-  options?: InlineOptions | Derivable<InlineOptions>
+  options?: InlineOptions | Derivable<InlineOptions>,
 ) => Middleware = inlineCore;
 
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
 export const limitShift: (
-  options?: LimitShiftOptions | Derivable<LimitShiftOptions>
+  options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
 ) => {
   options: any;
   fn: (state: MiddlewareState) => Coords;
