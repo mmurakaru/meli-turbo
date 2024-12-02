@@ -57,11 +57,13 @@ function renderOverlay(): void {
 
 function createOverlayElement(step: Step): HTMLDivElement {
   const overlay = document.createElement("div");
-  overlay.className = "product-tour-overlay";
+  overlay.id = "overlay";
   overlay.innerHTML = `
-    <h3>${step.title}</h3>
-    <p>${step.text}</p>
-    <button class="next-btn">Next</button>
+  <div class="overlay--body">
+    <h3 class="overlay--title">${step.title}</h3>
+    <p class="overlay--text">${step.text}</p>
+    <button class="overlay--button-primary">Next</button>
+  </div>
   `;
   return overlay;
 }
@@ -100,7 +102,7 @@ function nextStep(): void {
 
   state.currentStep++;
   if (state.currentStep < state.config.steps.length) {
-    document.querySelector(".product-tour-overlay")?.remove();
+    document.getElementById("overlay")?.remove();
     renderOverlay();
   } else {
     end();
@@ -113,8 +115,7 @@ function end(): void {
     state.cleanup = null;
   }
 
-  document.querySelector(".product-tour-overlay")?.remove();
-  console.log("Product tour completed");
+  document.getElementById("overlay")?.remove();
 }
 
 declare global {
