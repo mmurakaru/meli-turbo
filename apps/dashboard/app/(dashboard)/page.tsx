@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@repo/ui/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/ui/popover';
 import Vapi from '@vapi-ai/web';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -84,33 +84,31 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <p className="w-fit text-slate-50 font-medium text-sm py-2 px-4 bg-[hsl(222.2,47.4%,11.2%)] rounded-[calc(0.5rem-2px)] whitespace-nowrap h-9 gap-2 justify-center inline-flex items-center">
-                      Hover to give it a try!
-                    </p>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    sideOffset={10}
-                    side="bottom"
-                    className="bg-white flex flex-col gap-8 shadow-md max-w-80"
-                  >
-                    <p className="font-bold text-sm leading-5 text-gray-900">AI-Powered Product Tours!</p>
-                    <p className="text-sm leading-5 text-gray-500">
-                      Revolutionize your user onboarding with our AI voice agent. Create interactive, voice-guided tours
-                      that engage users and showcase your SaaS product's best features. <br /> <br /> Boost adoption
-                      rates and user satisfaction in minutes, not days.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <VoiceWave />
-                      <Link href="/sign-up">
-                        <Button>Create a tour</Button>
-                      </Link>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Popover>
+                <PopoverTrigger>
+                  <p className="w-fit text-slate-50 font-medium text-sm py-2 px-4 bg-[hsl(222.2,47.4%,11.2%)] rounded-[calc(0.5rem-2px)] whitespace-nowrap h-9 gap-2 justify-center inline-flex items-center">
+                    Give it a try!
+                  </p>
+                </PopoverTrigger>
+                <PopoverContent
+                  sideOffset={10}
+                  side="bottom"
+                  className="bg-white flex flex-col gap-8 shadow-md max-w-80"
+                >
+                  <p className="font-bold text-sm leading-5 text-gray-900">AI-Powered Product Tours!</p>
+                  <p className="text-sm leading-5 text-gray-500">
+                    Revolutionize your user onboarding with our AI voice agent. Create interactive, voice-guided tours
+                    that engage users and showcase your SaaS product's best features. <br /> <br /> Boost adoption rates
+                    and user satisfaction in minutes, not days.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <VoiceWave />
+                    <Link href="/sign-up">
+                      <Button>Create a tour</Button>
+                    </Link>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="py-12 sm:py-16 mx-auto max-w-7xl px-6 lg:px-8 lg:col-span-12">
