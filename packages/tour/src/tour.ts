@@ -8,32 +8,14 @@ let state: TourState = {
   cleanup: null,
 };
 
-const CONFIG_MOCK = {
-  steps: [
-    {
-      selector: ".pricing-link",
-      title: "Pricing",
-      text: "Get started. Click here to find out more about our pricing.",
-    },
-    {
-      selector: ".signup-link",
-      title: "Signup",
-      text: "Leverage AI to analyze your webapp structure and content, automatically generating tour steps and content suggestions. The finalized tour is implemented with voice AI assistance.",
-    },
-  ],
-} as Config;
-
 async function init(configUrl: string): Promise<void> {
   state.config = await fetchConfig(configUrl);
   renderOverlay();
 }
 
 async function fetchConfig(url: string): Promise<Config> {
-  //const response = await fetch(url);
-  //return response.json();
-  const config = { ...CONFIG_MOCK };
-
-  return config;
+  const response = await fetch(url);
+  return response.json();
 }
 
 function renderOverlay(): void {
