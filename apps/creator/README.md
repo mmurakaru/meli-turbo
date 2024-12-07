@@ -24,7 +24,6 @@
 - Design **while simulating:** latency, translation, media queries, platform constraints, orientation, screensize, etc
 - **Make more decisions** on the front end of your site/app (a11y, responsive, edge cases, etc)
 
-
 **No waiting** for developers to expose their legos, **just go direct** and edit the end state (regardless of framework) and **execute/test an idea**
 
 <br>
@@ -37,16 +36,16 @@
 <br>
 <br>
 
-Check out the [list of features me and other's are wishing for](https://github.com/GoogleChromeLabs/ProjectVisBug/issues?q=is%3Aopen+is%3Aissue+label%3A%22%E2%9A%A1%EF%B8%8F+feature%22). There's a lot of fun stuff planned or in demand. Cast your vote on a feature, leave some feedback or add clarity. 
+Check out the [list of features me and other's are wishing for](https://github.com/GoogleChromeLabs/ProjectVisBug/issues?q=is%3Aopen+is%3Aissue+label%3A%22%E2%9A%A1%EF%B8%8F+feature%22). There's a lot of fun stuff planned or in demand. Cast your vote on a feature, leave some feedback or add clarity.
 
 Let's do this **design community, I'm looking at you!** Make a GitHub account and start dreamin' in the [issues area!](https://github.com/GoogleChromeLabs/ProjectVisBug/issues) **Help create the tool you need to do your job better.**
 
-
 ## 🤔 **It's not:**
--   **A competitor** to design authoring tools like Figma, Sketch, XD, etc; **it's a complement!**
--   Something you would use **to start from scratch**
--   A **design system recognizer**, enforcer, enabler, etc.. but it is a **design system leverager!**
--   An **interaction** prototyping tool, you need to produce the states for VisBug to design against
+
+- **A competitor** to design authoring tools like Figma, Sketch, XD, etc; **it's a complement!**
+- Something you would use **to start from scratch**
+- A **design system recognizer**, enforcer, enabler, etc.. but it is a **design system leverager!**
+- An **interaction** prototyping tool, you need to produce the states for VisBug to design against
 
 <br>
 <br>
@@ -55,26 +54,26 @@ Let's do this **design community, I'm looking at you!** Make a GitHub account an
 ## Installation
 
 ### Add to your browser
+
 [Chrome Extension](https://chrome.google.com/webstore/detail/cdockenadnadldjbbgcallicgledbeoc)  
 [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/visbug/)  
 [Safari Extension](https://apps.apple.com/app/id1538509686)  
-[Edge Extension](https://microsoftedge.microsoft.com/addons/detail/visbug/kdmdoinnkaeognnpegpkepdnggeaodkn)  
+[Edge Extension](https://microsoftedge.microsoft.com/addons/detail/visbug/kdmdoinnkaeognnpegpkepdnggeaodkn)
 
 ### Getting Started
+
 [Check the Wiki](https://github.com/GoogleChromeLabs/ProjectVisBug/wiki)  
 [Master List of Keyboard Commands](https://github.com/GoogleChromeLabs/ProjectVisBug/wiki/Keyboard-Master-List)  
 [Open Feature Requests](https://github.com/GoogleChromeLabs/ProjectVisBug/issues?q=is%3Aopen+is%3Aissue+label%3A%22%E2%9A%A1%EF%B8%8F+feature%22)  
 [Chat on Gitter](https://gitter.im/VisBug)  
 [Chat on Spectrum](https://spectrum.chat/visbug)  
-[Load VisBug from a CDN](https://codepen.io/argyleink/pen/rNrQrpO)  
+[Load VisBug from a CDN](https://codepen.io/argyleink/pen/rNrQrpO)
 
 ### Web Component (coming soon 💀🤘)
+
 ```sh
 npm i visbug
 ```
-
-
-
 
 ## Contribute
 
@@ -89,15 +88,15 @@ If it hasn't, just open a [new clear and descriptive issue](../../issues/new).
 
 ### Submitting pull requests
 
--   Fork it!
--   Clone your fork: `git clone https://github.com/<your-username>/ProjectVisBug`
--   Navigate to the newly cloned directory: `cd ProjectVisBug`
--   Create a new branch for the new feature: `git checkout -b my-new-feature`
--   Install the packages for development: `npm i`
--   Make your changes
--   Commit your changes: `git commit -am 'Added some feature'`
--   Push the branch: `git push origin my-new-feature`
--   Submit a pull request with full remarks documenting your changes through the GitHub UI
+- Fork it!
+- Clone your fork: `git clone https://github.com/<your-username>/ProjectVisBug`
+- Navigate to the newly cloned directory: `cd ProjectVisBug`
+- Create a new branch for the new feature: `git checkout -b my-new-feature`
+- Install the packages for development: `npm i`
+- Make your changes
+- Commit your changes: `git commit -am 'Added some feature'`
+- Push the branch: `git push origin my-new-feature`
+- Submit a pull request with full remarks documenting your changes through the GitHub UI
 
 ## License
 
