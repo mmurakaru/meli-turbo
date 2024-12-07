@@ -1,56 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, install dependencies and build the project:
-
-```bash
-brew install gsed && pnpm install && pnpm build
-```
-
-This will create an `/out` directory that can you can add to Chrome as an extension. The `manifest.json` links `pages/index.js` to the generated `index.html`. On top of that, the `/public/content.js` script is configured to run on any host url.
-
-Second, run the development server for the Browser UI (or Chrome Extension Context):
-
-```bash
-pnpm dev:extension
-```
-
-or, run the development server for the Content Area (or Web Page Viewport):
-
-```bash
-pnpm dev:web
-```
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-**🚩 Note**: [`gsed`](https://formulae.brew.sh/formula/gnu-sed#default) is used during `build` and `development` steps to bundle the project in a Chrome extension. Therefore, you will need to have this CLI installed on your development machine.
-
-```bash
-brew install gsed // homebrew installation
-```
-
-## Add extension to chrome
-
-Open the Extension Management page by navigating to `chrome://extensions`. Enable Developer Mode by clicking the toggle switch next to Developer mode. Click the Load unpacked button and select the `/out` directory.
-
 <p align="center">
-<img src="/images/add-extension-to-chrome.png" alt="Screenshot of chrome://extensions page" width="616">
+  <img src="./assets/visbug.png" width="300" height="300" alt="visbug">
+  <br>
+  <a href="https://travis-ci.org/GoogleChromeLabs/ProjectVisBug"><img src="https://travis-ci.org/GoogleChromeLabs/ProjectVisBug.svg?branch=master" alt="travis build status"></a>
+  <a href="https://chrome.google.com/webstore/detail/visbug/cdockenadnadldjbbgcallicgledbeoc?hl=en"><img src="https://badgen.net/chrome-web-store/users/cdockenadnadldjbbgcallicgledbeoc"></a>
+  <a href="https://chrome.google.com/webstore/detail/visbug/cdockenadnadldjbbgcallicgledbeoc?hl=en"><img src="https://badgen.net/chrome-web-store/stars/cdockenadnadldjbbgcallicgledbeoc"></a>
 </p>
 
-## Learn More
+# 「VisBug」
 
-To learn more about Next.js, take a look at the following resources:
+> Open source web design debug tools
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Point, click & tinker
+- Hold shift and **multi-select**
+- Edit **any page** in **any state**
+- **Hover inspect** styles, accessibility and alignment
+- **Nitpick** layouts & content, **in the real end environment**, at any device size
+- **Leverage** design tool nudging skills
+- **Edit** any text
+- **Replace** image(s)
+- Traverse DOM like groups & layers in Sketch
+- Design **within the chaos** of production or prototypes and the **odd states** they produce
+- Bugs become **design opportunities**
+- Design **while simulating:** latency, translation, media queries, platform constraints, orientation, screensize, etc
+- **Make more decisions** on the front end of your site/app (a11y, responsive, edge cases, etc)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+**No waiting** for developers to expose their legos, **just go direct** and edit the end state (regardless of framework) and **execute/test an idea**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<br>
+<br>
+<br>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<h3 style="font-weight:300; max-width: 40ch;"><b>Give power</b> to designers & content creators power within the web project they have today, <b>by bringing design tool interactions</b> to the browser.</h3>
+
+<br>
+<br>
+<br>
+
+Check out the [list of features me and other's are wishing for](https://github.com/GoogleChromeLabs/ProjectVisBug/issues?q=is%3Aopen+is%3Aissue+label%3A%22%E2%9A%A1%EF%B8%8F+feature%22). There's a lot of fun stuff planned or in demand. Cast your vote on a feature, leave some feedback or add clarity. 
+
+Let's do this **design community, I'm looking at you!** Make a GitHub account and start dreamin' in the [issues area!](https://github.com/GoogleChromeLabs/ProjectVisBug/issues) **Help create the tool you need to do your job better.**
+
+
+## 🤔 **It's not:**
+-   **A competitor** to design authoring tools like Figma, Sketch, XD, etc; **it's a complement!**
+-   Something you would use **to start from scratch**
+-   A **design system recognizer**, enforcer, enabler, etc.. but it is a **design system leverager!**
+-   An **interaction** prototyping tool, you need to produce the states for VisBug to design against
+
+<br>
+<br>
+<br>
+
+## Installation
+
+### Add to your browser
+[Chrome Extension](https://chrome.google.com/webstore/detail/cdockenadnadldjbbgcallicgledbeoc)  
+[Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/visbug/)  
+[Safari Extension](https://apps.apple.com/app/id1538509686)  
+[Edge Extension](https://microsoftedge.microsoft.com/addons/detail/visbug/kdmdoinnkaeognnpegpkepdnggeaodkn)  
+
+### Getting Started
+[Check the Wiki](https://github.com/GoogleChromeLabs/ProjectVisBug/wiki)  
+[Master List of Keyboard Commands](https://github.com/GoogleChromeLabs/ProjectVisBug/wiki/Keyboard-Master-List)  
+[Open Feature Requests](https://github.com/GoogleChromeLabs/ProjectVisBug/issues?q=is%3Aopen+is%3Aissue+label%3A%22%E2%9A%A1%EF%B8%8F+feature%22)  
+[Chat on Gitter](https://gitter.im/VisBug)  
+[Chat on Spectrum](https://spectrum.chat/visbug)  
+[Load VisBug from a CDN](https://codepen.io/argyleink/pen/rNrQrpO)  
+
+### Web Component (coming soon 💀🤘)
+```sh
+npm i visbug
+```
+
+
+
+
+## Contribute
+
+First off, thanks for taking the time to contribute!
+Now, take a moment to be sure your contributions make sense to everyone else.
+Questions or need help building a feature, come [chat on Gitter](https://gitter.im/VisBug) or [Spectrum](https://spectrum.chat/visbug)!
+
+### Reporting Issues
+
+Found a problem? Want a new feature? First of all see if your issue or idea has [already been reported](../../issues).
+If it hasn't, just open a [new clear and descriptive issue](../../issues/new).
+
+### Submitting pull requests
+
+-   Fork it!
+-   Clone your fork: `git clone https://github.com/<your-username>/ProjectVisBug`
+-   Navigate to the newly cloned directory: `cd ProjectVisBug`
+-   Create a new branch for the new feature: `git checkout -b my-new-feature`
+-   Install the packages for development: `npm i`
+-   Make your changes
+-   Commit your changes: `git commit -am 'Added some feature'`
+-   Push the branch: `git push origin my-new-feature`
+-   Submit a pull request with full remarks documenting your changes through the GitHub UI
+
+## License
+
+[Apache2 License](LICENSE) © [Adam Argyle](https://argyleink.com)
