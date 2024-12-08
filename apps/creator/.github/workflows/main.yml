@@ -18,8 +18,8 @@ jobs:
       - name: Git Init
         run: |
           git switch -c main
-          git config --global user.email "argyle@google.com"
-          git config --global user.name "Adam Argyle"
+          git config --global user.email "mmurakaru@gmail.com"
+          git config --global user.name "Markus Murakaru"
 
       - name: Test & Build
         run: |
@@ -31,30 +31,22 @@ jobs:
         continue-on-error: true
         with:
           tags: true
-          branch: 'main'
+          branch: "main"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Save Build As Artifact
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: VisBug
-          path: extension/build/visbug.zip
+          name: Meli
+          path: extension/build/meli.zip
 
       - name: Publish Chrome Extension
         uses: trmcnvn/chrome-addon@v2
         continue-on-error: true
         with:
           extension: cdockenadnadldjbbgcallicgledbeoc
-          zip: extension/build/visbug.zip
+          zip: extension/build/meli.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-
-      - name: Firebase Deploy
-        uses: pizzafox/firebase-action@1.0.7
-        env:
-          PROJECT_ID: "visbug"
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        with:
-          args: deploy
