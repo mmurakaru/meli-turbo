@@ -1,0 +1,4 @@
+:host {
+  & [pass="true"] { color: green; }
+  & [pass="false"] { color: red; }
+}

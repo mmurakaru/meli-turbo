@@ -47,7 +47,7 @@ export default function SecurityPage() {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium bold text-gray-900 mb-6">Security Settings</h1>
+      <h1 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">Security Settings</h1>
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Password</CardTitle>
@@ -96,7 +96,7 @@ export default function SecurityPage() {
             {passwordState.success && <p className="text-green-500 text-sm">{passwordState.success}</p>}
             <Button
               type="submit"
-              className="bg-purple-500 hover:bg-purple-600 text-white"
+              className="bg-violet-700 hover:bg-violet-600 text-white"
               disabled={isPasswordPending}
             >
               {isPasswordPending ? (

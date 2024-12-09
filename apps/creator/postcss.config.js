@@ -1,8 +1,15 @@
-/** @type {import('postcss-load-config').Config} */
-const config = {
-  plugins: {
-    tailwindcss: {},
-  },
-};
+const postcssPresetEnv  = require('postcss-preset-env')
+const postcssImport     = require('postcss-import')
 
-module.exports = config;
+module.exports = {
+  plugins: [
+    postcssImport(),
+    postcssPresetEnv({
+      stage: 0,
+      browsers: [
+        'last 3 chrome version',
+        'last 3 firefox version',
+      ],
+    }),
+  ]
+}

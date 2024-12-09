@@ -4,7 +4,8 @@ import { ActionState } from '@/lib/auth/middleware';
 import { Button } from '@repo/ui/components/ui/button';
 import { Input } from '@repo/ui/components/ui/input';
 import { Label } from '@repo/ui/components/ui/label';
-import { AnchorIcon, Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useActionState } from 'react';
@@ -26,7 +27,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           href={'/'}
           className="flex justify-center"
         >
-          <AnchorIcon className="h-12 w-12 text-purple-500" />
+          <Image
+            src="icons/meli-logo-with-gradient.svg"
+            alt="Meli logo"
+            width={48}
+            height={48}
+          />
         </Link>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
@@ -104,7 +110,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             >
               {pending ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
                   Loading...
                 </>
               ) : mode === 'signin' ? (
