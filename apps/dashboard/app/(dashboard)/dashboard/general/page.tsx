@@ -37,7 +37,7 @@ export default function GeneralPage() {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">General Settings</h1>
+      <h1 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">General Settings</h1>
 
       <Card>
         <CardHeader>
@@ -73,7 +73,7 @@ export default function GeneralPage() {
             {state.success && <p className="text-green-500 text-sm">{state.success}</p>}
             <Button
               type="submit"
-              className="bg-purple-500 hover:bg-purple-600 text-white"
+              className="bg-violet-700 hover:bg-violet-600 text-white"
               disabled={isPending}
             >
               {isPending ? (

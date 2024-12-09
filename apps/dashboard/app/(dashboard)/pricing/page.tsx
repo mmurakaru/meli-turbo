@@ -1,7 +1,14 @@
 import { checkoutAction } from '@/lib/payments/actions';
 import { getStripePrices, getStripeProducts } from '@/lib/payments/stripe';
-import { Check } from 'lucide-react';
+import { buttonVariants } from '@repo/ui/components/ui/button';
+import { cn } from '@repo/ui/lib/utils';
+import { Check, Sparkle } from 'lucide-react';
+import Link from 'next/link';
+import Layout from '../layout';
 import { SubmitButton } from './submit-button';
+
+const FREE_PLAN_ID = 'Free';
+const PLUS_PLAN_ID = 'Plus';
 
 // Prices are fresh for one hour max
 export const revalidate = 3600;
@@ -16,39 +23,41 @@ export default async function PricingPage() {
   const plusPrice = prices.find((price) => price.productId === plusPlan?.id);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        <PricingCard
-          name="Free"
-          price={0}
-          interval="month"
-          trialDays={0}
-          features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
-          priceId="free_price"
-        />
-        <PricingCard
-          name={basePlan?.name || 'Base'}
-          price={basePrice?.unitAmount || 800}
-          interval={basePrice?.interval || 'month'}
-          trialDays={basePrice?.trialPeriodDays || 7}
-          features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
-          priceId={basePrice?.id}
-        />
-        <PricingCard
-          name={plusPlan?.name || 'Plus'}
-          price={plusPrice?.unitAmount || 1200}
-          interval={plusPrice?.interval || 'month'}
-          trialDays={plusPrice?.trialPeriodDays || 7}
-          features={[
-            'Everything in Base, and:',
-            'Unlimited Workspace Members',
-            'Product tour Analytics',
-            'Priority support',
-          ]}
-          priceId={plusPrice?.id}
-        />
-      </div>
-    </main>
+    <Layout isPublic>
+      <main className="px-4 sm:px-6 lg:px-8 py-20 bg-gray-50">
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <PricingCard
+            name="Free"
+            price={0}
+            interval="month"
+            trialDays={0}
+            features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
+            priceId="free_price"
+          />
+          <PricingCard
+            name={basePlan?.name || 'Base'}
+            price={basePrice?.unitAmount || 800}
+            interval={basePrice?.interval || 'month'}
+            trialDays={basePrice?.trialPeriodDays || 7}
+            features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
+            priceId={basePrice?.id}
+          />
+          <PricingCard
+            name={plusPlan?.name || 'Plus'}
+            price={plusPrice?.unitAmount || 1200}
+            interval={plusPrice?.interval || 'month'}
+            trialDays={plusPrice?.trialPeriodDays || 7}
+            features={[
+              'Everything in Base, and:',
+              'Unlimited Workspace Members',
+              'Product tour Analytics',
+              'Priority support',
+            ]}
+            priceId={plusPrice?.id}
+          />
+        </div>
+      </main>
+    </Layout>
   );
 }
 
@@ -67,9 +76,21 @@ function PricingCard({
   features: string[];
   priceId?: string;
 }) {
+  const isFreePlan = name === FREE_PLAN_ID;
+  const isPlusPlan = name === PLUS_PLAN_ID;
+
   return (
     <div className="pt-6">
-      <h2 className="text-2xl font-medium text-gray-900 mb-2">{name}</h2>
+      <div className="flex gap-1">
+        <h2 className={cn('text-2xl font-medium  mb-2', isPlusPlan ? 'text-violet-700' : 'text-gray-900')}>{name}</h2>
+        {isPlusPlan ? (
+          <Sparkle
+            strokeWidth={1.5}
+            className="text-violet-700 w-4 h-4"
+          />
+        ) : null}
+      </div>
+
       <p className="text-sm text-gray-600 mb-4">with {trialDays} day free trial</p>
       <p className="text-4xl font-medium text-gray-900 mb-6">
         €{price / 100} <span className="text-xl font-normal text-gray-600">per user / {interval}</span>
@@ -83,7 +104,16 @@ function PricingCard({
           name="priceId"
           value={priceId}
         />
-        <SubmitButton plan={name} />
+        {isFreePlan ? (
+          <Link
+            href="/dashboard"
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            Get started
+          </Link>
+        ) : (
+          <SubmitButton plan={name} />
+        )}
       </form>
       <ul className="space-y-4">
         {features.map((feature, index) => (
@@ -91,7 +121,7 @@ function PricingCard({
             key={index}
             className="flex items-start"
           >
-            <Check className="h-5 w-5 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
+            <Check className="h-5 w-5 text-violet-700 mr-2 mt-0.5 flex-shrink-0" />
             <span className="text-gray-700">{feature}</span>
           </li>
         ))}

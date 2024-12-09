@@ -11,7 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/ui/dropdown-menu';
 import { Separator } from '@repo/ui/components/ui/separator';
-import { Anchor, Home, LogOut } from 'lucide-react';
+import { cn } from '@repo/ui/lib/utils';
+import { HomeIcon, LogOutIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
@@ -28,20 +30,25 @@ function Header() {
   }
 
   return (
-    <header className="border-b border-gray-200">
+    <header className="fixed top-0 w-full border-b border-gray-200 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link
           href="/"
           className="flex items-center"
           aria-label="Meli"
         >
-          <Anchor className="h-6 w-6 text-purple-500" />
+          <Image
+            src="icons/meli-logo-with-gradient.svg"
+            alt="Meli logo"
+            width={24}
+            height={24}
+          />
           <span className="ml-2 text-xl font-semibold text-gray-900">MELI</span>
         </Link>
         <div className="flex items-center space-x-4">
           <Link
             href="/pricing"
-            className="pricing-link text-sm font-medium text-gray-700 hover:text-gray-900"
+            className="text-sm font-medium text-gray-700 hover:text-gray-900"
           >
             Pricing
           </Link>
@@ -63,27 +70,30 @@ function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="p-0"
+                className="bg-gray-50"
               >
-                <DropdownMenuItem className="w-full cursor-pointer m-1">
-                  <Link
-                    href="/dashboard"
-                    className="flex w-full items-center"
-                  >
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </DropdownMenuItem>
-                <form
-                  action={handleSignOut}
-                  className="p-1"
+                <Link
+                  href="/dashboard"
+                  className="flex w-full items-center"
                 >
+                  <DropdownMenuItem className="w-full cursor-pointer gap-1">
+                    <HomeIcon
+                      strokeWidth={1}
+                      className="mr-2 h-4 w-4"
+                    />
+                    <span>Dashboard</span>
+                  </DropdownMenuItem>
+                </Link>
+                <form action={handleSignOut}>
                   <button
                     type="submit"
-                    className="flex w-full"
+                    className="w-full p-0"
                   >
-                    <DropdownMenuItem className="w-full cursor-pointer">
-                      <LogOut className="mr-2 h-4 w-4" />
+                    <DropdownMenuItem className="w-full cursor-pointer gap-1">
+                      <LogOutIcon
+                        strokeWidth={1}
+                        className="mr-2 h-4 w-4"
+                      />
                       <span>Sign out</span>
                     </DropdownMenuItem>
                   </button>
@@ -96,12 +106,7 @@ function Header() {
                 variant="outline"
                 asChild
               >
-                <Link
-                  href="/sign-in"
-                  className="signin-link"
-                >
-                  Sign in
-                </Link>
+                <Link href="/sign-in">Sign in</Link>
               </Button>
               <Button asChild>
                 <Link
@@ -170,13 +175,14 @@ export function Footer() {
   ];
 
   const companyLinks = [{ href: '/about', label: 'About' }];
-
+  /* 
   const socialLinks = [
     { href: 'https://www.twitter.com/melihq', label: 'Twitter', className: 'bg-[url(/twitter-icon.svg)]' },
     { href: 'https://www.linkedin.com/company/melihq', label: 'LinkedIn', className: 'bg-[url(/linkedin-icon.svg)]' },
     { href: 'https://www.instagram.com/melihq', label: 'Instagram', className: 'bg-[url(/instagram-icon.svg)]' },
     { href: 'https://www.youtube.com/@melihq', label: 'YouTube', className: 'bg-[url(/youtube-icon.svg)]' },
-  ];
+  ]; */
+
   return (
     <footer className="bg-background text-foreground">
       <div className="container mx-auto px-6 py-12 max-w-7xl">
@@ -202,14 +208,19 @@ export function Footer() {
               className="flex items-center"
               aria-label="Meli"
             >
-              <Anchor className="h-6 w-6 text-purple-500" />
+              <Image
+                src="icons/meli-logo-with-gradient.svg"
+                alt="Meli logo"
+                width={24}
+                height={24}
+              />
               <span className="ml-2 text-xl font-semibold text-gray-900">MELI</span>
             </Link>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               © Copyright {new Date().getFullYear()} Meli Software. All rights reserved.
             </p>
           </div>
-          <div className="flex gap-4">
+          {/*           <div className="flex gap-4">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
@@ -220,19 +231,19 @@ export function Footer() {
                 aria-label={link.label}
               />
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
   );
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children, isPublic }: { children: React.ReactNode; isPublic?: boolean }) {
   return (
-    <section className="flex flex-col min-h-screen">
-      <Header />
+    <section className={cn('flex flex-col min-h-screen', isPublic ? 'pt-[4.25rem]' : null)}>
+      {isPublic && <Header />}
       {children}
-      <Footer />
+      {isPublic && <Footer />}
     </section>
   );
 }

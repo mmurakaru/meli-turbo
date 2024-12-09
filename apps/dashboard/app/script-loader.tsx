@@ -7,7 +7,6 @@ export default function ScriptLoader() {
         rel="stylesheet"
         href="https://tour-meli-ai.vercel.app/bundle.min.css"
       />
-      ;
       <Script>
         {`
         window.tourMeli = window.tourMeli || {};
