@@ -59,7 +59,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             isSidebarOpen ? 'block translate-x-0 fixed' : 'hidden -translate-x-full',
           )}
         >
-          <nav className="h-full overflow-y-auto p-4 flex flex-col">
+          <nav className="h-[100dvh] overflow-y-auto p-4 flex flex-col">
             <div className="mb-4 px-4 flex items-center">
               <span className="text-sm font-medium uppercase">{user?.name}</span>
             </div>
