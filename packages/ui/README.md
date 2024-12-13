@@ -3,7 +3,7 @@
 Adding a new component:
 
 ```bash
-pnpx shadcn@latest add [component]
+pnpx shadcn@latest add
 ```
 
 You will be presented with a list of components to choose from:

@@ -1,5 +1,6 @@
 'use client';
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/ui/components/ui/accordion';
 import { Button } from '@repo/ui/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/ui/popover';
 import Vapi from '@vapi-ai/web';
@@ -122,7 +123,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="py-12 sm:py-16 mx-auto max-w-7xl px-6 lg:px-8 lg:col-span-12">
+              <div className="py-12 sm:py-16 mx-auto max-w-7xl lg:col-span-12">
                 <h2 className="text-base sm:text-xl lg:text-lg xl:text-xl tracking-tight text-center text-gray-900">
                   Trusted by
                 </h2>
@@ -168,6 +169,40 @@ export default function HomePage() {
               {/*             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
               <Terminal />
             </div> */}
+
+              <div className="py-12 sm:py-16 max-w-7xl lg:col-span-12">
+                <h2 className="font-bold text-base sm:text-xl lg:text-lg xl:text-xl tracking-tight text-gray-900">
+                  FAQ's
+                </h2>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full"
+                >
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Are tooltips accessible?</AccordionTrigger>
+                    <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>Are tooltips styled & branded?</AccordionTrigger>
+                    <AccordionContent>
+                      Yes. Tooltips come with default styles and Meli branding, but you can get unbranded tooltips when
+                      choosing our Base or Pro plan.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger>Are tour steps animated?</AccordionTrigger>
+                    <AccordionContent>Yes. The tour steps are animated by default.</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-4">
+                    <AccordionTrigger>Is a developer needed to implement a product tour?</AccordionTrigger>
+                    <AccordionContent>
+                      Yes. Setting up the product tour rendering requires developer intervention. Creating the tour
+                      itself can be done no-code.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
             </div>
           </div>
         </section>
