@@ -2,7 +2,7 @@ import { getTeamForUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 import { Settings } from './settings';
 
-export default async function SettingsPage() {
+export default async function WorkspacePage() {
   const user = await getUser();
 
   if (!user) {

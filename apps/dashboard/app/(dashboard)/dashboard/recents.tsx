@@ -7,6 +7,7 @@ import Link from 'next/link';
 export function Recents() {
   return (
     <section className="flex-1 p-4 lg:p-8">
+      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>

@@ -1,6 +1,7 @@
 'use client';
 
-import { deleteAccount, updatePassword } from '@/app/(login)/actions';
+import { deleteAccount, updateAccount, updatePassword } from '@/app/(login)/actions';
+import { useUser } from '@/lib/auth';
 import { Button } from '@repo/ui/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
 import { Input } from '@repo/ui/components/ui/input';
@@ -14,6 +15,7 @@ type ActionState = {
 };
 
 export default function SecurityPage() {
+  const { user } = useUser();
   const [passwordState, passwordAction, isPasswordPending] = useActionState<ActionState, FormData>(updatePassword, {
     error: '',
     success: '',
@@ -45,9 +47,78 @@ export default function SecurityPage() {
     });
   };
 
+  const [state, formAction, isPending] = useActionState<ActionState, FormData>(updateAccount, {
+    error: '',
+    success: '',
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // If you call the Server Action directly, it will automatically
+    // reset the form. We don't want that here, because we want to keep the
+    // client-side values in the inputs. So instead, we use an event handler
+    // which calls the action. You must wrap direct calls with startTranstion.
+    // When you use the `action` prop it automatically handles that for you.
+    // Another option here is to persist the values to local storage. I might
+    // explore alternative options.
+    startTransition(() => {
+      formAction(new FormData(event.currentTarget));
+    });
+  };
+
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-bold text-gray-900 mb-6">Security Settings</h1>
+      <h1 className="text-lg lg:text-2xl font-extrabold text-gray-900 mb-6">Account Settings</h1>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Account Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="space-y-4"
+            onSubmit={handleSubmit}
+          >
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                defaultValue={user?.name || ''}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                defaultValue={user?.email || ''}
+                required
+              />
+            </div>
+            {state.error && <p className="text-red-500 text-sm">{state.error}</p>}
+            {state.success && <p className="text-green-500 text-sm">{state.success}</p>}
+            <Button
+              type="submit"
+              variant={'secondary'}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Password</CardTitle>
@@ -96,7 +167,7 @@ export default function SecurityPage() {
             {passwordState.success && <p className="text-green-500 text-sm">{passwordState.success}</p>}
             <Button
               type="submit"
-              className="bg-violet-700 hover:bg-violet-600 text-white"
+              variant={'secondary'}
               disabled={isPasswordPending}
             >
               {isPasswordPending ? (
@@ -106,7 +177,7 @@ export default function SecurityPage() {
                 </>
               ) : (
                 <>
-                  <Lock className="mr-2 h-4 w-4" />
+                  <Lock className="mr-2 h-4 w-4 stroke-1" />
                   Update Password
                 </>
               )}
@@ -150,7 +221,7 @@ export default function SecurityPage() {
                 </>
               ) : (
                 <>
-                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trash2 className="mr-2 h-4 w-4 stroke-1" />
                   Delete Account
                 </>
               )}

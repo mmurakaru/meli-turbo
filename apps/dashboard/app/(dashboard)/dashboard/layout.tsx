@@ -2,9 +2,11 @@
 
 import { signOut } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
 import { Button } from '@repo/ui/components/ui/button';
+import { Separator } from '@repo/ui/components/ui/separator';
 import { cn } from '@repo/ui/lib/utils';
-import { Activity, AnchorIcon, ChartColumn, Clock, LogOutIcon, Menu, Settings, Shield, Users } from 'lucide-react';
+import { AnchorIcon, ChartColumn, Clock, LogOutIcon, Menu, Settings, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -15,13 +17,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const navItems = [
+  const navItemsTop = [
     { href: '/dashboard', icon: Clock, label: 'Recents' },
     { href: '/dashboard/analytics', icon: ChartColumn, label: 'Analytics' },
-    { href: '/dashboard/team', icon: Users, label: 'Team' },
-    { href: '/dashboard/general', icon: Settings, label: 'General' },
-    { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
-    { href: '/dashboard/security', icon: Shield, label: 'Security' },
+    // { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
+  ];
+
+  const navItemsBottom = [
+    { href: '/dashboard/workspace', icon: Users, label: 'Workspace Settings' },
+    { href: '/dashboard/account', icon: Settings, label: 'Account settings' },
   ];
 
   async function handleSignOut() {
@@ -33,7 +37,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex flex-col min-h-[100dvh] max-w-7xl w-full">
       {/* Mobile header */}
-      <div className="lg:hidden flex items-center justify-between bg-white border-b border-gray-200 p-4">
+      <div className="sticky top-0 lg:hidden flex items-center justify-between bg-white border-b border-gray-200 p-4 z-10">
         <div className="flex items-center">
           <AnchorIcon
             strokeWidth={1}
@@ -51,19 +55,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </Button>
       </div>
 
-      <div className="flex flex-1 overflow-hidden h-full">
+      <div className="flex flex-1 h-full">
         {/* Sidebar */}
         <aside
           className={cn(
-            'w-64 bg-white border-r border-gray-200 lg:block lg:relative absolute inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0',
+            'w-64 bg-white border-r border-gray-200 lg:block lg:sticky lg:h-full absolute inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0',
             isSidebarOpen ? 'block translate-x-0 fixed' : 'hidden -translate-x-full',
           )}
         >
           <nav className="h-[100dvh] overflow-y-auto p-4 flex flex-col">
-            <div className="mb-4 px-4 flex items-center">
-              <span className="text-sm font-medium uppercase">{user?.name}</span>
+            <div className="mb-4 flex items-center gap-2">
+              <Avatar className="size-6">
+                <AvatarImage alt={user?.name || ''} />
+                <AvatarFallback className="bg-violet-500 text-white">
+                  {user?.email
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-medium">{user?.email.split('@')[0]}</span>
             </div>
-            {navItems.map((item) => (
+
+            {navItemsTop.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -83,22 +97,41 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Link>
             ))}
 
-            <form
-              className="mt-auto"
-              action={handleSignOut}
-            >
-              <Button
-                type="submit"
-                variant="ghost"
-                className="my-1 w-full justify-start"
-              >
-                <LogOutIcon
-                  strokeWidth={1}
-                  className="mr-2 h-4 w-4"
-                />
-                <span className="font-light">Sign out</span>
-              </Button>
-            </form>
+            <div className="mt-auto">
+              <Separator className="my-4" />
+              {navItemsBottom.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  passHref
+                >
+                  <Button
+                    variant={pathname === item.href ? 'secondary' : 'ghost'}
+                    className={`my-1 w-full justify-start ${pathname === item.href ? 'bg-gray-100' : ''}`}
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <item.icon
+                      strokeWidth={1}
+                      className="mr-2 h-4 w-4"
+                    />
+                    <span className="font-light">{item.label}</span>
+                  </Button>
+                </Link>
+              ))}
+              <form action={handleSignOut}>
+                <Button
+                  type="submit"
+                  variant="ghost"
+                  className="my-1 w-full justify-start"
+                >
+                  <LogOutIcon
+                    strokeWidth={1}
+                    className="mr-2 h-4 w-4"
+                  />
+                  <span className="font-light">Sign out</span>
+                </Button>
+              </form>
+            </div>
           </nav>
         </aside>
 

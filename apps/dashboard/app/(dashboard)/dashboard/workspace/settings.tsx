@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avat
 import { Button } from '@repo/ui/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
 import { useActionState } from 'react';
-import { InviteTeamMember } from './invite-team';
+import { InviteMember } from './invite-member';
 
 type ActionState = {
   error?: string;
@@ -26,16 +26,16 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-bold mb-6">Team Settings</h1>
+      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Workspace Settings</h1>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Team Subscription</CardTitle>
+          <CardTitle>Subscription</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
-                <p className="font-medium">Current Plan: {teamData.planName || 'Free'}</p>
+                <p className="font-medium text-gradient">Current Plan: {teamData.planName || 'Free'}</p>
                 <p className="text-sm text-muted-foreground">
                   {teamData.subscriptionStatus === 'active'
                     ? 'Billed monthly'
@@ -47,7 +47,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
               <form action={customerPortalAction}>
                 <Button
                   type="submit"
-                  variant="outline"
+                  variant="secondary"
                 >
                   Manage Subscription
                 </Button>
@@ -58,7 +58,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
       </Card>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Team Members</CardTitle>
+          <CardTitle>Members</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
@@ -109,7 +109,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
           {removeState?.error && <p className="text-red-500 mt-4">{removeState.error}</p>}
         </CardContent>
       </Card>
-      <InviteTeamMember />
+      <InviteMember />
     </section>
   );
 }

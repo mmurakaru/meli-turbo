@@ -15,7 +15,7 @@ type ActionState = {
   success?: string;
 };
 
-export function InviteTeamMember() {
+export function InviteMember() {
   const { user } = useUser();
   const isOwner = user?.role === 'owner';
   const [inviteState, inviteAction, isInvitePending] = useActionState<ActionState, FormData>(inviteTeamMember, {
@@ -26,7 +26,7 @@ export function InviteTeamMember() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invite Team Member</CardTitle>
+        <CardTitle>Invite Member</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -72,8 +72,8 @@ export function InviteTeamMember() {
           {inviteState?.success && <p className="text-green-500">{inviteState.success}</p>}
           <Button
             type="submit"
-            className="bg-violet-700 hover:bg-violet-600 text-white"
             disabled={isInvitePending || !isOwner}
+            variant={'secondary'}
           >
             {isInvitePending ? (
               <>
@@ -82,7 +82,7 @@ export function InviteTeamMember() {
               </>
             ) : (
               <>
-                <PlusCircle className="mr-2 h-4 w-4" />
+                <PlusCircle className="mr-2 h-4 w-4 stroke-1" />
                 Invite Member
               </>
             )}
