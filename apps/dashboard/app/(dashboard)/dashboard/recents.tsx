@@ -7,10 +7,10 @@ export function Recents() {
   return (
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
-      <div className="grid gap-6 sm:grid-cols-2 w-fit">
+      <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <Link href={'/dashboard/tours/1'}>
-            <Card className="h-56 w-96 bg-gray-50"></Card>
+            <Card className="w-full max-h-56 aspect-video bg-gray-50"></Card>
           </Link>
           <div className="py-4">
             <p className="font-bold text-gray-700 text-sm">Untitled Tour</p>
@@ -25,7 +25,7 @@ export function Recents() {
         </div>
         <div>
           <Link href={'/dashboard/tours/1'}>
-            <Card className="h-56 w-96 bg-gray-50"></Card>
+            <Card className="w-full max-h-56 aspect-video bg-gray-50"></Card>
           </Link>
           <div className="py-4">
             <p className="font-bold text-gray-700 text-sm">Untitled Tour</p>
@@ -40,7 +40,7 @@ export function Recents() {
         </div>
         <div>
           <Link href={'/dashboard/tours/1'}>
-            <Card className="h-56 w-96 bg-gray-50"></Card>
+            <Card className="w-full max-h-56 aspect-video bg-gray-50"></Card>
           </Link>
           <div className="py-4">
             <p className="font-bold text-gray-700 text-sm">Untitled Tour</p>
