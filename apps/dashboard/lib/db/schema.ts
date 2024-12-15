@@ -170,6 +170,7 @@ export type Step = typeof steps.$inferSelect;
 export type NewStep = typeof steps.$inferInsert;
 export type TourWithSteps = Tour & {
   steps: Step[];
+  team: Pick<Team, 'id' | 'name'>;
 };
 
 export enum ActivityType {

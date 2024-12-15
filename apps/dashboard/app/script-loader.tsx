@@ -11,7 +11,7 @@ export default function ScriptLoader() {
         {`
         window.tourMeli = window.tourMeli || {};
         window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js'
-        window.tourMeli.configUrl = 'https://meli-ai.com/api/tours/123';
+        window.tourMeli.configUrl = 'https://meli-ai.com/api/tours/1';
 
         (function(w, d, s, c) {
         var script = d.createElement('script');
