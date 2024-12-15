@@ -1,20 +1,26 @@
 'use client';
 
 import { Check, Copy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export function Terminal() {
-  const [terminalStep, setTerminalStep] = useState(0);
+export function Terminal({ tourId }: { tourId: string }) {
   const [copied, setCopied] = useState(false);
-  const terminalSteps = ['yarn add meli-ai/web', 'npm add meli-ai/web', 'pnpm add meli-ai/web'];
+  const terminalSteps = [
+    '<link rel="stylesheet" href="https://tour-meli-ai.vercel.app/bundle.css" />',
+    `<script>
+      window.tourMeli = window.tourMeli || {};
+      window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js';
+      window.tourMeli.configUrl = 'https://meli-ai.com/api/tours/${tourId}';
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTerminalStep((prev) => (prev < terminalSteps.length - 1 ? prev + 1 : prev));
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [terminalStep]);
+      (function(w, d, s, c) {
+        var script = d.createElement('script');
+        script.src = s;
+        script.async = true;
+        script.onload = () => w.initProductTour(c);
+        d.head.appendChild(script);
+      })(window, document, window.tourMeli.scriptUrl, window.tourMeli.configUrl);
+  </script>`,
+  ];
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(terminalSteps.join('\n'));
@@ -23,14 +29,12 @@ export function Terminal() {
   };
 
   return (
-    <div className="w-full rounded-lg shadow-lg overflow-hidden bg-gray-900 text-white font-mono text-sm relative">
+    <div className="w-full rounded-lg shadow-sm overflow-hidden bg-gray-50 text-white font-mono text-sm relative">
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
+          <p className="font-semibold text-sm text-gray-900">
+            Add this snippet the head of your application to render the tour
+          </p>
           <button
             onClick={copyToClipboard}
             className="text-gray-400 hover:text-white transition-colors"
@@ -39,13 +43,13 @@ export function Terminal() {
             {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
           </button>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 text-gray-900">
           {terminalSteps.map((step, index) => (
             <div
               key={index}
-              className={`${index > terminalStep ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+              className="opacity-100 transition-opacity duration-300"
             >
-              <span className="text-green-400">$</span> {step}
+              {step}
             </div>
           ))}
         </div>

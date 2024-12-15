@@ -2,7 +2,7 @@ import { verifyToken } from '@/lib/auth/session';
 import { and, desc, eq, isNull } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import { activityLogs, teamMembers, teams, tours, users } from './schema';
 
 export async function getUser() {
   const cookieStore = await cookies();
@@ -119,4 +119,24 @@ export async function getTeamForUser(userId: number) {
   });
 
   return result?.teamMembers[0]?.team || null;
+}
+
+// Schema change required
+// Add ownerId -> teamId or userId
+// Add ownerType -> 'team' or 'user'
+export async function getTours(teamId: number) {
+  return await db
+    .select({
+      id: tours.id,
+      title: tours.title,
+      teamId: tours.teamId,
+      description: tours.description,
+      createdAt: tours.createdAt,
+      updatedAt: tours.updatedAt,
+      deletedAt: tours.deletedAt,
+    })
+    .from(tours)
+    .where(eq(tours.teamId, teamId))
+    .orderBy(desc(tours.updatedAt))
+    .limit(10);
 }

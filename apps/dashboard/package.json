@@ -17,6 +17,7 @@
     "@repo/ui": "workspace:*",
     "@vapi-ai/web": "^2.1.7",
     "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.28.0",
     "drizzle-orm": "^0.36.1",
@@ -33,12 +34,12 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "clsx": "^2.1.1",
+    "@eslint/js": "^9.14.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@types/node": "^22.9.0",
-    "@eslint/js": "^9.14.0",
+    "clsx": "^2.1.1",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.12.0",
