@@ -11,7 +11,7 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
         {tourData.map((tour) => (
-          <div>
+          <div key={tour.id}>
             <Link href={`/dashboard/tours/${tour.id}`}>
               <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
             </Link>
