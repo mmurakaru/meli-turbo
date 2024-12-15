@@ -63,16 +63,27 @@ export const invitations = pgTable('invitations', {
 
 export const tours = pgTable('tours', {
   id: serial('id').primaryKey(),
-  uuid: varchar('uuid', { length: 36 }).notNull().unique(),
   teamId: integer('team_id')
     .notNull()
     .references(() => teams.id),
   title: varchar('title', { length: 100 }).notNull(),
   description: text('description').notNull(),
-  steps: text('steps').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
+});
+
+export const steps = pgTable('steps', {
+  id: serial('id').primaryKey(),
+  tourId: integer('tour_id')
+    .notNull()
+    .references(() => tours.id),
+  selector: varchar('selector', { length: 255 }).notNull(),
+  title: varchar('title', { length: 100 }).notNull(),
+  text: text('text').notNull(),
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -119,10 +130,18 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
   }),
 }));
 
-export const toursRelations = relations(tours, ({ one }) => ({
+export const toursRelations = relations(tours, ({ one, many }) => ({
   team: one(teams, {
     fields: [tours.teamId],
     references: [teams.id],
+  }),
+  steps: many(steps),
+}));
+
+export const stepsRelations = relations(steps, ({ one }) => ({
+  tour: one(tours, {
+    fields: [steps.tourId],
+    references: [tours.id],
   }),
 }));
 
@@ -147,12 +166,10 @@ export type NewTour = typeof tours.$inferInsert;
 export type TourWithTeam = Tour & {
   team: Pick<Team, 'id' | 'name'>;
 };
+export type Step = typeof steps.$inferSelect;
+export type NewStep = typeof steps.$inferInsert;
 export type TourWithSteps = Tour & {
-  steps: Array<{
-    selector: string;
-    title: string;
-    text: string;
-  }>;
+  steps: Step[];
 };
 
 export enum ActivityType {
