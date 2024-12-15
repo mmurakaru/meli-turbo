@@ -83,6 +83,15 @@ Optionally, you can listen for Stripe webhooks locally through their CLI to hand
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
+## Database migration
+
+```bash
+pnpm db:generate
+pnpm db:migrate
+```
+
+See [https://orm.drizzle.team/docs/migrations](Migration docs) for more options
+
 ## Testing Payments
 
 To test Stripe payments, use the following test card details:

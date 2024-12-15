@@ -15,6 +15,13 @@
       "when": 1733069033065,
       "tag": "0001_fair_sage",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734270388638,
+      "tag": "0002_narrow_the_enforcers",
+      "breakpoints": true
     }
   ]
 }
