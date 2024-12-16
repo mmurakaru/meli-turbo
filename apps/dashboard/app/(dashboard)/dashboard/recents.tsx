@@ -8,7 +8,12 @@ import Link from 'next/link';
 export function Recents({ tourData }: { tourData: Tour[] }) {
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
+      <h1
+        id="meli-step-1"
+        className="text-lg lg:text-2xl font-extrabold mb-6"
+      >
+        Recents
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
         {tourData.map((tour) => (
           <div key={tour.id}>

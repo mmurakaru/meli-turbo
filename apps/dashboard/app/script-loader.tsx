@@ -7,7 +7,7 @@ export default function ScriptLoader() {
         rel="stylesheet"
         href="https://tour-meli-ai.vercel.app/bundle.min.css"
       />
-      <Script>
+      <Script defer>
         {`
         window.tourMeli = window.tourMeli || {};
         window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js'

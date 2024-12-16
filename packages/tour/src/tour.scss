@@ -1,4 +1,10 @@
-.tour-overlay {
+#tour-overlay {
+  width: max-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2147483643;
+
   border: 1px solid #a855f7;
   padding: 0.8rem;
   border-radius: 0.2rem;

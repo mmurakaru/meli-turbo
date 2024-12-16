@@ -18,14 +18,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItemsTop = [
-    { href: '/dashboard', icon: Clock, label: 'Recents' },
-    { href: '/dashboard/analytics', icon: ChartColumn, label: 'Analytics' },
+    { href: '/dashboard', icon: Clock, label: 'Recents', id: null },
+    { href: '/dashboard/analytics', icon: ChartColumn, label: 'Analytics', id: null },
     // { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
   ];
 
   const navItemsBottom = [
-    { href: '/dashboard/workspace', icon: Users, label: 'Workspace Settings' },
-    { href: '/dashboard/account', icon: Settings, label: 'Account settings' },
+    { href: '/dashboard/workspace', icon: Users, label: 'Workspace Settings', id: 'meli-step-2' },
+    { href: '/dashboard/account', icon: Settings, label: 'Account settings', id: null },
   ];
 
   async function handleSignOut() {
@@ -79,6 +79,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {navItemsTop.map((item) => (
               <Link
+                id={item.id ?? undefined}
                 key={item.href}
                 href={item.href}
                 passHref
@@ -101,6 +102,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Separator className="my-4" />
               {navItemsBottom.map((item) => (
                 <Link
+                  id={item.id ?? undefined}
                   key={item.href}
                   href={item.href}
                   passHref

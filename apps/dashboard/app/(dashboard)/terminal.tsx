@@ -7,7 +7,7 @@ export function Terminal({ tourId }: { tourId: string }) {
   const [copied, setCopied] = useState(false);
   const terminalSteps = [
     '<link rel="stylesheet" href="https://tour-meli-ai.vercel.app/bundle.css" />',
-    `<script>
+    `<script defer>
       window.tourMeli = window.tourMeli || {};
       window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js';
       window.tourMeli.configUrl = 'https://meli-ai.com/api/tours/${tourId}';

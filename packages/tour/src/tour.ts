@@ -1,5 +1,13 @@
 import { Config, Step, TourState } from "./tour.types";
 
+import {
+  autoUpdate,
+  computePosition,
+  flip,
+  offset,
+  platform,
+  shift,
+} from "@floating-ui/dom";
 import "./tour.scss";
 
 let state: TourState = {
@@ -22,7 +30,7 @@ function renderOverlay(): void {
   if (!state.config) return;
 
   const step = state.config.steps[state.currentStep];
-  const referenceElement = document.querySelector(step.selector);
+  const referenceElement = document.querySelector(`#${step.selector}`);
 
   if (!referenceElement) {
     console.error(`Reference element not found: ${step.selector}`);
@@ -32,45 +40,44 @@ function renderOverlay(): void {
   const overlay = createOverlayElement(step);
   document.body.appendChild(overlay);
 
-  positionOverlay(referenceElement as HTMLElement, overlay);
+  requestAnimationFrame(() => {
+    positionOverlay(referenceElement as Element, overlay);
+  });
 
   overlay
     .querySelector(".tour-overlay--button-primary")
     ?.addEventListener("click", nextStep);
 }
 
-function createOverlayElement(step: Step): HTMLDivElement {
+function createOverlayElement(step: Step): HTMLElement {
   const overlay = document.createElement("div");
-  overlay.className = "tour-overlay";
+  overlay.id = "tour-overlay";
   overlay.innerHTML = `
     <h3 class="tour-overlay--title">${step.title}</h3>
     <p class="tour-overlay--text">${step.text}</p>
     <button class="tour-overlay--button-primary">Next</button>
   `;
+
   return overlay;
 }
 
-function positionOverlay(reference: HTMLElement, overlay: HTMLElement): void {
+function positionOverlay(reference: Element, overlay: HTMLElement): void {
   if (!reference || !overlay) return;
 
-  /*   state.cleanup = autoUpdate(reference, overlay, () => {
+  state.cleanup = autoUpdate(reference, overlay, () => {
     computePosition(reference, overlay, {
       platform,
       middleware: [offset(10), flip(), shift()],
-    }).then(({ x, y }) => {
-      Object.assign(overlay.style, {
-        left: `${x}px`,
-        top: `${y}px`,
+    })
+      .then(({ x, y }) => {
+        Object.assign(overlay.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      })
+      .catch((error) => {
+        console.error("Error in computePosition:", error);
       });
-    });
-  }); */
-
-  const rect = reference.getBoundingClientRect();
-
-  Object.assign(overlay.style, {
-    position: "absolute",
-    left: `${rect.left + window.scrollX}px`,
-    top: `${rect.bottom + window.scrollY + 10}px`,
   });
 }
 
@@ -84,7 +91,7 @@ function nextStep(): void {
 
   state.currentStep++;
   if (state.currentStep < state.config.steps.length) {
-    document.querySelector(".tour-overlay")?.remove();
+    document.querySelector("#tour-overlay")?.remove();
     renderOverlay();
   } else {
     end();
@@ -97,7 +104,7 @@ function end(): void {
     state.cleanup = null;
   }
 
-  document.querySelector(".tour-overlay")?.remove();
+  document.querySelector("#tour-overlay")?.remove();
 }
 
 declare global {
