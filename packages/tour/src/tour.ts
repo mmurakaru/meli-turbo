@@ -79,6 +79,7 @@ function positionOverlay(reference: Element, overlay: HTMLElement): void {
 
   state.cleanup = autoUpdate(reference, overlay, () => {
     computePosition(reference, overlay, {
+      placement: "bottom-start",
       platform,
       middleware: [offset(10), flip(), shift()],
     })
