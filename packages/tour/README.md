@@ -1,7 +1,7 @@
 # Add script & styles to your index.html
 
 ```bash
-  <link rel="stylesheet" href="https://tour-meli-ai.vercel.app/bundle.css" />
+  <link rel="stylesheet" href="https://tour-meli-ai.vercel.app/bundle.min.css" />
   <script defer>
       window.tourMeli = window.tourMeli || {};
       window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js';

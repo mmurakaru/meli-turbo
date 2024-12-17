@@ -19,6 +19,7 @@ let state: TourState = {
 async function init(configUrl: string): Promise<void> {
   state.config = await fetchConfig(configUrl);
   renderOverlay();
+  setupMutationObserver();
 }
 
 async function fetchConfig(url: string): Promise<Config> {
@@ -107,6 +108,20 @@ function end(): void {
   document.querySelector("#tour-overlay")?.remove();
 }
 
+// Initialize tour when target exists in DOM
+function setupMutationObserver(): void {
+  const observer = new MutationObserver(() => {
+    if (state.config) {
+      const currentStep = state.config.steps[state.currentStep];
+      if (currentStep && document.querySelector(`#${currentStep.selector}`)) {
+        renderOverlay();
+      }
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
 declare global {
   interface TourMeli {
     scriptUrl: string;
@@ -121,4 +136,13 @@ declare global {
 
 if (typeof window !== "undefined") {
   window.initProductTour = init;
+
+  // Reinitalize tour on route change
+  if ((window as any).next) {
+    (window as any).next.router.events.on("routeChangeComplete", () => {
+      if (state.config) {
+        renderOverlay();
+      }
+    });
+  }
 }
