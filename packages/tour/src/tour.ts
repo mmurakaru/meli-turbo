@@ -138,11 +138,11 @@ if (typeof window !== "undefined") {
   window.initProductTour = init;
 
   // Reinitalize tour on route change
-  if ((window as any).next) {
-    (window as any).next.router.events.on("routeChangeComplete", () => {
-      if (state.config) {
-        renderOverlay();
-      }
-    });
-  }
+  // if ((window as any).next) {
+  //   (window as any).next.router.events.on("routeChangeComplete", () => {
+  //     if (state.config) {
+  //       renderOverlay();
+  //     }
+  //   });
+  // }
 }
