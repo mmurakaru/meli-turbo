@@ -76,7 +76,7 @@ export default function HomePage() {
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-              <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-12 ">
+              <div className="lg:text-center md:max-w-2xl md:mx-auto lg:col-span-12">
                 <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
                   Transform Your User Onboarding Experience
                   <span className="bg-gradient-to-r from-[#2d3af7] to-[#c90add] text-transparent bg-clip-text inline-block sm:leading-[3.75rem] md:leading-[4.5rem]">
@@ -89,7 +89,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-2 mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
+              <div className="mt-12 mx-auto max-w-2xl col-span-12">
                 <div className="flex items-center gap-2">
                   <Button asChild>
                     <Link href={'/sign-up'}>Sign up for free</Link>

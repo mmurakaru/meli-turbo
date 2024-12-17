@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avat
 import { Button } from '@repo/ui/components/ui/button';
 import { Separator } from '@repo/ui/components/ui/separator';
 import { cn } from '@repo/ui/lib/utils';
-import { AnchorIcon, ChartColumn, Clock, LogOutIcon, Menu, Settings, Users } from 'lucide-react';
+import { AnchorIcon, ChartColumn, CircleUser, Clock, LogOutIcon, Menu, Settings, UserCog, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -20,12 +20,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navItemsTop = [
     { href: '/dashboard', icon: Clock, label: 'Recents', id: null },
     { href: '/dashboard/analytics', icon: ChartColumn, label: 'Analytics', id: null },
+    { href: '/dashboard/team', icon: Users, label: 'Team', id: null },
+    { href: '/dashboard/private', icon: CircleUser, label: 'Private', id: null },
     // { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
   ];
 
   const navItemsBottom = [
-    { href: '/dashboard/workspace', icon: Users, label: 'Workspace Settings', id: 'meli-step-2' },
-    { href: '/dashboard/account', icon: Settings, label: 'Account settings', id: null },
+    { href: '/dashboard/workspace', icon: Settings, label: 'Workspace Settings', id: 'meli-step-2' },
+    { href: '/dashboard/account', icon: UserCog, label: 'Account settings', id: null },
   ];
 
   async function handleSignOut() {

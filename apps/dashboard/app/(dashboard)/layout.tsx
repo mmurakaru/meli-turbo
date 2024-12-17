@@ -38,7 +38,7 @@ function Header() {
           aria-label="Meli"
         >
           <Image
-            src="icons/meli-logo-with-gradient.svg"
+            src="/icons/meli-logo-with-gradient.svg"
             alt="Meli logo"
             width={24}
             height={24}
@@ -209,7 +209,7 @@ export function Footer() {
               aria-label="Meli"
             >
               <Image
-                src="icons/meli-logo-with-gradient.svg"
+                src="/icons/meli-logo-with-gradient.svg"
                 alt="Meli logo"
                 width={24}
                 height={24}

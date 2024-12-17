@@ -28,7 +28,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           className="flex justify-center"
         >
           <Image
-            src="icons/meli-logo-with-gradient.svg"
+            src="/icons/meli-logo-with-gradient.svg"
             alt="Meli logo"
             width={48}
             height={48}
