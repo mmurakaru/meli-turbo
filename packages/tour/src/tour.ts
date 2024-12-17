@@ -123,11 +123,13 @@ function end(): void {
 // Reinitiate tour overlay on route change
 function handleRouteChange() {
   if (state.config) {
-    // Clear existing overlay
+    if (state.cleanup) {
+      state.cleanup();
+      state.cleanup = null;
+    }
+
     document.querySelector("#tour-overlay")?.remove();
-    // Reset current step
     state.currentStep = 0;
-    // Check for tour elements on the new page
     checkForTourElement();
   }
 }
@@ -135,13 +137,13 @@ function handleRouteChange() {
 // Route change listener
 function addRouteChangeListener() {
   if (typeof window !== "undefined") {
-    // For single-page applications
+    // Single-page applications
     window.addEventListener("popstate", handleRouteChange);
 
-    // For hash-based routing
+    // Hash-based routing
     window.addEventListener("hashchange", handleRouteChange);
 
-    // For frameworks with custom routing events
+    // Custom routing events
     if (window.addEventListener) {
       window.addEventListener("routeChange", handleRouteChange);
     }
