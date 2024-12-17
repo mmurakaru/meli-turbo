@@ -18,8 +18,20 @@ let state: TourState = {
 
 async function init(configUrl: string): Promise<void> {
   state.config = await fetchConfig(configUrl);
-  renderOverlay();
-  setupMutationObserver();
+  checkForTourElement();
+  addRouteChangeListener();
+}
+
+// Check if elementRef exists in DOM
+function checkForTourElement() {
+  if (state.config) {
+    const currentStep = state.config.steps[state.currentStep];
+    if (currentStep && document.querySelector(`#${currentStep.selector}`)) {
+      renderOverlay();
+    } else {
+      setTimeout(checkForTourElement, 100);
+    }
+  }
 }
 
 async function fetchConfig(url: string): Promise<Config> {
@@ -108,18 +120,32 @@ function end(): void {
   document.querySelector("#tour-overlay")?.remove();
 }
 
-// Initialize tour when target exists in DOM
-function setupMutationObserver(): void {
-  const observer = new MutationObserver(() => {
-    if (state.config) {
-      const currentStep = state.config.steps[state.currentStep];
-      if (currentStep && document.querySelector(`#${currentStep.selector}`)) {
-        renderOverlay();
-      }
-    }
-  });
+// Reinitiate tour overlay on route change
+function handleRouteChange() {
+  if (state.config) {
+    // Clear existing overlay
+    document.querySelector("#tour-overlay")?.remove();
+    // Reset current step
+    state.currentStep = 0;
+    // Check for tour elements on the new page
+    checkForTourElement();
+  }
+}
 
-  observer.observe(document.body, { childList: true, subtree: true });
+// Route change listener
+function addRouteChangeListener() {
+  if (typeof window !== "undefined") {
+    // For single-page applications
+    window.addEventListener("popstate", handleRouteChange);
+
+    // For hash-based routing
+    window.addEventListener("hashchange", handleRouteChange);
+
+    // For frameworks with custom routing events
+    if (window.addEventListener) {
+      window.addEventListener("routeChange", handleRouteChange);
+    }
+  }
 }
 
 declare global {
@@ -136,13 +162,4 @@ declare global {
 
 if (typeof window !== "undefined") {
   window.initProductTour = init;
-
-  // Reinitalize tour on route change
-  // if ((window as any).next) {
-  //   (window as any).next.router.events.on("routeChangeComplete", () => {
-  //     if (state.config) {
-  //       renderOverlay();
-  //     }
-  //   });
-  // }
 }
