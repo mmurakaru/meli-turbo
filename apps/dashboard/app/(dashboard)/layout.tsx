@@ -201,8 +201,8 @@ export function Footer() {
           />
         </div>
         <Separator className="my-8" />
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex flex-col items-center gap-2 sm:items-start">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row w-full">
+          <div className="flex flex-col items-center gap-2 sm:items-start w-full">
             <Link
               href="/"
               className="flex items-center"
@@ -217,7 +217,7 @@ export function Footer() {
               <span className="ml-2 text-xl font-semibold text-gray-900">MELI</span>
             </Link>
             <p className="text-xs text-muted-foreground">
-              © Copyright {new Date().getFullYear()} Meli Software. All rights reserved.
+              © Copyright {new Date().getFullYear()} Meli Software SL. All rights reserved.
             </p>
           </div>
           {/*           <div className="flex gap-4">

@@ -6,7 +6,7 @@ import './globals.scss';
 import ScriptLoader from './script-loader';
 
 export const metadata: Metadata = {
-  title: 'Meli',
+  title: 'Meli | Voice AI product tour',
   description: 'Voice AI product tour',
 };
 
