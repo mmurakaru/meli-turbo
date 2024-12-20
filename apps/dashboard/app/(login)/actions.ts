@@ -20,7 +20,7 @@ import {
 import { createCheckoutSession } from '@/lib/payments/stripe';
 import { createClient } from '@/utils/supabase/server';
 import { and, eq, sql } from 'drizzle-orm';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -50,11 +50,12 @@ const signInSchema = z.object({
 export async function signInWithOAuth() {
   const supabase = await createClient();
   const provider = 'google';
+  const origin = (await headers()).get('origin');
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: 'https://wwww.meli-ai.com/auth/callback',
+      redirectTo: `${origin}/auth/callback`,
     },
   });
 
