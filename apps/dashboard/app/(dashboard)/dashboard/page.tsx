@@ -6,7 +6,7 @@ export default async function RecentsPage() {
   const user = await getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect('/sign-in');
   }
 
   const team = await getTeamForUser(user.id);

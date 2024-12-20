@@ -3,13 +3,12 @@
 import { ActionState } from '@/lib/auth/middleware';
 import { Button } from '@repo/ui/components/ui/button';
 import { Input } from '@repo/ui/components/ui/input';
-import { Label } from '@repo/ui/components/ui/label';
 import { Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useActionState } from 'react';
-import { signIn, signUp } from './actions';
+import { signIn, signInWithOAuth, signUp } from './actions';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
@@ -20,28 +19,32 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     error: '',
   });
 
+  async function handleSignInWithOAuth() {
+    await signInWithOAuth();
+  }
+
   return (
     <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <Link
           href={'/'}
-          className="flex justify-center"
+          className="flex justify-center items-center"
         >
           <Image
             src="/icons/meli-logo-with-gradient.svg"
             alt="Meli logo"
-            width={48}
-            height={48}
+            width={32}
+            height={32}
           />
+          <span className="ml-2 text-2xl font-semibold text-gray-900 uppercase">Meli</span>
         </Link>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
+        <h2 className="mt-6 text-center text-sm font-normal text-gray-900">
+          {mode === 'signin' ? 'Sign in to your account' : 'Create an account'}
         </h2>
       </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
         <form
-          className="space-y-6"
+          className="space-y-2"
           action={formAction}
         >
           <input
@@ -59,75 +62,66 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             name="inviteId"
             value={inviteId || ''}
           />
-          <div>
-            <Label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </Label>
-            <div className="mt-1">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                maxLength={50}
-                placeholder="Enter your email"
-              />
-            </div>
-          </div>
 
-          <div>
-            <Label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </Label>
-            <div className="mt-1">
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                required
-                minLength={8}
-                maxLength={100}
-                placeholder="Enter your password"
-              />
-            </div>
-          </div>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            maxLength={50}
+            placeholder="Email"
+          />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+            required
+            minLength={8}
+            maxLength={100}
+            placeholder="Password"
+          />
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={pending}
+          >
+            {pending ? (
+              <>
+                <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
+                Loading...
+              </>
+            ) : mode === 'signin' ? (
+              'Sign in'
+            ) : (
+              'Sign up'
+            )}
+          </Button>
 
-          {state?.error && <div className="text-red-500 text-sm">{state.error}</div>}
-
-          <div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={pending}
-            >
-              {pending ? (
-                <>
-                  <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
-                  Loading...
-                </>
-              ) : mode === 'signin' ? (
-                'Sign in'
-              ) : (
-                'Sign up'
-              )}
-            </Button>
-          </div>
+          <div className="text-red-500 text-sm h-5">{state.error}</div>
         </form>
+
+        <Button
+          className="w-full mt-4"
+          variant={'outline'}
+          onClick={handleSignInWithOAuth}
+        >
+          <Image
+            src={'/icons/google.svg'}
+            alt="Google logo"
+            height={16}
+            width={16}
+          />
+          Continue with Google
+        </Button>
 
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300" />
             </div>
-            <div className="relative flex justify-center text-sm">
+            <div className="relative flex justify-center text-xs">
               <span className="px-2 bg-gray-50 text-gray-500">
                 {mode === 'signin' ? 'New to our platform?' : 'Already have an account?'}
               </span>
@@ -135,14 +129,19 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           </div>
 
           <div className="mt-6">
-            <Link
-              href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
-                redirect ? `?redirect=${redirect}` : ''
-              }${priceId ? `&priceId=${priceId}` : ''}`}
-              className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+            <Button
+              asChild
+              variant={'outline'}
+              className="w-full"
             >
-              {mode === 'signin' ? 'Create an account' : 'Sign in to existing account'}
-            </Link>
+              <Link
+                href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
+                  redirect ? `?redirect=${redirect}` : ''
+                }${priceId ? `&priceId=${priceId}` : ''}`}
+              >
+                {mode === 'signin' ? 'Create an account' : 'Sign in to existing account'}
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

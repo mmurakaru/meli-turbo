@@ -18,12 +18,18 @@ import {
   type NewUser,
 } from '@/lib/db/schema';
 import { createCheckoutSession } from '@/lib/payments/stripe';
+import { createClient } from '@/utils/supabase/server';
 import { and, eq, sql } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-async function logActivity(teamId: number | null | undefined, userId: number, type: ActivityType, ipAddress?: string) {
+export async function logActivity(
+  teamId: number | null | undefined,
+  userId: number,
+  type: ActivityType,
+  ipAddress?: string,
+) {
   if (teamId === null || teamId === undefined) {
     return;
   }
@@ -41,8 +47,35 @@ const signInSchema = z.object({
   password: z.string().min(8).max(100),
 });
 
+export async function signInWithOAuth() {
+  const supabase = await createClient();
+  const provider = 'google';
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: '/auth/callback',
+    },
+  });
+
+  if (error) {
+    return { error: 'Failed to initiate Google sign-in. Please try again.' };
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
+}
+
 export const signIn = validatedAction(signInSchema, async (data, formData) => {
+  const supabase = await createClient();
   const { email, password } = data;
+
+  const { error } = await supabase.auth.signInWithPassword(data);
+
+  if (error) {
+    return { error: 'Invalid email or password. Please try again.' };
+  }
 
   const userWithTeam = await db
     .select({
@@ -85,7 +118,14 @@ const signUpSchema = z.object({
 });
 
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
+  const supabase = await createClient();
   const { email, password, inviteId } = data;
+
+  const { error } = await supabase.auth.signUp({ email, password });
+
+  if (error) {
+    return { error: 'Failed to create user. Please try again.' };
+  }
 
   const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
@@ -173,6 +213,13 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 });
 
 export async function signOut() {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return { error: 'Failed to sign out user.' };
+  }
+
   const cookieStore = await cookies();
   const user = (await getUser()) as User;
   const userWithTeam = await getUserWithTeam(user.id);
