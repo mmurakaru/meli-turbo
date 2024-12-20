@@ -43,7 +43,7 @@ function Header() {
             width={24}
             height={24}
           />
-          <span className="ml-2 text-xl font-semibold text-gray-900">MELI</span>
+          <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
         </Link>
         <div className="flex items-center space-x-4">
           <Link
@@ -214,7 +214,7 @@ export function Footer() {
                 width={24}
                 height={24}
               />
-              <span className="ml-2 text-xl font-semibold text-gray-900">MELI</span>
+              <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
             </Link>
             <p className="text-xs text-muted-foreground">
               © Copyright {new Date().getFullYear()} Meli Software SL. All rights reserved.
