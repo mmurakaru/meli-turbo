@@ -54,7 +54,7 @@ export async function signInWithOAuth() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: '/auth/callback',
+      redirectTo: 'https://wwww.meli-ai.com/auth/callback',
     },
   });
 
