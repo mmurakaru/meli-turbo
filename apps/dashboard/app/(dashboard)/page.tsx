@@ -84,8 +84,8 @@ export default function HomePage() {
                   </span>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  Launch your SaaS product tour in record time with our powerful voice agent. Create tours and let Voice
-                  AI guide the user.
+                  Build and Launch interactive product tours in record time. Define tour steps and let Voice AI guide
+                  the user through core features.
                 </p>
               </div>
 

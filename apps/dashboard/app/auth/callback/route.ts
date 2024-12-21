@@ -2,7 +2,7 @@ import { logActivity } from '@/app/(login)/actions';
 import { hashPassword, setSession } from '@/lib/auth/session';
 import { db } from '@/lib/db/drizzle';
 import { ActivityType, teamMembers, teams, users } from '@/lib/db/schema';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';

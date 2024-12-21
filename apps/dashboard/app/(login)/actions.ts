@@ -18,7 +18,7 @@ import {
   type NewUser,
 } from '@/lib/db/schema';
 import { createCheckoutSession } from '@/lib/payments/stripe';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { and, eq, sql } from 'drizzle-orm';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';

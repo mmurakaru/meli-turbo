@@ -13,10 +13,10 @@ export default function AboutPage() {
             <div className="lg:grid lg:grid-cols-12 lg:gap-8">
               <div className="lg:text-center md:max-w-2xl md:mx-auto lg:col-span-12">
                 <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
-                  The product tour for user activation
+                  The platform for user activation
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  Meli provides a interactive product tour that enables teams, to enhance user onboarding.
+                  Meli provides a interactive product tour that enables teams, to make user onboarding seamless.
                 </p>
               </div>
 
