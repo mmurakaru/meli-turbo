@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   const navItemsBottom = [
-    { href: '/dashboard/workspace', icon: Settings, label: 'Workspace Settings', id: 'meli-step-2' },
+    { href: '/dashboard/workspace', icon: Settings, label: 'Workspace Settings', id: null },
     { href: '/dashboard/account', icon: UserCog, label: 'Account settings', id: null },
   ];
 

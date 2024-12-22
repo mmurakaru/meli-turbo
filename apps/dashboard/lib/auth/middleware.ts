@@ -1,5 +1,7 @@
-import { getTeamForUser, getUser } from '@/lib/db/queries';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { getTeamForUser } from '@/lib/db/queries';
+import { TeamDataWithMembers } from '@/lib/db/schema';
+import { createClient } from '@/utils/supabase/server';
+import { User } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -33,8 +35,13 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
   action: ValidatedActionWithUserFunction<S, T>,
 ) {
   return async (prevState: ActionState, formData: FormData): Promise<T> => {
-    const user = await getUser();
-    if (!user) {
+    const supabase = await createClient();
+
+    const {
+      error,
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (error || !user) {
       throw new Error('User is not authenticated');
     }
 
@@ -51,8 +58,13 @@ type ActionWithTeamFunction<T> = (formData: FormData, team: TeamDataWithMembers)
 
 export function withTeam<T>(action: ActionWithTeamFunction<T>) {
   return async (formData: FormData): Promise<T> => {
-    const user = await getUser();
-    if (!user) {
+    const supabase = await createClient();
+
+    const {
+      error,
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (error || !user) {
       redirect('/sign-in');
     }
 
