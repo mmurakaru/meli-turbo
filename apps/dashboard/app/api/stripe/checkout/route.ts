@@ -1,9 +1,9 @@
-import { eq } from 'drizzle-orm';
 import { db } from '@/lib/db/drizzle';
-import { users, teams, teamMembers } from '@/lib/db/schema';
-import { setSession } from '@/lib/auth/session';
-import { NextRequest, NextResponse } from 'next/server';
+import { publicUsers, teamMembers, teams } from '@/lib/db/schema';
 import { stripe } from '@/lib/payments/stripe';
+import { createClient } from '@/utils/supabase/server';
+import { eq } from 'drizzle-orm';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 export async function GET(request: NextRequest) {
@@ -15,6 +15,16 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabase = await createClient();
+    const {
+      error: authError,
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (authError || !authUser) {
+      throw new Error('User not authenticated.');
+    }
+
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ['customer', 'subscription'],
     });
@@ -51,11 +61,7 @@ export async function GET(request: NextRequest) {
       throw new Error("No user ID found in session's client_reference_id.");
     }
 
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(userId)))
-      .limit(1);
+    const user = await db.select().from(publicUsers).where(eq(publicUsers.id, userId)).limit(1);
 
     if (user.length === 0) {
       throw new Error('User not found in database.');
@@ -85,7 +91,6 @@ export async function GET(request: NextRequest) {
       })
       .where(eq(teams.id, userTeam[0].teamId));
 
-    await setSession(user[0]);
     return NextResponse.redirect(new URL('/dashboard', request.url));
   } catch (error) {
     console.error('Error handling successful checkout:', error);

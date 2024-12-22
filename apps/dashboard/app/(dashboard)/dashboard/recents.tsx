@@ -10,12 +10,7 @@ import Link from 'next/link';
 export function Recents({ tourData }: { tourData: Tour[] }) {
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1
-        id="meli-step-1"
-        className="text-lg lg:text-2xl font-extrabold mb-6"
-      >
-        Recents
-      </h1>
+      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
 
       <Link href="/dashboard/new-tour">
         <Card className="max-w-64 flex items-center gap-2 px-4 py-2 hover:bg-gray-50 transition-colors mb-6">

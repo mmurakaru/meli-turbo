@@ -24,7 +24,6 @@
     "drizzle-kit": "^0.28.0",
     "drizzle-orm": "^0.36.1",
     "google-one-tap": "^1.0.6",
-    "jose": "^5.9.6",
     "lucide-react": "^0.454.0",
     "next": "15.0.2-canary.8",
     "postcss": "^8.4.47",
@@ -53,6 +52,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-react-aria-components": "1.1.6",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.13.0"
+    "typescript-eslint": "^8.13.0",
+    "uuid": "^11.0.3"
   }
 }

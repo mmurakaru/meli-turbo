@@ -1,36 +1,31 @@
-import { verifyToken } from '@/lib/auth/session';
+import { createClient } from '@/utils/supabase/server';
 import { and, desc, eq, isNull } from 'drizzle-orm';
-import { cookies } from 'next/headers';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, tours, users } from './schema';
+import { activityLogs, publicUsers, teamMembers, teams, tours } from './schema';
 
 export async function getUser() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get('session');
-  if (!sessionCookie || !sessionCookie.value) {
+  const supabase = await createClient();
+
+  const {
+    error,
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+
+  if (error || !authUser) {
     return null;
   }
 
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (!sessionData || !sessionData.user || typeof sessionData.user.id !== 'number') {
-    return null;
-  }
-
-  if (new Date(sessionData.expires) < new Date()) {
-    return null;
-  }
-
-  const user = await db
+  const publicUser = await db
     .select()
-    .from(users)
-    .where(and(eq(users.id, sessionData.user.id), isNull(users.deletedAt)))
+    .from(publicUsers)
+    .where(and(eq(publicUsers.id, authUser.id), isNull(publicUsers.deletedAt)))
     .limit(1);
 
-  if (user.length === 0) {
+  if (publicUser.length === 0) {
     return null;
   }
 
-  return user[0];
+  return publicUser[0];
 }
 
 export async function getTeamByStripeCustomerId(customerId: string) {
@@ -57,23 +52,28 @@ export async function updateTeamSubscription(
     .where(eq(teams.id, teamId));
 }
 
-export async function getUserWithTeam(userId: number) {
-  const result = await db
+export async function getUserWithTeam(userId: string) {
+  const [result] = await db
     .select({
-      user: users,
+      user: publicUsers,
       teamId: teamMembers.teamId,
     })
-    .from(users)
-    .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    .where(eq(users.id, userId))
+    .from(publicUsers)
+    .leftJoin(teamMembers, eq(publicUsers.id, teamMembers.userId))
+    .where(eq(publicUsers.id, userId))
     .limit(1);
 
-  return result[0];
+  return result;
 }
 
 export async function getActivityLogs() {
-  const user = await getUser();
-  if (!user) {
+  const supabase = await createClient();
+
+  const {
+    error,
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (error || !user) {
     throw new Error('User not authenticated');
   }
 
@@ -83,18 +83,18 @@ export async function getActivityLogs() {
       action: activityLogs.action,
       timestamp: activityLogs.timestamp,
       ipAddress: activityLogs.ipAddress,
-      userName: users.name,
+      userName: publicUsers.name,
     })
     .from(activityLogs)
-    .leftJoin(users, eq(activityLogs.userId, users.id))
+    .leftJoin(publicUsers, eq(activityLogs.userId, publicUsers.id))
     .where(eq(activityLogs.userId, user.id))
     .orderBy(desc(activityLogs.timestamp))
     .limit(10);
 }
 
-export async function getTeamForUser(userId: number) {
-  const result = await db.query.users.findFirst({
-    where: eq(users.id, userId),
+export async function getTeamForUser(userId: string) {
+  const result = await db.query.publicUsers.findFirst({
+    where: eq(publicUsers.id, userId),
     with: {
       teamMembers: {
         with: {
@@ -105,8 +105,8 @@ export async function getTeamForUser(userId: number) {
                   user: {
                     columns: {
                       id: true,
-                      name: true,
                       email: true,
+                      name: true,
                     },
                   },
                 },

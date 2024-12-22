@@ -1,11 +1,20 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgSchema, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+const authSchema = pgSchema('auth');
+
+export const authUsers = authSchema.table('users', {
+  id: uuid('id').primaryKey(),
+  email: varchar('email', { length: 255 }).unique(),
+  password: text('password').notNull(),
+});
+
+export const publicUsers = pgTable('profiles', {
+  id: uuid('id')
+    .primaryKey()
+    .references(() => authUsers.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 100 }),
   email: varchar('email', { length: 255 }).notNull().unique(),
-  passwordHash: text('password_hash').notNull(),
   role: varchar('role', { length: 20 }).notNull().default('member'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
@@ -26,9 +35,9 @@ export const teams = pgTable('teams', {
 
 export const teamMembers = pgTable('team_members', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id')
+  userId: uuid('user_id')
     .notNull()
-    .references(() => users.id),
+    .references(() => publicUsers.id, { onDelete: 'cascade' }),
   teamId: integer('team_id')
     .notNull()
     .references(() => teams.id),
@@ -41,7 +50,7 @@ export const activityLogs = pgTable('activity_logs', {
   teamId: integer('team_id')
     .notNull()
     .references(() => teams.id),
-  userId: integer('user_id').references(() => users.id),
+  userId: uuid('user_id').references(() => publicUsers.id, { onDelete: 'cascade' }),
   action: text('action').notNull(),
   timestamp: timestamp('timestamp').notNull().defaultNow(),
   ipAddress: varchar('ip_address', { length: 45 }),
@@ -54,9 +63,9 @@ export const invitations = pgTable('invitations', {
     .references(() => teams.id),
   email: varchar('email', { length: 255 }).notNull(),
   role: varchar('role', { length: 50 }).notNull(),
-  invitedBy: integer('invited_by')
+  invitedBy: uuid('invited_by')
     .notNull()
-    .references(() => users.id),
+    .references(() => publicUsers.id, { onDelete: 'cascade' }),
   invitedAt: timestamp('invited_at').notNull().defaultNow(),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
@@ -92,7 +101,7 @@ export const teamsRelations = relations(teams, ({ many }) => ({
   invitations: many(invitations),
 }));
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(publicUsers, ({ many }) => ({
   teamMembers: many(teamMembers),
   invitationsSent: many(invitations),
 }));
@@ -102,16 +111,16 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
     fields: [invitations.teamId],
     references: [teams.id],
   }),
-  invitedBy: one(users, {
+  invitedBy: one(publicUsers, {
     fields: [invitations.invitedBy],
-    references: [users.id],
+    references: [publicUsers.id],
   }),
 }));
 
 export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
-  user: one(users, {
+  user: one(publicUsers, {
     fields: [teamMembers.userId],
-    references: [users.id],
+    references: [publicUsers.id],
   }),
   team: one(teams, {
     fields: [teamMembers.teamId],
@@ -124,9 +133,9 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
     fields: [activityLogs.teamId],
     references: [teams.id],
   }),
-  user: one(users, {
+  user: one(publicUsers, {
     fields: [activityLogs.userId],
-    references: [users.id],
+    references: [publicUsers.id],
   }),
 }));
 
@@ -145,8 +154,8 @@ export const stepsRelations = relations(steps, ({ one }) => ({
   }),
 }));
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export type User = typeof publicUsers.$inferSelect;
+export type NewUser = typeof publicUsers.$inferInsert;
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type TeamMember = typeof teamMembers.$inferSelect;
@@ -160,7 +169,6 @@ export type TeamDataWithMembers = Team & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
-// TODO: add endpoint to create tour
 export type Tour = typeof tours.$inferSelect;
 export type NewTour = typeof tours.$inferInsert;
 export type TourWithTeam = Tour & {
