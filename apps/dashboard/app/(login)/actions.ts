@@ -50,7 +50,7 @@ export async function signInWithOAuth() {
   const provider = 'google';
   const origin = (await headers()).get('origin');
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
       redirectTo: `${origin}/auth/callback`,
@@ -72,7 +72,14 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const { error, data: authData } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    return { error: 'Invalid email or password. Please try again.' };
+    const code = error.code;
+
+    switch (code) {
+      case 'email_not_confirmed':
+        return { error: 'To sign in, please confirm your email.' };
+      default:
+        return { error: 'Invalid email or password. Please try again.' };
+    }
   }
 
   if (!authData.user) {
@@ -116,6 +123,12 @@ const signUpSchema = z.object({
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   const supabase = await createClient();
   const { email, password, inviteId } = data;
+
+  const existingUser = await db.select().from(publicUsers).where(eq(publicUsers.email, email)).limit(1);
+
+  if (existingUser.length > 0) {
+    return { error: 'An account with this email already exists. Please sign in.' };
+  }
 
   const { error, data: authData } = await supabase.auth.signUp({ email, password });
 
@@ -197,7 +210,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     return createCheckoutSession({ team: createdTeam, priceId });
   }
 
-  redirect('/dashboard');
+  redirect('/sign-in');
 });
 
 export async function signOut() {
