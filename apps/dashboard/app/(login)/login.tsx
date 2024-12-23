@@ -20,7 +20,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   });
 
   async function handleSignInWithOAuth() {
-    await signInWithOAuth();
+    await signInWithOAuth(inviteId);
   }
 
   return (

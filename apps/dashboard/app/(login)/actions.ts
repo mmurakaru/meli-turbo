@@ -40,12 +40,7 @@ export async function logActivity(
   await db.insert(activityLogs).values(newActivity);
 }
 
-const signInSchema = z.object({
-  email: z.string().email().min(3).max(255),
-  password: z.string().min(8).max(100),
-});
-
-export async function signInWithOAuth() {
+export async function signInWithOAuth(inviteId?: string | null) {
   const supabase = await createClient();
   const provider = 'google';
   const origin = (await headers()).get('origin');
@@ -54,6 +49,9 @@ export async function signInWithOAuth() {
     provider,
     options: {
       redirectTo: `${origin}/auth/callback`,
+      queryParams: {
+        ...(inviteId && { inviteId }),
+      },
     },
   });
 
@@ -65,6 +63,11 @@ export async function signInWithOAuth() {
     redirect(data.url);
   }
 }
+
+const signInSchema = z.object({
+  email: z.string().email().min(3).max(255),
+  password: z.string().min(8).max(100),
+});
 
 export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const supabase = await createClient();
