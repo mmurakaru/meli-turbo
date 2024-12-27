@@ -121,7 +121,7 @@ export async function getTeamForUser(userId: string) {
   return result?.teamMembers[0]?.team || null;
 }
 
-export async function getToursForOwner(ownerId: string) {
+export async function getToursForOwner(ownerId: string, ownerType: 'team' | 'user') {
   return await db
     .select({
       id: tours.id,
@@ -134,7 +134,7 @@ export async function getToursForOwner(ownerId: string) {
       deletedAt: tours.deletedAt,
     })
     .from(tours)
-    .where(eq(tours.ownerId, ownerId))
+    .where(and(eq(tours.ownerId, ownerId), eq(tours.ownerType, ownerType)))
     .orderBy(desc(tours.updatedAt))
     .limit(10);
 }

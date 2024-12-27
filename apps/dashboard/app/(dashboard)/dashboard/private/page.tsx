@@ -1,4 +1,4 @@
-import { getTeamForUser, getTours, getUser } from '@/lib/db/queries';
+import { getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
 import { Private } from './private';
 
 export default async function PrivatePage() {
@@ -10,7 +10,7 @@ export default async function PrivatePage() {
 
   if (!team) return;
 
-  const tourData = await getTours(team.id);
+  const tourData = await getToursForOwner(user.id, 'user');
 
   return <Private tourData={tourData} />;
 }

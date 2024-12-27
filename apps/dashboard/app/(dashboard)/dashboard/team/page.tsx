@@ -1,7 +1,16 @@
+import { getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
+import { Team } from './team';
+
 export default async function TeamPage() {
-  return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Team</h1>
-    </section>
-  );
+  const user = await getUser();
+
+  if (!user) return;
+
+  const team = await getTeamForUser(user.id);
+
+  if (!team) return;
+
+  const tourData = await getToursForOwner(team.id, 'team');
+
+  return <Team tourData={tourData} />;
 }
