@@ -96,7 +96,7 @@ async function handleSignUp(user: User, inviteId: string | null, origin: string)
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
 
-  let teamId: number;
+  let teamId: string;
   let userRole: string;
   let createdTeam: typeof teams.$inferSelect | null = null;
 

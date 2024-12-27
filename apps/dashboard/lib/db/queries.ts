@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { and, desc, eq, isNull } from 'drizzle-orm';
+import { and, desc, eq, isNull, or } from 'drizzle-orm';
 import { db } from './drizzle';
 import { activityLogs, publicUsers, teamMembers, teams, tours } from './schema';
 
@@ -35,7 +35,7 @@ export async function getTeamByStripeCustomerId(customerId: string) {
 }
 
 export async function updateTeamSubscription(
-  teamId: number,
+  teamId: string,
   subscriptionData: {
     stripeSubscriptionId: string | null;
     stripeProductId: string | null;
@@ -121,22 +121,38 @@ export async function getTeamForUser(userId: string) {
   return result?.teamMembers[0]?.team || null;
 }
 
-// Schema change required
-// Add ownerId -> teamId or userId
-// Add ownerType -> 'team' or 'user'
-export async function getTours(teamId: number) {
+export async function getToursForOwner(ownerId: string) {
   return await db
     .select({
       id: tours.id,
       title: tours.title,
-      teamId: tours.teamId,
+      ownerId: tours.ownerId,
+      ownerType: tours.ownerType,
       description: tours.description,
       createdAt: tours.createdAt,
       updatedAt: tours.updatedAt,
       deletedAt: tours.deletedAt,
     })
     .from(tours)
-    .where(eq(tours.teamId, teamId))
+    .where(eq(tours.ownerId, ownerId))
+    .orderBy(desc(tours.updatedAt))
+    .limit(10);
+}
+
+export async function getAllTours(ownerId: string) {
+  return await db
+    .select({
+      id: tours.id,
+      title: tours.title,
+      ownerId: tours.ownerId,
+      ownerType: tours.ownerType,
+      description: tours.description,
+      createdAt: tours.createdAt,
+      updatedAt: tours.updatedAt,
+      deletedAt: tours.deletedAt,
+    })
+    .from(tours)
+    .where(or(eq(tours.ownerId, ownerId), eq(tours.ownerType, 'team')))
     .orderBy(desc(tours.updatedAt))
     .limit(10);
 }

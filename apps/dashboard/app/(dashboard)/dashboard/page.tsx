@@ -1,4 +1,4 @@
-import { getTeamForUser, getTours, getUser } from '@/lib/db/queries';
+import { getAllTours, getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 import { Recents } from './recents';
 
@@ -13,7 +13,11 @@ export default async function RecentsPage() {
 
   if (!team) return;
 
-  const tourData = await getTours(team.id);
+  //const tourData = await getToursForOwner(team.id);
+  const tourData = {
+    private: await getToursForOwner(user.id),
+    all: await getAllTours(user.id),
+  };
 
   return <Recents tourData={tourData} />;
 }

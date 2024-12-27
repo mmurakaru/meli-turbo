@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { SquarePlus } from 'lucide-react';
 import Link from 'next/link';
 
-export function Recents({ tourData }: { tourData: Tour[] }) {
+export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[] } }) {
   return (
     <section className="flex-1 p-4 lg:p-8">
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
@@ -33,7 +33,7 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
           className="mt-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-            {tourData.map((tour) => (
+            {tourData.private.map((tour) => (
               <div key={tour.id}>
                 <Link href={`/dashboard/tours/${tour.id}`}>
                   <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
@@ -42,7 +42,7 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
                   <p className="font-bold text-gray-700 text-sm truncate">{tour.title}</p>
                   <div className="flex items-center gap-1">
                     <p className="font-normal text-gray-500 text-xs">
-                      In <b className="text-gradient font-normal">Private</b>
+                      In <b className="text-gradient font-normal">{tour.ownerType}</b>
                     </p>
                     <div className="text-gray-500">&middot;</div>
                     <p className="font-normal text-gray-500 text-xs">
@@ -60,7 +60,7 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
           className="mt-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-            {tourData.map((tour) => (
+            {tourData.all.map((tour) => (
               <div key={tour.id}>
                 <Link href={`/dashboard/tours/${tour.id}`}>
                   <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
@@ -69,7 +69,7 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
                   <p className="font-bold text-gray-700 text-sm truncate">{tour.title}</p>
                   <div className="flex items-center gap-1">
                     <p className="font-normal text-gray-500 text-xs">
-                      In <b className="text-gradient font-normal">Private</b>
+                      In <b className="text-gradient font-normal">{tour.ownerType}</b>
                     </p>
                     <div className="text-gray-500">&middot;</div>
                     <p className="font-normal text-gray-500 text-xs">
@@ -79,21 +79,6 @@ export function Recents({ tourData }: { tourData: Tour[] }) {
                 </div>
               </div>
             ))}
-            <div>
-              <Link href={'/dashboard/tours/unknown'}>
-                <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
-              </Link>
-              <div className="py-4">
-                <p className="font-bold text-gray-700 text-sm truncate">Test tour</p>
-                <div className="flex items-center gap-1">
-                  <p className="font-normal text-gray-500 text-xs">
-                    In <b className="text-gradient font-normal">Team</b>
-                  </p>
-                  <div className="text-gray-500">&middot;</div>
-                  <p className="font-normal text-gray-500 text-xs">Updated 20 Oct, 2024</p>
-                </div>
-              </div>
-            </div>
           </div>
         </TabsContent>
       </Tabs>

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgSchema, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgSchema, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 const authSchema = pgSchema('auth');
 
@@ -22,7 +22,7 @@ export const publicUsers = pgTable('profiles', {
 });
 
 export const teams = pgTable('teams', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().default('uuid_generate_v4()'),
   name: varchar('name', { length: 100 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
@@ -38,7 +38,7 @@ export const teamMembers = pgTable('team_members', {
   userId: uuid('user_id')
     .notNull()
     .references(() => publicUsers.id, { onDelete: 'cascade' }),
-  teamId: integer('team_id')
+  teamId: uuid('team_id')
     .notNull()
     .references(() => teams.id),
   role: varchar('role', { length: 50 }).notNull(),
@@ -47,10 +47,10 @@ export const teamMembers = pgTable('team_members', {
 
 export const activityLogs = pgTable('activity_logs', {
   id: serial('id').primaryKey(),
-  teamId: integer('team_id')
+  teamId: uuid('team_id')
     .notNull()
     .references(() => teams.id),
-  userId: uuid('user_id').references(() => publicUsers.id, { onDelete: 'cascade' }),
+  userId: uuid('user_id').references(() => publicUsers.id),
   action: text('action').notNull(),
   timestamp: timestamp('timestamp').notNull().defaultNow(),
   ipAddress: varchar('ip_address', { length: 45 }),
@@ -58,7 +58,7 @@ export const activityLogs = pgTable('activity_logs', {
 
 export const invitations = pgTable('invitations', {
   id: serial('id').primaryKey(),
-  teamId: integer('team_id')
+  teamId: uuid('team_id')
     .notNull()
     .references(() => teams.id),
   email: varchar('email', { length: 255 }).notNull(),
@@ -70,11 +70,12 @@ export const invitations = pgTable('invitations', {
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
 
+export const ownerTypeEnum = pgEnum('owner_type', ['team', 'user']);
+
 export const tours = pgTable('tours', {
   id: serial('id').primaryKey(),
-  teamId: integer('team_id')
-    .notNull()
-    .references(() => teams.id),
+  ownerId: uuid('owner_id').notNull(),
+  ownerType: ownerTypeEnum('owner_type').notNull(),
   title: varchar('title', { length: 100 }).notNull(),
   description: text('description').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -86,7 +87,7 @@ export const steps = pgTable('steps', {
   id: serial('id').primaryKey(),
   tourId: integer('tour_id')
     .notNull()
-    .references(() => tours.id),
+    .references(() => tours.id, { onDelete: 'cascade' }),
   selector: varchar('selector', { length: 255 }).notNull(),
   title: varchar('title', { length: 100 }).notNull(),
   text: text('text').notNull(),
@@ -141,8 +142,14 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 
 export const toursRelations = relations(tours, ({ one, many }) => ({
   team: one(teams, {
-    fields: [tours.teamId],
+    fields: [tours.ownerId],
     references: [teams.id],
+    relationName: 'teamTours',
+  }),
+  user: one(publicUsers, {
+    fields: [tours.ownerId],
+    references: [publicUsers.id],
+    relationName: 'userTours',
   }),
   steps: many(steps),
 }));
@@ -178,7 +185,6 @@ export type Step = typeof steps.$inferSelect;
 export type NewStep = typeof steps.$inferInsert;
 export type TourWithSteps = Tour & {
   steps: Step[];
-  team: Pick<Team, 'id' | 'name'>;
 };
 
 export enum ActivityType {

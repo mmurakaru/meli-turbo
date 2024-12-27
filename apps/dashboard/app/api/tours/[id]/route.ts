@@ -16,7 +16,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<Pa
         id: tours.id,
         title: tours.title,
         description: tours.description,
-        teamId: teams.id,
+        ownerId: tours.ownerId,
+        ownerType: tours.ownerType,
         teamName: teams.name,
         steps: steps,
         createdAt: tours.createdAt,
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<Pa
         deletedAt: tours.deletedAt,
       })
       .from(tours)
-      .innerJoin(teams, eq(tours.teamId, teams.id))
+      .innerJoin(teams, eq(tours.ownerId, teams.id))
       .leftJoin(steps, eq(tours.id, steps.tourId))
       .where(eq(tours.id, +id));
 
@@ -39,14 +40,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<Pa
           id: curr.id,
           title: curr.title,
           description: curr.description,
-          teamId: curr.teamId,
+          ownerId: curr.ownerId,
+          ownerType: curr.ownerType,
           createdAt: curr.createdAt,
           updatedAt: curr.updatedAt,
           deletedAt: curr.deletedAt,
-          team: {
-            id: curr.teamId,
-            name: curr.teamName,
-          },
           steps: [],
         };
       }

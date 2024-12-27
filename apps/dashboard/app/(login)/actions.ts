@@ -23,7 +23,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 export async function logActivity(
-  teamId: number | null | undefined,
+  teamId: string | null | undefined,
   userId: string,
   type: ActivityType,
   ipAddress?: string,
@@ -151,7 +151,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     return { error: 'Failed to create user profile. Please try again.' };
   }
 
-  let teamId: number;
+  let teamId: string;
   let userRole: string;
   let createdTeam: typeof teams.$inferSelect | null = null;
 
