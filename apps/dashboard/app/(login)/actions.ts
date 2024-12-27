@@ -100,7 +100,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     .where(eq(publicUsers.id, authData.user.id))
     .limit(1);
 
-  if (userWithTeam.length === 0) {
+  if (!userWithTeam.length) {
     return { error: 'User data not found. Please contact support.' };
   }
 
@@ -129,7 +129,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   const existingUser = await db.select().from(publicUsers).where(eq(publicUsers.email, email)).limit(1);
 
-  if (existingUser.length > 0) {
+  if (existingUser.length) {
     return { error: 'An account with this email already exists. Please sign in.' };
   }
 
