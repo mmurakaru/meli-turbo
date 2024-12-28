@@ -3,9 +3,9 @@
 import { Tour } from '@/lib/db/schema';
 import { Card } from '@repo/ui/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/ui/tabs';
-import { format } from 'date-fns';
 import { SquarePlus } from 'lucide-react';
 import Link from 'next/link';
+import { normalizedTours } from '../helper/normalize-tour.helper';
 
 export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[] } }) {
   return (
@@ -33,7 +33,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
           className="mt-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-            {tourData.private.map((tour) => (
+            {normalizedTours(tourData.private).map((tour) => (
               <div key={tour.id}>
                 <Link href={`/dashboard/tours/${tour.id}`}>
                   <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
@@ -45,9 +45,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
                       In <b className="text-gradient font-normal">{tour.ownerType}</b>
                     </p>
                     <div className="text-gray-500">&middot;</div>
-                    <p className="font-normal text-gray-500 text-xs">
-                      Updated {format(tour.updatedAt, 'MMM dd, yyyy')}
-                    </p>
+                    <p className="font-normal text-gray-500 text-xs">Updated {tour.updatedAt}</p>
                   </div>
                 </div>
               </div>
@@ -60,7 +58,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
           className="mt-4"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-            {tourData.all.map((tour) => (
+            {normalizedTours(tourData.all).map((tour) => (
               <div key={tour.id}>
                 <Link href={`/dashboard/tours/${tour.id}`}>
                   <Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
@@ -72,9 +70,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
                       In <b className="text-gradient font-normal">{tour.ownerType}</b>
                     </p>
                     <div className="text-gray-500">&middot;</div>
-                    <p className="font-normal text-gray-500 text-xs">
-                      Updated {format(tour.updatedAt, 'MMM dd, yyyy')}
-                    </p>
+                    <p className="font-normal text-gray-500 text-xs">Updated {tour.updatedAt}</p>
                   </div>
                 </div>
               </div>
