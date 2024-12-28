@@ -1,8 +1,8 @@
 'use client';
 
 import { Tour } from '@/lib/db/schema';
-import { Card } from '@repo/ui/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/ui/tabs';
+import { Card } from '@workspace/ui/components/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
 import { SquarePlus } from 'lucide-react';
 import Link from 'next/link';
 import { normalizedTours } from '../helper/normalize-tour.helper';
@@ -22,7 +22,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
         </Card>
       </Link>
 
-      <Tabs defaultValue="all">
+      <Tabs defaultValue="private">
         <TabsList className="w-[200px] grid grid-cols-2">
           <TabsTrigger value="private">Private</TabsTrigger>
           <TabsTrigger value="all">All</TabsTrigger>

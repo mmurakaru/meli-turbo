@@ -9,21 +9,21 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/ui/card";
+} from "@workspace/ui/components/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/ui/chart";
+} from "@workspace/ui/components/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select";
+} from "@workspace/ui/components/select";
 import { PieSectorDataItem } from "recharts/types/polar/Pie.js";
 
 const desktopData = [
@@ -79,7 +79,7 @@ export function PieChartInteractive({
 
   const activeIndex = React.useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth],
+    [activeMonth]
   );
   const months = React.useMemo(() => desktopData.map((item) => item.month), []);
 

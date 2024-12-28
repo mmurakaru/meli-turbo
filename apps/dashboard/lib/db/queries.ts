@@ -121,7 +121,7 @@ export async function getTeamForUser(userId: string) {
   return result?.teamMembers[0]?.team || null;
 }
 
-export async function getToursForOwner(ownerId: string, ownerType: 'team' | 'user') {
+export async function getToursForOwner(userId: string, ownerType: 'team' | 'user') {
   return await db
     .select({
       id: tours.id,
@@ -134,12 +134,34 @@ export async function getToursForOwner(ownerId: string, ownerType: 'team' | 'use
       deletedAt: tours.deletedAt,
     })
     .from(tours)
-    .where(and(eq(tours.ownerId, ownerId), eq(tours.ownerType, ownerType)))
+    .where(and(eq(tours.ownerId, userId), eq(tours.ownerType, ownerType)))
     .orderBy(desc(tours.updatedAt))
     .limit(10);
 }
 
-export async function getAllTours(ownerId: string) {
+export async function getAllTours(userId: string) {
+  const userWithTeam = await getUserWithTeam(userId);
+
+  if (!userWithTeam || !userWithTeam.teamId) {
+    // If the user is not part of a team, only return their personal tours
+    return await db
+      .select({
+        id: tours.id,
+        title: tours.title,
+        ownerId: tours.ownerId,
+        ownerType: tours.ownerType,
+        description: tours.description,
+        createdAt: tours.createdAt,
+        updatedAt: tours.updatedAt,
+        deletedAt: tours.deletedAt,
+      })
+      .from(tours)
+      .where(and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')))
+      .orderBy(desc(tours.updatedAt))
+      .limit(10);
+  }
+
+  // If the user is part of a team, return both their personal tours and their team's tours
   return await db
     .select({
       id: tours.id,
@@ -152,7 +174,45 @@ export async function getAllTours(ownerId: string) {
       deletedAt: tours.deletedAt,
     })
     .from(tours)
-    .where(or(eq(tours.ownerId, ownerId), eq(tours.ownerType, 'team')))
+    .where(
+      or(
+        and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')),
+        and(eq(tours.ownerId, userWithTeam.teamId), eq(tours.ownerType, 'team')),
+      ),
+    )
     .orderBy(desc(tours.updatedAt))
     .limit(10);
+}
+
+export async function getTour(tourId: number, userId: string) {
+  const userWithTeam = await getUserWithTeam(userId);
+
+  if (!userWithTeam) return;
+
+  const query = db
+    .select({
+      id: tours.id,
+      title: tours.title,
+      ownerId: tours.ownerId,
+      ownerType: tours.ownerType,
+      description: tours.description,
+      createdAt: tours.createdAt,
+      updatedAt: tours.updatedAt,
+      deletedAt: tours.deletedAt,
+    })
+    .from(tours)
+    .where(
+      and(
+        eq(tours.id, tourId),
+        or(
+          and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')),
+          and(eq(tours.ownerId, userWithTeam.teamId!), eq(tours.ownerType, 'team')),
+        ),
+      ),
+    )
+    .limit(1);
+
+  const result = await query;
+
+  return result.length > 0 ? result[0] : null;
 }

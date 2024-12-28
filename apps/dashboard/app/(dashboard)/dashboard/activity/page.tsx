@@ -1,6 +1,6 @@
 import { getActivityLogs } from '@/lib/db/queries';
 import { ActivityType } from '@/lib/db/schema';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import {
   AlertCircle,
   CheckCircle,

@@ -1,4 +1,4 @@
-import config from '@repo/ui/tailwind.config';
+import config from '@workspace/ui/tailwind.config';
 import type { Config } from 'tailwindcss';
 
 const dashboardConfig: Config = {

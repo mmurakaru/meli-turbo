@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@workspace/ui/components/button';
 import Link from 'next/link';
 import Layout from '../layout';
 

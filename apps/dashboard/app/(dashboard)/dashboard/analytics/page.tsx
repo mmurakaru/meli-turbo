@@ -1,6 +1,6 @@
-import { AreaChartInteractive } from '@repo/ui/components/ui/area-chart-interactive';
-import { PieChartInteractive } from '@repo/ui/components/ui/pie-chart-interactive';
-import { RadialChart } from '@repo/ui/components/ui/radial-chart';
+import { AreaChartInteractive } from '@workspace/ui/components/area-chart-interactive';
+import { PieChartInteractive } from '@workspace/ui/components/pie-chart-interactive';
+import { RadialChart } from '@workspace/ui/components/radial-chart';
 
 const chartData = [
   { date: '2024-04-01', desktop: 222, mobile: 150 },

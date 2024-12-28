@@ -14,7 +14,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
+    "@workspace/ui": "workspace:*",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.10",
     "@vapi-ai/web": "^2.1.7",

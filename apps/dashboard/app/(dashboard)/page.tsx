@@ -1,9 +1,9 @@
 'use client';
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@repo/ui/components/ui/accordion';
-import { Button } from '@repo/ui/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/ui/popover';
 import Vapi from '@vapi-ai/web';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
+import { Button } from '@workspace/ui/components/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

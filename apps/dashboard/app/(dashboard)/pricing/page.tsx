@@ -1,7 +1,7 @@
 import { checkoutAction } from '@/lib/payments/actions';
 import { getStripePrices, getStripeProducts } from '@/lib/payments/stripe';
-import { buttonVariants } from '@repo/ui/components/ui/button';
-import { cn } from '@repo/ui/lib/utils';
+import { buttonVariants } from '@workspace/ui/components/button';
+import { cn } from '@workspace/ui/lib/utils';
 import { Check, Sparkle } from 'lucide-react';
 import Link from 'next/link';
 import Layout from '../layout';

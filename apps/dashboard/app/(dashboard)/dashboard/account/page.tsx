@@ -2,10 +2,10 @@
 
 import { deleteAccount, updateAccount, updatePassword } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
-import { Button } from '@repo/ui/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
-import { Input } from '@repo/ui/components/ui/input';
-import { Label } from '@repo/ui/components/ui/label';
+import { Button } from '@workspace/ui/components/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Input } from '@workspace/ui/components/input';
+import { Label } from '@workspace/ui/components/label';
 import { Loader2, Lock, Trash2 } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
 

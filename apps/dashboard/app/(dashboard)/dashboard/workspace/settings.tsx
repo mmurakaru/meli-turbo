@@ -3,9 +3,9 @@
 import { removeTeamMember } from '@/app/(login)/actions';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
 import { customerPortalAction } from '@/lib/payments/actions';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
-import { Button } from '@repo/ui/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
+import { Button } from '@workspace/ui/components/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { useActionState } from 'react';
 import { InviteMember } from './invite-member';
 

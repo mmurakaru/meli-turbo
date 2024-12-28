@@ -13,7 +13,6 @@ export default async function RecentsPage() {
 
   if (!team) return;
 
-  //const tourData = await getToursForOwner(team.id);
   const tourData = {
     private: await getToursForOwner(user.id, 'user'),
     all: await getAllTours(user.id),

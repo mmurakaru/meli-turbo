@@ -1,8 +1,8 @@
 'use client';
 
 import { ActionState } from '@/lib/auth/middleware';
-import { Button } from '@repo/ui/components/ui/button';
-import { Input } from '@repo/ui/components/ui/input';
+import { Button } from '@workspace/ui/components/button';
+import { Input } from '@workspace/ui/components/input';
 import { Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -1,7 +1,7 @@
 'use client';
 
 import { Tour } from '@/lib/db/schema';
-import { Card } from '@repo/ui/components/ui/card';
+import { Card } from '@workspace/ui/components/card';
 import Link from 'next/link';
 import { normalizedTours } from '../../helper/normalize-tour.helper';
 

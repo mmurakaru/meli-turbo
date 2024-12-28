@@ -16,8 +16,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/ui/card";
-import { ChartConfig, ChartContainer } from "@repo/ui/components/ui/chart";
+} from "@workspace/ui/components/card";
+import { ChartConfig, ChartContainer } from "@workspace/ui/components/chart";
 const chartData = [
   { browser: "safari", visitors: 72, fill: "var(--color-safari)" },
 ];
