@@ -19,64 +19,70 @@ import {
   useSidebar,
 } from '@workspace/ui/components/sidebar';
 
-export function NavProjects({
+export function NavWorkspace({
   projects,
 }: {
   projects: {
     name: string;
-    url: string;
+    href: string;
     icon: LucideIcon;
   }[];
 }) {
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Workspace</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
+            <SidebarMenuButton
+              asChild
+              onClick={isMobile ? toggleSidebar : undefined}
+            >
+              <a href={item.href}>
+                <item.icon strokeWidth={1} />
+                <span className="font-light">{item.name}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
+                  <MoreHorizontal strokeWidth={1} />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-48 rounded-lg"
+                className="w-48 rounded-md"
                 side={isMobile ? 'bottom' : 'right'}
                 align={isMobile ? 'end' : 'start'}
               >
                 <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
+                  <Folder
+                    strokeWidth={1}
+                    className="text-muted-foreground"
+                  />
+                  <span className="font-light">View Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
+                  <Forward
+                    strokeWidth={1}
+                    className="text-muted-foreground"
+                  />
+                  <span className="font-light">Share Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
+                  <Trash2
+                    strokeWidth={1}
+                    className="text-muted-foreground"
+                  />
+                  <span className="font-light">Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   );

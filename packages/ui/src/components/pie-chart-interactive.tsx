@@ -79,7 +79,7 @@ export function PieChartInteractive({
 
   const activeIndex = React.useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth],
+    [activeMonth]
   );
   const months = React.useMemo(() => desktopData.map((item) => item.month), []);
 

@@ -67,7 +67,7 @@ export default function SecurityPage() {
   };
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
+    <section className="flex-1">
       <h1 className="text-lg lg:text-2xl font-extrabold text-gray-900 mb-6">Account Settings</h1>
       <Card className="mb-8">
         <CardHeader>

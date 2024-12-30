@@ -9,7 +9,7 @@ import { normalizedTours } from '../helper/normalize-tour.helper';
 
 export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[] } }) {
   return (
-    <section className="flex-1 p-4 lg:p-8">
+    <section className="flex-1">
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
 
       <Link href="/dashboard/new-tour">

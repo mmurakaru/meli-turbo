@@ -1,5 +1,7 @@
-import { AppSidebar } from '@/components/app-sidebar';
+'use client';
+
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@workspace/ui/components/sidebar';
+import { AppSidebar } from '../components/app-sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   //   const { user, setUser } = useUser();
@@ -30,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="p-0 lg:p-4 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="block sticky inset-y-0 p-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear bg-white border-b border-gray-200">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             {/* <Separator
@@ -44,15 +46,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>Recents</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb> */}
           </div>
         </header>
-
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-0 lg:p-4">{children}</main>
+        <section className="flex-1 overflow-y-auto p-4 lg:p-8">{children}</section>
       </SidebarInset>
     </SidebarProvider>
   );
