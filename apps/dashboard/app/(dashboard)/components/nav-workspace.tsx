@@ -31,7 +31,7 @@ export function NavWorkspace({
   const { isMobile, toggleSidebar } = useSidebar();
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup>
       <SidebarGroupLabel>Workspace</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (

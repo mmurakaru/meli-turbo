@@ -142,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavDeveloper items={data.developer} />
       </SidebarContent>
       <SidebarFooter>
-        <Separator className="my-4" />
+        <Separator className="my-2" />
         {data.settings.map((item) => (
           <Link
             id={item.id ?? undefined}
@@ -158,7 +158,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <item.icon
                 strokeWidth={1}
-                className="mr-2 h-4 w-4"
+                className="h-4 w-4"
               />
               <span className="font-light">{item.label}</span>
             </SidebarMenuButton>

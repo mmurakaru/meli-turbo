@@ -4,7 +4,6 @@ import { Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, UserCog } from 'luc
 
 import { User } from '@/lib/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
-import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@workspace/ui/components/sidebar';
+import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -28,16 +28,18 @@ export function NavUser({ user }: { user: User | null }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size="sm"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground place-items-center"
             >
-              <Avatar className="size-8">
+              <Avatar className="size-6">
                 <AvatarImage alt={user?.name || user?.email} />
                 <AvatarFallback className="bg-violet-500 text-white">
-                  {user?.email
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
+                  <span className="text-xs font-medium">
+                    {user?.email
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')}
+                  </span>
                 </AvatarFallback>
               </Avatar>
 
@@ -49,7 +51,7 @@ export function NavUser({ user }: { user: User | null }) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg gap-2"
             side="bottom"
             align="end"
             sideOffset={4}
@@ -76,21 +78,18 @@ export function NavUser({ user }: { user: User | null }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            <DropdownMenuGroup className="grid gap-1">
               <Link
                 href="/dashboard/account"
                 passHref
               >
-                <Button
-                  variant={pathname === '/dashboard/account' ? 'secondary' : 'ghost'}
-                  className={`my-1 w-full justify-start ${pathname === '/dashboard/account' ? 'bg-gray-100' : ''}`}
+                <SidebarMenuButton
+                  className={cn({ 'bg-gray-100': pathname === '/dashboard/account' })}
                   onClick={isMobile ? toggleSidebar : undefined}
                 >
-                  <DropdownMenuItem>
-                    <UserCog strokeWidth={1} />
-                    Account settings
-                  </DropdownMenuItem>
-                </Button>
+                  <UserCog strokeWidth={1} />
+                  Account settings
+                </SidebarMenuButton>
               </Link>
 
               <DropdownMenuItem>
