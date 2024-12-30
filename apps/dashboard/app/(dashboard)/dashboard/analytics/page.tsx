@@ -98,7 +98,7 @@ const chartData = [
 
 export default async function AnalyticsPage() {
   return (
-    <section className="flex-1 p-4 lg:p-8">
+    <section className="flex-1">
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Analytics</h1>
       <div className="grid gap-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">

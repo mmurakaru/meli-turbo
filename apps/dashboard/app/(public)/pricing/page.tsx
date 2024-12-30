@@ -4,7 +4,6 @@ import { buttonVariants } from '@workspace/ui/components/button';
 import { cn } from '@workspace/ui/lib/utils';
 import { Check, Sparkle } from 'lucide-react';
 import Link from 'next/link';
-import Layout from '../layout';
 import { SubmitButton } from './submit-button';
 
 const FREE_PLAN_ID = 'Free';
@@ -23,41 +22,39 @@ export default async function PricingPage() {
   const plusPrice = prices.find((price) => price.productId === plusPlan?.id);
 
   return (
-    <Layout isPublic>
-      <main className="px-4 sm:px-6 lg:px-8 py-20 bg-gray-50">
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <PricingCard
-            name="Free"
-            price={0}
-            interval="month"
-            trialDays={0}
-            features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
-            priceId="free_price"
-          />
-          <PricingCard
-            name={basePlan?.name || 'Base'}
-            price={basePrice?.unitAmount || 800}
-            interval={basePrice?.interval || 'month'}
-            trialDays={basePrice?.trialPeriodDays || 7}
-            features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
-            priceId={basePrice?.id}
-          />
-          <PricingCard
-            name={plusPlan?.name || 'Plus'}
-            price={plusPrice?.unitAmount || 1200}
-            interval={plusPrice?.interval || 'month'}
-            trialDays={plusPrice?.trialPeriodDays || 7}
-            features={[
-              'Everything in Base, and:',
-              'Unlimited Workspace Members',
-              'Product tour Analytics',
-              'Priority support',
-            ]}
-            priceId={plusPrice?.id}
-          />
-        </div>
-      </main>
-    </Layout>
+    <main className="px-4 sm:px-6 lg:px-8 py-20 bg-gray-50">
+      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <PricingCard
+          name="Free"
+          price={0}
+          interval="month"
+          trialDays={0}
+          features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
+          priceId="free_price"
+        />
+        <PricingCard
+          name={basePlan?.name || 'Base'}
+          price={basePrice?.unitAmount || 800}
+          interval={basePrice?.interval || 'month'}
+          trialDays={basePrice?.trialPeriodDays || 7}
+          features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
+          priceId={basePrice?.id}
+        />
+        <PricingCard
+          name={plusPlan?.name || 'Plus'}
+          price={plusPrice?.unitAmount || 1200}
+          interval={plusPrice?.interval || 'month'}
+          trialDays={plusPrice?.trialPeriodDays || 7}
+          features={[
+            'Everything in Base, and:',
+            'Unlimited Workspace Members',
+            'Product tour Analytics',
+            'Priority support',
+          ]}
+          priceId={plusPrice?.id}
+        />
+      </div>
+    </main>
   );
 }
 

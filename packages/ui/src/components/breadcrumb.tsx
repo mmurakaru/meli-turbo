@@ -19,7 +19,7 @@ const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5",
+      "flex flex-wrap items-center gap-1.5 break-words font-normal text-gray-500 text-xs sm:gap-2.5",
       className,
     )}
     {...props}
@@ -83,7 +83,7 @@ const BreadcrumbSeparator = ({
     className={cn("[&>svg]:w-3.5 [&>svg]:h-3.5", className)}
     {...props}
   >
-    {children ?? <ChevronRight />}
+    {children ?? <ChevronRight strokeWidth={1} />}
   </li>
 );
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
