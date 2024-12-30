@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown, LogOut, Sparkles, UserCog } from 'lucide-react';
+import { ChevronsUpDown, LogOut, Settings, Sparkles, UserCog } from 'lucide-react';
 
 import { signOut } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
@@ -42,8 +42,8 @@ export function NavUser() {
             >
               <Avatar className="size-6">
                 <AvatarImage alt={user?.name || user?.email} />
-                <AvatarFallback className="bg-violet-500 text-white">
-                  <span className="text-xs font-medium">
+                <AvatarFallback className="bg-violet-500">
+                  <span className="text-white text-xs font-medium">
                     {user?.email
                       .split(' ')
                       .map((n) => n[0])
@@ -65,30 +65,48 @@ export function NavUser() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5">
-                <Avatar className="size-6">
-                  <AvatarImage alt={user?.name || user?.email} />
-                  <AvatarFallback className="bg-violet-500 text-white">
-                    {user?.email
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium truncate">{user?.email.split('@')[0]}</span>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <SidebarMenuButton asChild>
+                <Link href="/dashboard/workspace">
+                  <Settings strokeWidth={1} />
+                  <span className="font-light">Workspace settings</span>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuButton asChild>
                 <Link href="/pricing">
-                  <Sparkles strokeWidth={1} />
-                  Upgrade this workspace
+                  <Sparkles
+                    strokeWidth={1}
+                    className="text-[#2d3af7]"
+                  />
+                  <span className="font-light text-gradient">Upgrade this workspace</span>
                 </Link>
               </SidebarMenuButton>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">Workspaces</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <div className="flex items-center gap-2 px-2 py-1.5">
+                <Avatar className="size-6">
+                  <AvatarImage alt={user?.name || user?.email} />
+                  <AvatarFallback className="bg-violet-500">
+                    <span className="text-white text-xs font-medium">
+                      {user?.email
+                        .split(' ')
+                        .map((n) => n[0])
+                        .join('')}
+                    </span>
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-xs leading-tight">
+                  <span className="font-medium truncate">{user?.email.split('@')[0]}</span>
+                  <span className="text-sidebar-foreground/70 truncate">Base plan</span>
+                </div>
+              </div>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">
+              {user?.email}
+            </DropdownMenuLabel>
             <DropdownMenuGroup className="grid gap-1">
               <SidebarMenuButton
                 className={cn({ 'bg-gray-100': pathname === '/dashboard/account' })}
@@ -97,9 +115,10 @@ export function NavUser() {
               >
                 <Link href="/dashboard/account">
                   <UserCog strokeWidth={1} />
-                  Account settings
+                  <span className="font-light">Account settings</span>
                 </Link>
               </SidebarMenuButton>
+
               {/* <DropdownMenuItem>
                 <CreditCard strokeWidth={1} />
                 Billing
@@ -111,7 +130,7 @@ export function NavUser() {
               <form onSubmit={handleSignOut}>
                 <SidebarMenuButton type="submit">
                   <LogOut strokeWidth={1} />
-                  Sign out
+                  <span className="font-light">Sign out</span>
                 </SidebarMenuButton>
               </form>
             </DropdownMenuGroup>

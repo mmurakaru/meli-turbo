@@ -7,11 +7,13 @@ import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu';
 import { Separator } from '@workspace/ui/components/separator';
-import { HomeIcon, LogOutIcon } from 'lucide-react';
+import { LayoutDashboard, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -37,7 +39,7 @@ function Header() {
           aria-label="Meli"
         >
           <Image
-            src="/icons/meli-logo-with-gradient.svg"
+            src="/icons/meli-with-gradient.svg"
             alt="Meli logo"
             width={24}
             height={24}
@@ -45,12 +47,18 @@ function Header() {
           <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
         </Link>
         <div className="flex items-center space-x-4">
-          <Link
-            href="/pricing"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900"
+          <Button
+            variant="link"
+            asChild
           >
-            Pricing
-          </Link>
+            <Link
+              href="/pricing"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Pricing
+            </Link>
+          </Button>
+
           {user ? (
             <DropdownMenu
               open={isMenuOpen}
@@ -68,35 +76,39 @@ function Header() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent
+                className="bg-gray-50 w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg gap-2"
+                side="bottom"
                 align="end"
-                className="bg-gray-50"
+                sideOffset={4}
               >
-                <Link
-                  href="/dashboard"
-                  className="flex w-full items-center"
-                >
-                  <DropdownMenuItem className="w-full cursor-pointer gap-1">
-                    <HomeIcon
-                      strokeWidth={1}
-                      className="mr-2 h-4 w-4"
-                    />
-                    <span>Dashboard</span>
-                  </DropdownMenuItem>
-                </Link>
-                <form action={handleSignOut}>
-                  <button
-                    type="submit"
-                    className="w-full p-0"
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">
+                    {user.email}
+                  </DropdownMenuLabel>
+                  <Link
+                    href="/dashboard"
+                    className="flex w-full items-center"
                   >
-                    <DropdownMenuItem className="w-full cursor-pointer gap-1">
-                      <LogOutIcon
+                    <DropdownMenuItem className="w-full cursor-pointer gap-2 h-9">
+                      <LayoutDashboard
                         strokeWidth={1}
-                        className="mr-2 h-4 w-4"
+                        className="h-4 w-4"
                       />
-                      <span>Sign out</span>
+                      <span className="font-light">Dashboard</span>
                     </DropdownMenuItem>
-                  </button>
-                </form>
+                  </Link>
+                  <form action={handleSignOut}>
+                    <button
+                      type="submit"
+                      className="w-full p-0"
+                    >
+                      <DropdownMenuItem className="w-full cursor-pointer gap-2 h-9">
+                        <LogOut strokeWidth={1} />
+                        <span className="font-light">Sign out</span>
+                      </DropdownMenuItem>
+                    </button>
+                  </form>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -208,7 +220,7 @@ export function Footer() {
               aria-label="Meli"
             >
               <Image
-                src="/icons/meli-logo-with-gradient.svg"
+                src="/icons/meli-with-gradient.svg"
                 alt="Meli logo"
                 width={24}
                 height={24}
