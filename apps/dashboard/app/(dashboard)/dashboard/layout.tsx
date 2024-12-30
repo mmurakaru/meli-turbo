@@ -4,30 +4,6 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@workspace/ui/com
 import { AppSidebar } from '../components/app-sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  //   const { user, setUser } = useUser();
-  //   const router = useRouter();
-  //   const pathname = usePathname();
-  //   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  //   const navItemsTop = [
-  //     { href: '/dashboard', icon: Clock, label: 'Recents', id: null },
-  //     { href: '/dashboard/analytics', icon: ChartColumn, label: 'Analytics', id: null },
-  //     { href: '/dashboard/team', icon: Users, label: 'Team', id: null },
-  //     { href: '/dashboard/private', icon: CircleUser, label: 'Private', id: null },
-  //     // { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
-  //   ];
-
-  //   const navItemsBottom = [
-  //     { href: '/dashboard/workspace', icon: Settings, label: 'Workspace Settings', id: null },
-  //     { href: '/dashboard/account', icon: UserCog, label: 'Account settings', id: null },
-  //   ];
-
-  //   async function handleSignOut() {
-  //     setUser(null);
-  //     await signOut();
-  //     router.push('/');
-  //   }
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -35,10 +11,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <header className="block sticky inset-y-0 p-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear bg-white border-b border-gray-200">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-            {/* <Separator
+            {/* 
+            <Separator
               orientation="vertical"
               className="mr-2 h-4"
             />
+            <div className="flex items-center">
+              <AnchorIcon
+                strokeWidth={1}
+                className="w-3.5 h-3.5 text-violet-700 mr-1"
+              />
+              <span className="text-sm font-medium uppercase">Meli</span>
+            </div>
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">

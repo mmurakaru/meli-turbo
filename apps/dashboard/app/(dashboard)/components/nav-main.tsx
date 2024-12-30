@@ -1,6 +1,6 @@
 'use client';
 
-import { Folder, Forward, MoreHorizontal, Trash2, type LucideIcon } from 'lucide-react';
+import { Copy, Folder, MoreHorizontal, Trash2, type LucideIcon } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -18,11 +18,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@workspace/ui/components/sidebar';
+import Link from 'next/link';
 
-export function NavWorkspace({
-  projects,
+export function NavMain({
+  main,
 }: {
-  projects: {
+  main: {
     name: string;
     href: string;
     icon: LucideIcon;
@@ -32,22 +33,25 @@ export function NavWorkspace({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+      <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {main.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
               asChild
               onClick={isMobile ? toggleSidebar : undefined}
             >
-              <a href={item.href}>
+              <Link href={item.href}>
                 <item.icon strokeWidth={1} />
                 <span className="font-light">{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
+                <SidebarMenuAction
+                  showOnHover
+                  className="hidden"
+                >
                   <MoreHorizontal strokeWidth={1} />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
@@ -62,14 +66,14 @@ export function NavWorkspace({
                     strokeWidth={1}
                     className="text-muted-foreground"
                   />
-                  <span className="font-light">View Project</span>
+                  <span className="font-light">View Tours</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward
+                  <Copy
                     strokeWidth={1}
                     className="text-muted-foreground"
                   />
-                  <span className="font-light">Share Project</span>
+                  <span className="font-light">Copy link</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
@@ -77,7 +81,7 @@ export function NavWorkspace({
                     strokeWidth={1}
                     className="text-muted-foreground"
                   />
-                  <span className="font-light">Delete Project</span>
+                  <span className="font-light">Delete tours</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

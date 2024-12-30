@@ -1,18 +1,6 @@
 'use client';
 
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  ChartColumn,
-  CircleUser,
-  Clock,
-  Command,
-  GalleryVerticalEnd,
-  Settings,
-  SquareTerminal,
-  Users,
-} from 'lucide-react';
+import { BookOpen, Bot, ChartColumn, CircleUser, Clock, Settings, SquareTerminal, Users } from 'lucide-react';
 import * as React from 'react';
 
 import { NavDeveloper } from '@/app/(dashboard)/components/nav-developer';
@@ -30,30 +18,12 @@ import {
 import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
-import { NavWorkspace } from './nav-workspace';
-import { TeamSwitcher } from './team-switcher';
 
 // This is sample data.
 const data = {
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
-  workspace: [
+  main: [
     {
       name: 'Recents',
       href: '/dashboard',
@@ -87,15 +57,15 @@ const data = {
         },
         {
           title: 'Get Started',
-          href: '/dashboard/get-started',
+          href: '/dashboard/documentation/get-started',
         },
         {
-          title: 'Tutorials',
-          href: '/dashboard/tutorials',
+          title: 'Examples',
+          href: '/dashboard/documentation/examples',
         },
         {
           title: 'Changelog',
-          href: '/dashboard/changelog',
+          href: '/dashboard/documentation/changelog',
         },
       ],
     },
@@ -116,7 +86,7 @@ const data = {
     },
     {
       title: 'Voice AI',
-      href: '#',
+      href: '/dashboard/voice-ai',
       icon: Bot,
       items: null,
     },
@@ -125,9 +95,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser();
+
+  if (!user) return;
+
   const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
-  const { user } = useUser();
 
   return (
     <Sidebar
@@ -135,10 +108,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
     >
       <SidebarHeader>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarHeader>
       <SidebarContent>
-        <NavWorkspace projects={data.workspace} />
+        <NavMain main={data.main} />
         <NavDeveloper items={data.developer} />
       </SidebarContent>
       <SidebarFooter>
@@ -164,7 +137,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuButton>
           </Link>
         ))}
-        <TeamSwitcher teams={data.teams} />
+        {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

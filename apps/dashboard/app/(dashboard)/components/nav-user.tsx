@@ -1,14 +1,14 @@
 'use client';
 
-import { Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, UserCog } from 'lucide-react';
+import { ChevronsUpDown, LogOut, Sparkles, UserCog } from 'lucide-react';
 
-import { User } from '@/lib/db/schema';
+import { signOut } from '@/app/(login)/actions';
+import { useUser } from '@/lib/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -16,11 +16,20 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@workspace/ui/components/sidebar';
 import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
-export function NavUser({ user }: { user: User | null }) {
+export function NavUser() {
   const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
+
+  const { user, setUser } = useUser();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    setUser(null);
+    await signOut();
+    router.push('/');
+  }
 
   return (
     <SidebarMenu>
@@ -72,40 +81,40 @@ export function NavUser({ user }: { user: User | null }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles strokeWidth={1} />
-                Upgrade to Plus
-              </DropdownMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/pricing">
+                  <Sparkles strokeWidth={1} />
+                  Upgrade this workspace
+                </Link>
+              </SidebarMenuButton>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup className="grid gap-1">
-              <Link
-                href="/dashboard/account"
-                passHref
+              <SidebarMenuButton
+                className={cn({ 'bg-gray-100': pathname === '/dashboard/account' })}
+                onClick={isMobile ? toggleSidebar : undefined}
+                asChild
               >
-                <SidebarMenuButton
-                  className={cn({ 'bg-gray-100': pathname === '/dashboard/account' })}
-                  onClick={isMobile ? toggleSidebar : undefined}
-                >
+                <Link href="/dashboard/account">
                   <UserCog strokeWidth={1} />
                   Account settings
-                </SidebarMenuButton>
-              </Link>
-
-              <DropdownMenuItem>
+                </Link>
+              </SidebarMenuButton>
+              {/* <DropdownMenuItem>
                 <CreditCard strokeWidth={1} />
                 Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DropdownMenuItem> */}
+              {/* <DropdownMenuItem>
                 <Bell strokeWidth={1} />
                 Notifications
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
+              <form onSubmit={handleSignOut}>
+                <SidebarMenuButton type="submit">
+                  <LogOut strokeWidth={1} />
+                  Sign out
+                </SidebarMenuButton>
+              </form>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut strokeWidth={1} />
-              Sign out
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

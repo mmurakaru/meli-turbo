@@ -13,7 +13,7 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
       <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
 
       <Link href="/dashboard/new-tour">
-        <Card className="max-w-64 flex items-center gap-2 px-4 py-2 hover:bg-gray-50 transition-colors mb-6">
+        <Card className="max-w-64 flex items-center gap-2 px-4 py-2 hover:bg-gray-50 hover:border-gray-200 transition-colors mb-6">
           <SquarePlus className="text-violet-700 stroke-1" />
           <div>
             <p className="font-bold text-gray-700 text-sm truncate">Create new tour</p>
