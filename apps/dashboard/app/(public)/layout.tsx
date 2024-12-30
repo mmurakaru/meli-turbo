@@ -50,6 +50,7 @@ function Header() {
           <Button
             variant="link"
             asChild
+            className="hidden sm:block"
           >
             <Link
               href="/pricing"
