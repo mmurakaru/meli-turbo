@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   CancelDrop,
@@ -161,10 +163,10 @@ export function MultipleContainers({
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
-        A: createRange(itemCount, (index) => `A${index + 1}`),
-        B: createRange(itemCount, (index) => `B${index + 1}`),
-        C: createRange(itemCount, (index) => `C${index + 1}`),
-        D: createRange(itemCount, (index) => `D${index + 1}`),
+        A: createRange(itemCount, (index) => `A${index + 1} Step`),
+        B: createRange(itemCount, (index) => `B${index + 1} Step`),
+        // C: createRange(itemCount, (index) => `C${index + 1} Step`),
+        // D: createRange(itemCount, (index) => `D${index + 1} Step`),
       },
   );
   const [containers, setContainers] = useState(Object.keys(items) as UniqueIdentifier[]);
@@ -574,10 +576,14 @@ export function MultipleContainers({
 
 function getColor(id: UniqueIdentifier) {
   switch (String(id)[0]) {
+    // case 'A':
+    //   return '#7193f1';
+    // case 'B':
+    //   return '#ffda6c';
     case 'A':
-      return '#7193f1';
+      return '#2d3af7';
     case 'B':
-      return '#ffda6c';
+      return '#c90add';
     case 'C':
       return '#00bcd4';
     case 'D':
