@@ -1,6 +1,6 @@
-import { Terminal } from '@/app/(dashboard)/terminal';
 import { getTeamForUser, getTour, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
+import { MultipleContainers } from '../../new-tour/multiple-containers';
 
 export default async function TourPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
@@ -26,10 +26,17 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
   }
   return (
     <section className="flex-1">
-      <h1 className="text-lg lg:text-2xl font-extrabold mb-6">Edit Tour {slug}</h1>
+      <h1 className="text-lg lg:text-2xl font-extrabold mb-2">Edit Tour {slug}</h1>
+      <p className="mb-4">
+        Each tour consists of modules with multiple steps. Create modules and move steps between modules.
+      </p>
 
-      <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:col-start-4 lg:flex lg:items-center">
-        <Terminal tourId={slug} />
+      <div className="w-full overflow-auto">
+        <MultipleContainers
+          columns={1}
+          itemCount={3}
+          trashable
+        />
       </div>
     </section>
   );
