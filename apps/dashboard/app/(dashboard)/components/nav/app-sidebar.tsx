@@ -3,7 +3,7 @@
 import { BookOpen, Bot, ChartColumn, CircleUser, Clock, Sparkles, SquareTerminal, UserPlus, Users } from 'lucide-react';
 import * as React from 'react';
 
-import { NavDeveloper } from '@/app/(dashboard)/components/nav-developer';
+import { NavDeveloper } from '@/app/(dashboard)/components/nav/nav-developer';
 import { useUser } from '@/lib/auth';
 import { Separator } from '@workspace/ui/components/separator';
 import {
