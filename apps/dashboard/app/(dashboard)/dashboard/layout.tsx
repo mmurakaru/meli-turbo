@@ -7,8 +7,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="overflow-x-auto">
-        <header className="block sticky inset-y-0 p-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear bg-white border-b border-gray-200">
+      <SidebarInset className="md:overflow-x-auto relative">
+        <header className="block sticky top-0 inset-y-0 p-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear bg-white border-b border-gray-200 z-10">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             {/* 
@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Breadcrumb> */}
           </div>
         </header>
-        <section className="flex-1 overflow-y-auto p-4 lg:p-8">{children}</section>
+        <section className="flex-1 overflow-y-auto p-4 lg:p-8 max-w-screen-xl">{children}</section>
       </SidebarInset>
     </SidebarProvider>
   );

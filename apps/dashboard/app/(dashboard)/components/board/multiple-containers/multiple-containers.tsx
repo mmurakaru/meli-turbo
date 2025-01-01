@@ -36,11 +36,12 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal, unstable_batchedUpdates } from 'react-dom';
-import { coordinateGetter as multipleContainersCoordinateGetter } from './multipleContainersKeyboardCoordinates';
+import { coordinateGetter as multipleContainersCoordinateGetter } from './multiple-containers-keyboard-coordinates';
 
-import { Container, ContainerProps, Item } from '../../components/board';
+import { Container, ContainerProps, Item } from '..';
 
-import { createRange } from '../../utilities';
+import { useIsMobile } from '@workspace/ui/hooks/use-mobile';
+import { createRange } from '../../../utilities';
 
 export default {
   title: 'Presets/Sortable/Multiple Containers',
@@ -174,6 +175,8 @@ export function MultipleContainers({
   const lastOverId = useRef<UniqueIdentifier | null>(null);
   const recentlyMovedToNewContainer = useRef(false);
   const isSortingContainer = activeId != null ? containers.includes(activeId) : false;
+
+  const isMobile = useIsMobile();
 
   /**
    * Custom collision detection strategy optimized for multiple containers
@@ -419,15 +422,16 @@ export function MultipleContainers({
     >
       <div
         style={{
+          inlineSize: '100%',
           display: 'inline-grid',
           boxSizing: 'border-box',
           paddingBlock: 32,
-          gridAutoFlow: vertical ? 'row' : 'column',
+          gridAutoFlow: isMobile || vertical ? 'row' : 'column',
         }}
       >
         <SortableContext
           items={[...containers, PLACEHOLDER_ID]}
-          strategy={vertical ? verticalListSortingStrategy : horizontalListSortingStrategy}
+          strategy={isMobile || vertical ? verticalListSortingStrategy : horizontalListSortingStrategy}
         >
           {containers.map((containerId) => (
             <DroppableContainer
@@ -488,7 +492,7 @@ export function MultipleContainers({
               : renderSortableItemDragOverlay(activeId)
             : null}
         </DragOverlay>,
-        document.body,
+        document?.body,
       )}
       {trashable && activeId && !containers.includes(activeId) ? <Trash id={TRASH_ID} /> : null}
     </DndContext>

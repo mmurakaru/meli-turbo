@@ -1,13 +1,11 @@
 'use client';
 
-import Vapi from '@vapi-ai/web';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { create } from '../actions';
 
 function VoiceWave() {
   const [amplitude, setAmplitude] = useState(0);
@@ -46,29 +44,6 @@ function VoiceWave() {
 }
 
 export default function HomePage() {
-  const [assistantId, setAssistantId] = useState();
-  const publicVapiKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY;
-
-  if (!publicVapiKey) {
-    throw new Error('NEXT_PUBLIC_VAPI_PUBLIC_KEY is not defined.');
-  }
-
-  const vapi = new Vapi(publicVapiKey);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function startAssistance() {
-    await vapi.start(assistantId);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function stopAssistance() {
-    await vapi.stop();
-  }
-
-  useEffect(() => {
-    create().then((data) => setAssistantId(data.id));
-  }, []);
-
   return (
     <main className="bg-gray-50">
       <section className="py-20">
