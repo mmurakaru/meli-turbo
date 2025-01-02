@@ -46,11 +46,33 @@ function Header() {
           />
           <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
         </Link>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 hidden sm:block">
           <Button
             variant="link"
             asChild
-            className="hidden sm:block"
+          >
+            <Link
+              href="/product"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Product
+            </Link>
+          </Button>
+
+          <Button
+            variant="link"
+            asChild
+          >
+            <Link
+              href="/use-cases"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Use cases
+            </Link>
+          </Button>
+          <Button
+            variant="link"
+            asChild
           >
             <Link
               href="/pricing"
@@ -59,7 +81,8 @@ function Header() {
               Pricing
             </Link>
           </Button>
-
+        </div>
+        <div className="flex items-center space-x-4">
           {user ? (
             <DropdownMenu
               open={isMenuOpen}
@@ -178,7 +201,11 @@ function FooterLink({ href, label, external }: FooterLink) {
 }
 
 export function Footer() {
-  const productLinks = [{ href: '/pricing', label: 'Pricing' }];
+  const productLinks = [
+    { href: '/product', label: 'Product overview' },
+    { href: '/use-cases', label: 'Use cases' },
+    { href: '/pricing', label: 'Pricing' },
+  ];
 
   const legalLinks = [
     { href: '/terms-of-use', label: 'Terms of Use' },
