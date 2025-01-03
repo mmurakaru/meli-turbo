@@ -83,6 +83,19 @@ export const tours = pgTable('tours', {
   deletedAt: timestamp('deleted_at'),
 });
 
+export const modules = pgTable('modules', {
+  id: serial('id').primaryKey(),
+  tourId: integer('tour_id')
+    .notNull()
+    .references(() => tours.id, { onDelete: 'cascade' }),
+  selector: varchar('selector', { length: 255 }).notNull(),
+  title: varchar('title', { length: 100 }).notNull(),
+  text: text('text').notNull(),
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
 export const steps = pgTable('steps', {
   id: serial('id').primaryKey(),
   tourId: integer('tour_id')

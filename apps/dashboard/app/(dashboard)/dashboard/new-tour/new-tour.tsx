@@ -20,6 +20,7 @@ export function NewTour() {
             itemCount={3}
             strategy={rectSortingStrategy}
             trashable
+            handle
           />
         </div>
         <div className={styles.scrollableMaskStart}></div>

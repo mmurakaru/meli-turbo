@@ -22,6 +22,7 @@ $focused-outline-color: #4c9ffe;
 
       svg {
         fill: #6f7b88;
+        stroke: #6f7b88;
       }
     }
   }
@@ -32,6 +33,7 @@ $focused-outline-color: #4c9ffe;
     height: 100%;
     overflow: visible;
     fill: #919eab;
+    stroke: #919eab;
   }
 
   &:active {
@@ -39,6 +41,7 @@ $focused-outline-color: #4c9ffe;
 
     svg {
       fill: var(--fill, #788491);
+      stroke: var(--fill, #788491);
     }
   }
 

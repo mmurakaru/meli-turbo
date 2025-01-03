@@ -485,7 +485,7 @@ export function MultipleContainers({
               onClick={handleAddColumn}
               placeholder
             >
-              + Add Column
+              + Add Module
             </DroppableContainer>
           )}
         </SortableContext>

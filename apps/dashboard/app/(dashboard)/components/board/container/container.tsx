@@ -4,6 +4,7 @@ import React, { forwardRef } from 'react';
 
 import { Handle, Remove } from '../item';
 
+import { Create } from '../item/components/create';
 import styles from './container.module.scss';
 
 export interface Props {
@@ -72,6 +73,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
             {label}
             <div className={styles.Actions}>
               {onRemove ? <Remove onClick={onRemove} /> : undefined}
+              <Create {...handleProps} />
               <Handle {...handleProps} />
             </div>
           </div>
