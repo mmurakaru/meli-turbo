@@ -2,6 +2,7 @@
 
 import { Button } from '@workspace/ui/components/button';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@workspace/ui/components/sidebar';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@workspace/ui/components/tooltip';
 import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -41,19 +42,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb> */}
+
             {pathname !== NEW_TOUR_PATHNAME ? (
-              <Button
-                data-sidebar="new-tour"
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                asChild
-              >
-                <Link href={NEW_TOUR_PATHNAME}>
-                  <SquarePen strokeWidth={1} />
-                  <span className="sr-only">Create new tour</span>
-                </Link>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      data-sidebar="new-tour"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      asChild
+                    >
+                      <Link href={NEW_TOUR_PATHNAME}>
+                        <SquarePen strokeWidth={1} />
+                        <span className="sr-only">Create new tour</span>
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Create new tour</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ) : null}
           </div>
         </header>
