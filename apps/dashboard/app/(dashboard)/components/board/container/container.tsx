@@ -4,6 +4,19 @@ import React, { forwardRef } from 'react';
 
 import { Handle, Remove } from '../item';
 
+import { Button } from '@workspace/ui/components/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@workspace/ui/components/dialog';
+import { Input } from '@workspace/ui/components/input';
+import { Label } from '@workspace/ui/components/label';
+import { Switch } from '@workspace/ui/components/switch';
+import { Textarea } from '@workspace/ui/components/textarea';
 import { Create } from '../item/components/create';
 import styles from './container.module.scss';
 
@@ -73,7 +86,34 @@ export const Container = forwardRef<HTMLDivElement, Props>(
             {label}
             <div className={styles.Actions}>
               {onRemove ? <Remove onClick={onRemove} /> : undefined}
-              <Create {...handleProps} />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Create />
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[750px]">
+                  <DialogHeader>
+                    <DialogTitle className="text-sm">New step</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid w-full items-center gap-1.5">
+                      <Input placeholder="Step title" />
+                    </div>
+                    <div className="grid w-full items-center gap-1.5">
+                      <Textarea
+                        placeholder="Add text..."
+                        className="max-h-[400px]"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
+                      <Switch id="create-more" />
+                      <Label htmlFor="create-more">Create more</Label>
+                    </div>
+                    <Button type="submit">Create step</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <Handle {...handleProps} />
             </div>
           </div>
