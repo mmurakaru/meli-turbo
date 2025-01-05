@@ -454,6 +454,7 @@ export function MultipleContainers({
               style={containerStyle}
               unstyled={minimal}
               onRemove={() => handleRemove(containerId)}
+              moduleId={Number(containerId)}
             >
               <SortableContext
                 items={items[containerId]}
@@ -485,6 +486,7 @@ export function MultipleContainers({
               items={empty}
               onClick={handleAddColumn}
               placeholder
+              moduleId={Number(PLACEHOLDER_ID)}
             >
               <Plus
                 className="w-6 h-6"
@@ -543,6 +545,7 @@ export function MultipleContainers({
         }}
         shadow
         unstyled={false}
+        moduleId={Number(containerId)}
       >
         {items[containerId].map((item, index) => (
           <Item
