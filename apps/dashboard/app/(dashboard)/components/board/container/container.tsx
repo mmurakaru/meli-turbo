@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@workspace/ui/lib/utils';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useActionState, useEffect, useRef, useState } from 'react';
 
 import { Handle, Remove } from '../item';
 
+import { createStep } from '@/app/(login)/actions';
+import { ActionState } from '@/lib/auth/middleware';
 import { Badge } from '@workspace/ui/components/badge';
 import { Button } from '@workspace/ui/components/button';
 import {
@@ -17,10 +19,11 @@ import {
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
 import { Separator } from '@workspace/ui/components/separator';
+import { toast } from '@workspace/ui/components/sonner';
 import { Switch } from '@workspace/ui/components/switch';
 import { Textarea } from '@workspace/ui/components/textarea';
 import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea';
-import { ChevronRight, ComponentIcon } from 'lucide-react';
+import { ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react';
 import { Create } from '../item/components/create';
 import styles from './container.module.scss';
 
@@ -39,6 +42,7 @@ export interface Props {
   unstyled?: boolean;
   onClick?(): void;
   onRemove?(): void;
+  moduleId: number;
 }
 
 export const Container = forwardRef<HTMLDivElement, Props>(
@@ -57,6 +61,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       scrollable,
       shadow,
       unstyled,
+      moduleId,
       ...props
     }: Props,
     ref,
@@ -73,6 +78,20 @@ export const Container = forwardRef<HTMLDivElement, Props>(
 
       setValue(val);
     };
+
+    const [createState, createAction, isCreatePending] = useActionState<ActionState, FormData>(createStep, {
+      error: '',
+      success: '',
+    });
+
+    useEffect(() => {
+      if (createState?.error) {
+        toast.error(createState.error);
+      }
+      if (createState?.success) {
+        toast.success(createState.success);
+      }
+    }, [createState]);
 
     return (
       <Component
@@ -128,39 +147,78 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                       <DialogTitle className="text-xs font-normal">New step</DialogTitle>
                     </div>
                   </DialogHeader>
-                  <div className="grid px-3 pb-3">
-                    <Input
-                      placeholder="Step title"
-                      className="font-medium"
-                      variant="ghost"
-                    />
-                    <Textarea
-                      placeholder="Add description..."
-                      className="max-h-[400px]"
-                      variant="ghost"
-                      onChange={handleChange}
-                      ref={textAreaRef}
-                      rows={1}
-                    />
-                  </div>
-                  <Separator />
-                  <DialogFooter className="gap-1 p-3">
-                    <div className="flex items-center gap-2">
-                      <Switch id="create-more" />
-                      <Label
-                        htmlFor="create-more"
-                        className="font-normal text-xs text-muted-foreground"
-                      >
-                        Create more
-                      </Label>
+
+                  <form action={createAction}>
+                    <div className="grid px-3 pb-3">
+                      <input
+                        type="hidden"
+                        name="moduleId"
+                        value={moduleId}
+                        required
+                      />
+                      <Input
+                        name="title"
+                        placeholder="Step title"
+                        className="font-medium"
+                        variant="ghost"
+                        required
+                      />
+                      <Textarea
+                        name="text"
+                        placeholder="Add description..."
+                        className="max-h-[400px]"
+                        variant="ghost"
+                        onChange={handleChange}
+                        ref={textAreaRef}
+                        rows={1}
+                        required
+                      />
+
+                      <div className="flex items-center gap-2 mt-8">
+                        <div className="grid flex-1">
+                          <Label
+                            htmlFor="selector"
+                            className="sr-only"
+                          >
+                            Link
+                          </Label>
+                          <Input
+                            id="selector"
+                            defaultValue="module-fvfvffv-step-ffgrfhjbhf"
+                            readOnly
+                            required
+                          />
+                        </div>
+                        <Button
+                          size="icon"
+                          className="px-3"
+                          variant="secondary"
+                        >
+                          <span className="sr-only">Copy</span>
+                          <Copy strokeWidth={1} />
+                        </Button>
+                      </div>
                     </div>
-                    <Button
-                      size="sm"
-                      type="submit"
-                    >
-                      Create step
-                    </Button>
-                  </DialogFooter>
+                    <Separator />
+                    <DialogFooter className="gap-1 p-3">
+                      <div className="flex items-center gap-2">
+                        <Switch id="create-more" />
+                        <Label
+                          htmlFor="create-more"
+                          className="font-normal text-xs text-muted-foreground"
+                        >
+                          Create more
+                        </Label>
+                      </div>
+                      <Button
+                        size="sm"
+                        type="submit"
+                        disabled={isCreatePending}
+                      >
+                        {isCreatePending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create step'}
+                      </Button>
+                    </DialogFooter>
+                  </form>
                 </DialogContent>
               </Dialog>
               <Handle {...handleProps} />

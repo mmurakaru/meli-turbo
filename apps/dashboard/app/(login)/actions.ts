@@ -7,13 +7,16 @@ import {
   activityLogs,
   ActivityType,
   invitations,
+  modules,
   type NewActivityLog,
   type NewTeam,
   type NewTeamMember,
   type NewUser,
   publicUsers,
+  steps,
   teamMembers,
   teams,
+  tours,
 } from '@/lib/db/schema';
 import { createCheckoutSession } from '@/lib/payments/stripe';
 import { createClient } from '@/utils/supabase/server';
@@ -425,4 +428,64 @@ export const inviteTeamMember = validatedActionWithUser(inviteTeamMemberSchema, 
   // await sendInvitationEmail(email, userWithTeam.team.name, role)
 
   return { success: 'Invitation sent successfully' };
+});
+
+const createStepSchema = z.object({
+  moduleId: z.number(),
+  selector: z.string().max(100),
+  title: z.string().max(100),
+  text: z.string(),
+});
+
+export const createStep = validatedActionWithUser(createStepSchema, async (data, _, user) => {
+  const { moduleId, selector, title, text } = data;
+
+  // Fetch the module to get the associated tour
+  const [module] = await db.select({ tourId: modules.tourId }).from(modules).where(eq(modules.id, moduleId)).limit(1);
+
+  if (!module) {
+    return { error: 'Module not found' };
+  }
+
+  // Fetch the tour to get the team ID
+  const [tour] = await db.select({ teamId: tours.ownerId }).from(tours).where(eq(tours.id, module.tourId)).limit(1);
+
+  if (!tour) {
+    return { error: 'Tour not found' };
+  }
+
+  // Check if the user is a member of the team
+  const userWithTeam = await getUserWithTeam(user.id);
+  if (!userWithTeam || userWithTeam.teamId !== tour.teamId) {
+    return { error: 'User is not authorized to create steps for this tour' };
+  }
+
+  // Get the highest order number for steps in the module
+  const [highestOrder] = await db
+    .select({ maxOrder: sql<number>`MAX(${steps.order})` })
+    .from(steps)
+    .where(eq(steps.moduleId, moduleId));
+
+  const nextOrder = (highestOrder?.maxOrder || 0) + 1;
+
+  // Create the new step
+  const [newStep] = await db
+    .insert(steps)
+    .values({
+      moduleId,
+      selector,
+      title,
+      text,
+      order: nextOrder,
+    })
+    .returning();
+
+  if (!newStep) {
+    return { error: 'Failed to create step. Please try again.' };
+  }
+
+  // Log the activity
+  await logActivity(tour.teamId, user.id, ActivityType.CREATE_STEP);
+
+  return { success: 'Step created successfully', step: newStep };
 });

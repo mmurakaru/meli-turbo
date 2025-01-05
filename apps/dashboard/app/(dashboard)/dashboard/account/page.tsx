@@ -31,7 +31,7 @@ export default function SecurityPage() {
     // If you call the Server Action directly, it will automatically
     // reset the form. We don't want that here, because we want to keep the
     // client-side values in the inputs. So instead, we use an event handler
-    // which calls the action. You must wrap direct calls with startTranstion.
+    // which calls the action. You must wrap direct calls with startTransition.
     // When you use the `action` prop it automatically handles that for you.
     // Another option here is to persist the values to local storage. I might
     // explore alternative options.
@@ -107,7 +107,7 @@ export default function SecurityPage() {
               disabled={isPending}
               size="sm"
             >
-              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Save Changes</>}
+              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Save Changes</>}
             </Button>
           </form>
         </CardContent>
@@ -165,7 +165,7 @@ export default function SecurityPage() {
               disabled={isPasswordPending}
               size="sm"
             >
-              {isPasswordPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Update Password</>}
+              {isPasswordPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Update Password</>}
             </Button>
           </form>
         </CardContent>
@@ -202,7 +202,7 @@ export default function SecurityPage() {
               disabled={isDeletePending}
               size="sm"
             >
-              {isDeletePending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Delete Account</>}
+              {isDeletePending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Delete Account</>}
             </Button>
           </form>
         </CardContent>
