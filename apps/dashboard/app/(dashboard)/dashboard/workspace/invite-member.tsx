@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@workspace
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
 import { RadioGroup, RadioGroupItem } from '@workspace/ui/components/radio-group';
-import { Loader2, PlusCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useActionState } from 'react';
 
 type ActionState = {
@@ -33,7 +33,7 @@ export function InviteMember() {
           action={inviteAction}
           className="space-y-4"
         >
-          <div>
+          <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -44,7 +44,7 @@ export function InviteMember() {
               disabled={!isOwner}
             />
           </div>
-          <div>
+          <div className="grid gap-2">
             <Label>Role</Label>
             <RadioGroup
               defaultValue="member"
@@ -59,7 +59,7 @@ export function InviteMember() {
                 />
                 <Label
                   htmlFor="member"
-                  className="font-normal text-sm"
+                  className="font-normal text-sm text-muted-foreground"
                 >
                   Member
                 </Label>
@@ -71,7 +71,7 @@ export function InviteMember() {
                 />
                 <Label
                   htmlFor="owner"
-                  className="font-normal text-sm"
+                  className="font-normal text-sm text-muted-foreground"
                 >
                   Owner
                 </Label>
@@ -88,13 +88,9 @@ export function InviteMember() {
             {isInvitePending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Inviting...
               </>
             ) : (
-              <>
-                <PlusCircle className="mr-2 h-4 w-4 stroke-1" />
-                Invite Member
-              </>
+              <>Invite Member</>
             )}
           </Button>
         </form>

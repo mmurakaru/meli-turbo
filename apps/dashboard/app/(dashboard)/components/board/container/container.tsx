@@ -144,7 +144,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                     />
                   </div>
                   <Separator />
-                  <DialogFooter className="flex items-center gap-1 p-3">
+                  <DialogFooter className="gap-1 p-3">
                     <div className="flex items-center gap-2">
                       <Switch id="create-more" />
                       <Label

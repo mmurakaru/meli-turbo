@@ -35,8 +35,8 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
-                <p className="font-medium text-gradient">Current Plan: {teamData.planName || 'Free'}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-normal text-gradient">Current Plan: {teamData.planName || 'Free'}</p>
+                <p className="text-xs text-muted-foreground">
                   {teamData.subscriptionStatus === 'active'
                     ? 'Billed monthly'
                     : teamData.subscriptionStatus === 'trialing'
@@ -70,8 +70,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                 <div className="flex items-center space-x-4">
                   <Avatar>
                     <AvatarImage
-                      className="stroke-1"
-                      src={'/avatars/placeholder.svg?height=32&width=32'}
+                      className="h-8 w-8"
                       alt={getUserDisplayName(member.user)}
                     />
                     <AvatarFallback>
@@ -82,8 +81,8 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium">{getUserDisplayName(member.user)}</p>
-                    <p className="text-sm text-muted-foreground capitalize">{member.role}</p>
+                    <p className="font-normal text-sm">{getUserDisplayName(member.user)}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{member.role}</p>
                   </div>
                 </div>
                 {index > 1 ? (

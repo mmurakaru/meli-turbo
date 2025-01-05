@@ -6,7 +6,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
-import { Loader2, Lock, Trash2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
 
 type ActionState = {
@@ -78,23 +78,23 @@ export default function SecurityPage() {
             className="space-y-4"
             onSubmit={handleSubmit}
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 name="name"
-                placeholder="Enter your name"
+                placeholder="Your name"
                 defaultValue={user?.name || ''}
                 required
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Your email"
                 defaultValue={user?.email || ''}
                 required
               />
@@ -128,7 +128,7 @@ export default function SecurityPage() {
             className="space-y-4"
             onSubmit={handlePasswordSubmit}
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="current-password">Current Password</Label>
               <Input
                 id="current-password"
@@ -140,7 +140,7 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="new-password">New Password</Label>
               <Input
                 id="new-password"
@@ -152,7 +152,7 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="confirm-password">Confirm New Password</Label>
               <Input
                 id="confirm-password"
@@ -189,14 +189,16 @@ export default function SecurityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Delete Account</CardTitle>
+          <p className="text-xs text-muted-foreground mb-4">
+            Account deletion is non-reversable. Please proceed with caution.
+          </p>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-500 mb-4">Account deletion is non-reversable. Please proceed with caution.</p>
           <form
             onSubmit={handleDeleteSubmit}
             className="space-y-4"
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="delete-password">Confirm Password</Label>
               <Input
                 id="delete-password"
@@ -217,13 +219,9 @@ export default function SecurityPage() {
               {isDeletePending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
                 </>
               ) : (
-                <>
-                  <Trash2 className="mr-2 h-4 w-4 stroke-1" />
-                  Delete Account
-                </>
+                <>Delete Account</>
               )}
             </Button>
           </form>
