@@ -11,10 +11,46 @@ export const Handle = forwardRef<HTMLButtonElement, ActionProps>((props, ref) =>
       {...props}
     >
       <svg
-        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
         width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z"></path>
+        <circle
+          cx="9"
+          cy="12"
+          r="1"
+        />
+        <circle
+          cx="9"
+          cy="5"
+          r="1"
+        />
+        <circle
+          cx="9"
+          cy="19"
+          r="1"
+        />
+        <circle
+          cx="15"
+          cy="12"
+          r="1"
+        />
+        <circle
+          cx="15"
+          cy="5"
+          r="1"
+        />
+        <circle
+          cx="15"
+          cy="19"
+          r="1"
+        />
       </svg>
     </Action>
   );

@@ -122,7 +122,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-gray-50 text-gray-500">
+              <span className="px-2 bg-gray-50 text-muted-foreground">
                 {mode === 'signin' ? 'New to our platform?' : 'Already have an account?'}
               </span>
             </div>

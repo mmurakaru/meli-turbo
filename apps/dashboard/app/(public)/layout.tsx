@@ -91,7 +91,7 @@ function Header() {
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer size-9">
                   <AvatarImage alt={user.name || ''} />
-                  <AvatarFallback className="bg-violet-100 text-white">
+                  <AvatarFallback className="bg-violet-200 text-white">
                     {user.email
                       .split(' ')
                       .map((n) => n[0])

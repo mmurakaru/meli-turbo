@@ -1,5 +1,6 @@
 import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
+import { Toaster } from '@workspace/ui/components/sonner';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import './globals.scss';
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-[100dvh]">
         <UserProvider userPromise={userPromise}>{children}</UserProvider>
         {/* <ScriptLoader /> */}
+        <Toaster />
       </body>
     </html>
   );

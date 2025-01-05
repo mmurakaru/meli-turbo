@@ -6,7 +6,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
-import { Loader2, Lock, Trash2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
 
 type ActionState = {
@@ -31,7 +31,7 @@ export default function SecurityPage() {
     // If you call the Server Action directly, it will automatically
     // reset the form. We don't want that here, because we want to keep the
     // client-side values in the inputs. So instead, we use an event handler
-    // which calls the action. You must wrap direct calls with startTranstion.
+    // which calls the action. You must wrap direct calls with startTransition.
     // When you use the `action` prop it automatically handles that for you.
     // Another option here is to persist the values to local storage. I might
     // explore alternative options.
@@ -78,42 +78,36 @@ export default function SecurityPage() {
             className="space-y-4"
             onSubmit={handleSubmit}
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 name="name"
-                placeholder="Enter your name"
+                placeholder="Your name"
                 defaultValue={user?.name || ''}
                 required
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Your email"
                 defaultValue={user?.email || ''}
                 required
               />
             </div>
-            {state.error && <p className="text-red-500 text-sm">{state.error}</p>}
-            {state.success && <p className="text-green-500 text-sm">{state.success}</p>}
+            {state.error && <p className="text-red-500 text-xs">{state.error}</p>}
+            {state.success && <p className="text-green-500 text-xs">{state.success}</p>}
             <Button
               type="submit"
               variant={'secondary'}
               disabled={isPending}
+              size="sm"
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                'Save Changes'
-              )}
+              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Save Changes</>}
             </Button>
           </form>
         </CardContent>
@@ -128,7 +122,7 @@ export default function SecurityPage() {
             className="space-y-4"
             onSubmit={handlePasswordSubmit}
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="current-password">Current Password</Label>
               <Input
                 id="current-password"
@@ -140,7 +134,7 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="new-password">New Password</Label>
               <Input
                 id="new-password"
@@ -152,7 +146,7 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="confirm-password">Confirm New Password</Label>
               <Input
                 id="confirm-password"
@@ -163,24 +157,15 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            {passwordState.error && <p className="text-red-500 text-sm">{passwordState.error}</p>}
-            {passwordState.success && <p className="text-green-500 text-sm">{passwordState.success}</p>}
+            {passwordState.error && <p className="text-red-500 text-xs">{passwordState.error}</p>}
+            {passwordState.success && <p className="text-green-500 text-xs">{passwordState.success}</p>}
             <Button
               type="submit"
               variant={'secondary'}
               disabled={isPasswordPending}
+              size="sm"
             >
-              {isPasswordPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
-                </>
-              ) : (
-                <>
-                  <Lock className="mr-2 h-4 w-4 stroke-1" />
-                  Update Password
-                </>
-              )}
+              {isPasswordPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Update Password</>}
             </Button>
           </form>
         </CardContent>
@@ -189,14 +174,16 @@ export default function SecurityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Delete Account</CardTitle>
+          <p className="text-xs text-muted-foreground mb-4">
+            Account deletion is non-reversable. Please proceed with caution.
+          </p>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-500 mb-4">Account deletion is non-reversable. Please proceed with caution.</p>
           <form
             onSubmit={handleDeleteSubmit}
             className="space-y-4"
           >
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="delete-password">Confirm Password</Label>
               <Input
                 id="delete-password"
@@ -207,24 +194,15 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            {deleteState.error && <p className="text-red-500 text-sm">{deleteState.error}</p>}
+            {deleteState.error && <p className="text-red-500 text-xs">{deleteState.error}</p>}
             <Button
               type="submit"
               variant="destructive"
               className="bg-red-600 hover:bg-red-700"
               disabled={isDeletePending}
+              size="sm"
             >
-              {isDeletePending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="mr-2 h-4 w-4 stroke-1" />
-                  Delete Account
-                </>
-              )}
+              {isDeletePending ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Delete Account</>}
             </Button>
           </form>
         </CardContent>

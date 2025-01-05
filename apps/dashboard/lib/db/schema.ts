@@ -83,9 +83,20 @@ export const tours = pgTable('tours', {
   deletedAt: timestamp('deleted_at'),
 });
 
-export const steps = pgTable('steps', {
+export const modules = pgTable('modules', {
   id: serial('id').primaryKey(),
   tourId: integer('tour_id')
+    .notNull()
+    .references(() => tours.id, { onDelete: 'cascade' }),
+  title: varchar('title', { length: 100 }).notNull(),
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const steps = pgTable('steps', {
+  id: serial('id').primaryKey(),
+  moduleId: integer('module_id')
     .notNull()
     .references(() => tours.id, { onDelete: 'cascade' }),
   selector: varchar('selector', { length: 255 }).notNull(),
@@ -154,10 +165,17 @@ export const toursRelations = relations(tours, ({ one, many }) => ({
   steps: many(steps),
 }));
 
-export const stepsRelations = relations(steps, ({ one }) => ({
+export const modulesRelations = relations(modules, ({ one }) => ({
   tour: one(tours, {
-    fields: [steps.tourId],
+    fields: [modules.tourId],
     references: [tours.id],
+  }),
+}));
+
+export const stepsRelations = relations(steps, ({ one }) => ({
+  module: one(modules, {
+    fields: [steps.moduleId],
+    references: [modules.id],
   }),
 }));
 
@@ -181,9 +199,16 @@ export type NewTour = typeof tours.$inferInsert;
 export type TourWithTeam = Tour & {
   team: Pick<Team, 'id' | 'name'>;
 };
+export type Module = typeof modules.$inferSelect;
+export type NewModule = typeof steps.$inferInsert;
+export type TourWithModules = Tour & {
+  modules: (Module & {
+    steps: Step[];
+  })[];
+};
 export type Step = typeof steps.$inferSelect;
 export type NewStep = typeof steps.$inferInsert;
-export type TourWithSteps = Tour & {
+export type ModuleWithSteps = Module & {
   steps: Step[];
 };
 
@@ -198,4 +223,6 @@ export enum ActivityType {
   REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
   INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
+  CREATE_MODULE = 'CREATE_MODULE',
+  CREATE_STEP = 'CREATE_STEP',
 }
