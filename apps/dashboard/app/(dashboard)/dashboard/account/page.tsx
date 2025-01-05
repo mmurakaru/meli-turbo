@@ -6,7 +6,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
-import { Loader2, Lock } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { startTransition, useActionState } from 'react';
 
 type ActionState = {
@@ -99,21 +99,15 @@ export default function SecurityPage() {
                 required
               />
             </div>
-            {state.error && <p className="text-red-500 text-sm">{state.error}</p>}
-            {state.success && <p className="text-green-500 text-sm">{state.success}</p>}
+            {state.error && <p className="text-red-500 text-xs">{state.error}</p>}
+            {state.success && <p className="text-green-500 text-xs">{state.success}</p>}
             <Button
               type="submit"
               variant={'secondary'}
               disabled={isPending}
+              size="sm"
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                'Save Changes'
-              )}
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Save Changes</>}
             </Button>
           </form>
         </CardContent>
@@ -163,24 +157,15 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            {passwordState.error && <p className="text-red-500 text-sm">{passwordState.error}</p>}
-            {passwordState.success && <p className="text-green-500 text-sm">{passwordState.success}</p>}
+            {passwordState.error && <p className="text-red-500 text-xs">{passwordState.error}</p>}
+            {passwordState.success && <p className="text-green-500 text-xs">{passwordState.success}</p>}
             <Button
               type="submit"
               variant={'secondary'}
               disabled={isPasswordPending}
+              size="sm"
             >
-              {isPasswordPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
-                </>
-              ) : (
-                <>
-                  <Lock className="mr-2 h-4 w-4 stroke-1" />
-                  Update Password
-                </>
-              )}
+              {isPasswordPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Update Password</>}
             </Button>
           </form>
         </CardContent>
@@ -209,20 +194,15 @@ export default function SecurityPage() {
                 maxLength={100}
               />
             </div>
-            {deleteState.error && <p className="text-red-500 text-sm">{deleteState.error}</p>}
+            {deleteState.error && <p className="text-red-500 text-xs">{deleteState.error}</p>}
             <Button
               type="submit"
               variant="destructive"
               className="bg-red-600 hover:bg-red-700"
               disabled={isDeletePending}
+              size="sm"
             >
-              {isDeletePending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                </>
-              ) : (
-                <>Delete Account</>
-              )}
+              {isDeletePending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Delete Account</>}
             </Button>
           </form>
         </CardContent>

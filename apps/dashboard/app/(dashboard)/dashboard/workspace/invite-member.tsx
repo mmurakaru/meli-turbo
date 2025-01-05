@@ -59,7 +59,7 @@ export function InviteMember() {
                 />
                 <Label
                   htmlFor="member"
-                  className="font-normal text-sm text-muted-foreground"
+                  className="font-normal text-xs text-muted-foreground"
                 >
                   Member
                 </Label>
@@ -71,7 +71,7 @@ export function InviteMember() {
                 />
                 <Label
                   htmlFor="owner"
-                  className="font-normal text-sm text-muted-foreground"
+                  className="font-normal text-xs text-muted-foreground"
                 >
                   Owner
                 </Label>
@@ -84,14 +84,9 @@ export function InviteMember() {
             type="submit"
             disabled={isInvitePending || !isOwner}
             variant={'secondary'}
+            size="sm"
           >
-            {isInvitePending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              </>
-            ) : (
-              <>Invite Member</>
-            )}
+            {isInvitePending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Invite Member</>}
           </Button>
         </form>
       </CardContent>

@@ -35,7 +35,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div className="mb-4 sm:mb-0">
-                <p className="font-normal text-gradient">Current Plan: {teamData.planName || 'Free'}</p>
+                <p className="text-sm font-medium text-gradient">Current Plan: {teamData.planName || 'Free'}</p>
                 <p className="text-xs text-muted-foreground">
                   {teamData.subscriptionStatus === 'active'
                     ? 'Billed monthly'
@@ -48,6 +48,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
                 <Button
                   type="submit"
                   variant="secondary"
+                  size="sm"
                 >
                   Manage Subscription
                 </Button>
