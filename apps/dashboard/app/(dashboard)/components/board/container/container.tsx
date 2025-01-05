@@ -23,9 +23,11 @@ import { toast } from '@workspace/ui/components/sonner';
 import { Switch } from '@workspace/ui/components/switch';
 import { Textarea } from '@workspace/ui/components/textarea';
 import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea';
-import { ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react';
+import { Check, ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react';
 import { Create } from '../item/components/create';
 import styles from './container.module.scss';
+
+import crypto from 'crypto';
 
 export interface Props {
   children: React.ReactNode;
@@ -92,6 +94,19 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         toast.success(createState.success);
       }
     }, [createState]);
+
+    const generateUUID = () => {
+      return 'ms-' + crypto.randomBytes(16).toString('hex');
+    };
+
+    const [copied, setCopied] = useState(false);
+    const [uuid] = useState(generateUUID);
+
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(uuid);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
 
     return (
       <Component
@@ -184,18 +199,20 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                           </Label>
                           <Input
                             id="selector"
-                            defaultValue="module-fvfvffv-step-ffgrfhjbhf"
+                            defaultValue={uuid}
                             readOnly
                             required
                           />
                         </div>
                         <Button
+                          type="button"
                           size="icon"
                           className="px-3"
                           variant="secondary"
+                          onClick={copyToClipboard}
                         >
-                          <span className="sr-only">Copy</span>
-                          <Copy strokeWidth={1} />
+                          <span className="sr-only">{copied ? 'Copied!' : 'Copy'}</span>
+                          {copied ? <Check strokeWidth={1} /> : <Copy strokeWidth={1} />}
                         </Button>
                       </div>
                     </div>
