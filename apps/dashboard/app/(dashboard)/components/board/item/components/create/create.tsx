@@ -16,7 +16,7 @@ export const Create = forwardRef<HTMLButtonElement, ActionProps>((props, ref) =>
         width="12"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2.5"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       >

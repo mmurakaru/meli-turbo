@@ -8,11 +8,10 @@
   outline: none;
   min-width: 100%;
   margin: 10px 0;
-  border-radius: 5px;
+  border-radius: 0.25rem;
   min-height: 200px;
-  transition: background-color 350ms ease;
-  background-color: rgba(246, 246, 246, 1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease-in-out;
+  border: 1px solid hsl(var(--border));
   font-size: 0.875rem;
 
   @media screen and (min-width: 768px) {
@@ -39,18 +38,22 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.5);
+    color: hsl(var(--foreground) / 0.2);
     background-color: transparent;
     border-style: dashed;
-    border-color: rgba(0, 0, 0, 0.08);
+    border-color: hsl(var(--border));
+    transition:
+      color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
 
     &:hover {
-      border-color: rgba(0, 0, 0, 0.15);
+      border-color: hsl(var(--muted-foreground) / 0.3);
+      color: hsl(var(--foreground) / 0.4);
     }
   }
 
   &.hover {
-    background-color: rgb(235, 235, 235, 1);
+    background-color: hsl(0, 0%, 98%);
   }
 
   &.unstyled {
@@ -75,7 +78,7 @@
     border-color: transparent;
     box-shadow:
       0 0 0 2px rgba(255, 255, 255, 0),
-      0 0px 0px 2px #4c9ffe;
+      0 0px 0px 2px hsl(258, 90%, 66%);
   }
 }
 
@@ -85,10 +88,10 @@
   padding-right: 8px;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: hsl(var(--background));
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  border-bottom: 1px solid hsl(var(--border));
 
   &:hover {
     .Actions > * {
@@ -102,6 +105,7 @@
 
   > *:first-child:not(:last-child) {
     opacity: 0;
+    transition: opacity 0.15s ease-in-out;
 
     &:focus-visible {
       opacity: 1;

@@ -9,7 +9,7 @@ export function NewTour() {
   return (
     <section>
       <h1 className="text-lg lg:text-2xl font-extrabold mb-2">Create new tour</h1>
-      <p className="mb-4">
+      <p className="mb-4 text-sm">
         Each tour consists of modules with multiple steps. Create modules and move steps between modules.
       </p>
 

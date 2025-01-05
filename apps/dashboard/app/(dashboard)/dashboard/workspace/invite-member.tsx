@@ -57,14 +57,24 @@ export function InviteMember() {
                   value="member"
                   id="member"
                 />
-                <Label htmlFor="member">Member</Label>
+                <Label
+                  htmlFor="member"
+                  className="font-normal text-sm"
+                >
+                  Member
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem
                   value="owner"
                   id="owner"
                 />
-                <Label htmlFor="owner">Owner</Label>
+                <Label
+                  htmlFor="owner"
+                  className="font-normal text-sm"
+                >
+                  Owner
+                </Label>
               </div>
             </RadioGroup>
           </div>

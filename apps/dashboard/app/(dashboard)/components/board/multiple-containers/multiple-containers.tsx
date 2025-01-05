@@ -44,6 +44,7 @@ import { coordinateGetter as multipleContainersCoordinateGetter } from './multip
 import { Container, ContainerProps, Item } from '..';
 
 import { useIsMobile } from '@workspace/ui/hooks/use-mobile';
+import { Plus } from 'lucide-react';
 import { createRange } from '../../../utilities';
 
 export default {
@@ -485,7 +486,10 @@ export function MultipleContainers({
               onClick={handleAddColumn}
               placeholder
             >
-              + Add Module
+              <Plus
+                className="w-6 h-6"
+                strokeWidth={1.5}
+              />
             </DroppableContainer>
           )}
         </SortableContext>
@@ -626,7 +630,7 @@ function Trash({ id }: { id: UniqueIdentifier }) {
         height: 60,
         borderRadius: 5,
         border: '1px solid',
-        borderColor: isOver ? 'red' : '#DDD',
+        borderColor: isOver ? 'red' : 'hsl(var(--border))',
       }}
     >
       Drop here to delete
