@@ -174,7 +174,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                       <Input
                         name="title"
                         placeholder="Step title"
-                        className="font-medium"
+                        className="font-semibold"
                         variant="ghost"
                         required
                       />
