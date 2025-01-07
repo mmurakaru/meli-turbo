@@ -36,7 +36,6 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
       <div className={cn(styles.scrollableWrapper)}>
         <div className={cn(styles.scrollable)}>
           <MultipleContainers
-            columns={1}
             itemCount={3}
             trashable
             handle

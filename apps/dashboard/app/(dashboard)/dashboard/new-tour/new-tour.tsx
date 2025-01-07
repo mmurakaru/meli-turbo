@@ -16,7 +16,6 @@ export function NewTour() {
       <div className={cn(styles.scrollableWrapper)}>
         <div className={cn(styles.scrollable)}>
           <MultipleContainers
-            columns={1}
             itemCount={3}
             strategy={rectSortingStrategy}
             trashable

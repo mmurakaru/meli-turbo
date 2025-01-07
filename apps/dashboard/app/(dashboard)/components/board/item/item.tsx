@@ -46,7 +46,6 @@ export const Item = React.memo(
   React.forwardRef<HTMLLIElement, Props>(
     (
       {
-        color,
         dragOverlay,
         dragging,
         disabled,
@@ -111,7 +110,6 @@ export const Item = React.memo(
               '--scale-x': transform?.scaleX ? `${transform.scaleX}` : undefined,
               '--scale-y': transform?.scaleY ? `${transform.scaleY}` : undefined,
               '--index': index,
-              '--color': color,
             } as React.CSSProperties
           }
           ref={ref}
@@ -123,7 +121,7 @@ export const Item = React.memo(
               handle && styles.withHandle,
               dragOverlay && styles.dragOverlay,
               disabled && styles.disabled,
-              color && styles.color,
+              styles.color,
             )}
             style={style}
             data-cypress="draggable-item"

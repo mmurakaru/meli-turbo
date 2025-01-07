@@ -112,7 +112,7 @@ const dropAnimation: DropAnimation = {
   }),
 };
 
-type Items = Record<UniqueIdentifier, UniqueIdentifier[]>;
+type Modules = Record<UniqueIdentifier, UniqueIdentifier[]>;
 
 interface Props {
   adjustScale?: boolean;
@@ -131,7 +131,7 @@ interface Props {
   }): React.CSSProperties;
   wrapperStyle?(args: { index: number }): React.CSSProperties;
   itemCount?: number;
-  items?: Items;
+  modules?: Modules;
   handle?: boolean;
   renderItem?: any;
   strategy?: SortingStrategy;
@@ -152,7 +152,7 @@ export function MultipleContainers({
   cancelDrop,
   columns,
   handle = false,
-  items: initialItems,
+  modules: initialModules,
   containerStyle,
   coordinateGetter = multipleContainersCoordinateGetter,
   getItemStyles = () => ({}),
@@ -165,13 +165,10 @@ export function MultipleContainers({
   vertical = false,
   scrollable,
 }: Props) {
-  const [items, setItems] = useState<Items>(
+  const [items, setItems] = useState<Modules>(
     () =>
-      initialItems ?? {
-        A: createRange(itemCount, (index) => `A${index + 1} Step`),
-        B: createRange(itemCount, (index) => `B${index + 1} Step`),
-        // C: createRange(itemCount, (index) => `C${index + 1} Step`),
-        // D: createRange(itemCount, (index) => `D${index + 1} Step`),
+      initialModules ?? {
+        1: createRange(itemCount, (index) => `Step ${index + 1}`),
       },
   );
   const [containers, setContainers] = useState(Object.keys(items) as UniqueIdentifier[]);
@@ -248,7 +245,7 @@ export function MultipleContainers({
     },
     [activeId, items],
   );
-  const [clonedItems, setClonedItems] = useState<Items | null>(null);
+  const [clonedItems, setClonedItems] = useState<Modules | null>(null);
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
@@ -433,10 +430,10 @@ export function MultipleContainers({
       <div
         style={{
           inlineSize: '100%',
-          display: 'inline-grid',
+          display: 'flex',
           boxSizing: 'border-box',
           paddingBlock: 32,
-          gridAutoFlow: isMobile || vertical ? 'row' : 'column',
+          flexFlow: isMobile || vertical ? 'column' : 'row',
         }}
       >
         <SortableContext
@@ -527,7 +524,6 @@ export function MultipleContainers({
           isDragging: true,
           isDragOverlay: true,
         })}
-        color={getColor(id)}
         wrapperStyle={wrapperStyle({ index: 0 })}
         renderItem={renderItem}
         dragOverlay
@@ -561,7 +557,6 @@ export function MultipleContainers({
               isSorting: false,
               isDragOverlay: false,
             })}
-            color={getColor(item)}
             wrapperStyle={wrapperStyle({ index })}
             renderItem={renderItem}
           />
@@ -592,25 +587,6 @@ export function MultipleContainers({
 
     return String.fromCharCode(lastContainerId.charCodeAt(0) + 1);
   }
-}
-
-function getColor(id: UniqueIdentifier) {
-  switch (String(id)[0]) {
-    // case 'A':
-    //   return '#7193f1';
-    // case 'B':
-    //   return '#ffda6c';
-    case 'A':
-      return '#2d3af7';
-    case 'B':
-      return '#c90add';
-    case 'C':
-      return '#00bcd4';
-    case 'D':
-      return '#ef769f';
-  }
-
-  return undefined;
 }
 
 function Trash({ id }: { id: UniqueIdentifier }) {
@@ -689,7 +665,6 @@ function SortableItem({
         overIndex: over ? getIndex(over.id) : overIndex,
         containerId,
       })}
-      color={getColor(id)}
       transition={transition}
       transform={transform}
       fadeIn={mountedWhileDragging}
