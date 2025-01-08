@@ -3,6 +3,7 @@ import { cn } from '@workspace/ui/lib/utils';
 import { redirect } from 'next/navigation';
 import { MultipleContainers } from '../../../components/board/multiple-containers/multiple-containers';
 import styles from '../../../components/board/multiple-containers/multiple-containers.module.scss';
+import { TourHeader } from './tour-header';
 
 export default async function TourPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
@@ -13,6 +14,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
   }
 
   const tour = await getTour(Number(slug), user.id);
+
   if (!tour) {
     redirect('/not-found');
   }
@@ -26,12 +28,14 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
   if (!hasPermission) {
     redirect('/not-found');
   }
+
   return (
     <section>
-      <h1 className="text-lg lg:text-2xl font-extrabold mb-2">Edit Tour {slug}</h1>
-      <p className="mb-4 text-sm">
-        Each tour consists of modules with multiple steps. Create modules and move steps between modules.
-      </p>
+      <TourHeader
+        tourId={tour.id}
+        description={tour.description}
+        title={tour.title}
+      />
 
       <div className={cn(styles.scrollableWrapper)}>
         <div className={cn(styles.scrollable)}>

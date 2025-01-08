@@ -2,12 +2,12 @@ import { Skeleton } from '@workspace/ui/components/skeleton';
 
 export default function Loading() {
   return (
-    <section className="flex-1">
-      <div className="flex items-center space-x-4">
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
+    <section>
+      <div className="px-3 py-1 h-9">
+        <Skeleton className="h-7 w-[250px]" />
+      </div>
+      <div className="px-3 py-1 h-9">
+        <Skeleton className="h-5 w-[200px]" />
       </div>
     </section>
   );

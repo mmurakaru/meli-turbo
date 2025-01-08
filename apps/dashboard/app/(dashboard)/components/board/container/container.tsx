@@ -168,9 +168,15 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                       <input
                         type="hidden"
                         name="moduleId"
-                        value={moduleId}
+                        value={moduleId || ''}
                         required
                       />
+                      <Label
+                        htmlFor="title"
+                        className="sr-only"
+                      >
+                        Title
+                      </Label>
                       <Input
                         name="title"
                         placeholder="Step title"
@@ -178,6 +184,12 @@ export const Container = forwardRef<HTMLDivElement, Props>(
                         variant="ghost"
                         required
                       />
+                      <Label
+                        htmlFor="text"
+                        className="sr-only"
+                      >
+                        Text
+                      </Label>
                       <Textarea
                         name="text"
                         placeholder="Add description..."
