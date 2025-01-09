@@ -89,6 +89,17 @@ Now, to start the Supabase stack, run:
 supabase start
 ```
 
+When the local development setup is running add the environment variables shown in the terminal:
+
+.env.local
+
+1. `NEXT_PUBLIC_SUPABASE_URL` = API URL
+2. `NEXT_PUBLIC_SUPABASE_ANON_KEY` = anon key
+
+.env
+
+1. `POSTGRES_URL` = DB URL
+
 Open [http://localhost:54323](http://localhost:54323) in your browser. The local development environment includes Supabase Studio, a graphical interface for working with your database.
 
 When finished, you can stop the stack:
