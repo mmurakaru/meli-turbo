@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-[100dvh]">
         <UserProvider userPromise={userPromise}>{children}</UserProvider>
+
         {/* <ScriptLoader /> */}
         <Toaster />
       </body>
