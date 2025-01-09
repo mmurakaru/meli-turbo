@@ -69,6 +69,34 @@ Optionally, you can listen for Stripe webhooks locally through their CLI to hand
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
+See [Getting started](https://supabase.com/docs/guides/local-development/cli/getting-started) for detailed info on installing the supabase CLI. Quickstart:
+
+Install the CLI with Homebrew:
+
+```bash
+brew install supabase/tap/supabase
+```
+
+Inside the project root, run:
+
+```bash
+supabase init
+```
+
+Now, to start the Supabase stack, run:
+
+```bash
+supabase start
+```
+
+Open [http://localhost:54323](http://localhost:54323) in your browser. The local development environment includes Supabase Studio, a graphical interface for working with your database.
+
+When finished, you can stop the stack:
+
+```bash
+supabase stop
+```
+
 ## Database migration
 
 ```bash
