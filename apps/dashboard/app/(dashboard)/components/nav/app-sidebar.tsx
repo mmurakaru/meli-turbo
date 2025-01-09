@@ -4,7 +4,6 @@ import { BookOpen, Bot, ChartColumn, CircleUser, Clock, Sparkles, SquareTerminal
 import * as React from 'react';
 
 import { NavDeveloper } from '@/app/(dashboard)/components/nav/nav-developer';
-import { useUser } from '@/lib/auth';
 import { Separator } from '@workspace/ui/components/separator';
 import {
   Sidebar,
@@ -97,12 +96,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useUser();
-
-  if (!user) return;
-
-  const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
+  const pathname = usePathname();
 
   return (
     <Sidebar

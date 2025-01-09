@@ -19,10 +19,11 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function NavUser() {
+  const { user, setUser } = useUser();
+
   const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
 
-  const { user, setUser } = useUser();
   const router = useRouter();
 
   async function handleSignOut() {
