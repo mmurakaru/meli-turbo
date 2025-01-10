@@ -256,7 +256,7 @@ export function Footer() {
               <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
             </Link>
             <p className="text-xs text-muted-foreground">
-              © Copyright {new Date().getFullYear()} Meli Software SL. All rights reserved.
+              © Copyright {new Date().getFullYear()} Meli Software. All rights reserved.
             </p>
           </div>
           {/*           <div className="flex gap-4">
