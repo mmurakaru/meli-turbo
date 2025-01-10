@@ -1,6 +1,7 @@
 import { getAllTours, getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 import { Recents } from './recents';
+import Loading from './loading';
 
 export default async function RecentsPage() {
   const user = await getUser();
@@ -18,5 +19,10 @@ export default async function RecentsPage() {
     all: await getAllTours(user.id),
   };
 
-  return <Recents tourData={tourData} />;
+  return (
+    <>
+      <Loading />
+      <Recents tourData={tourData} />
+    </>
+  );
 }
