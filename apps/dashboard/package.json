@@ -1,5 +1,7 @@
 {
   "name": "dashboard",
+  "version": "1.0.0",
+  "description": "Meli - Voice AI product tour",
   "private": true,
   "scripts": {
     "build": "next build",

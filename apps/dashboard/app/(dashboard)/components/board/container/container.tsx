@@ -4,7 +4,6 @@ import React, { forwardRef, useActionState, useEffect, useRef, useState } from '
 
 import { Handle, Remove } from '../item';
 
-import { createStep } from '@/app/(login)/actions';
 import { ActionState } from '@/lib/auth/middleware';
 import { Badge } from '@workspace/ui/components/badge';
 import { Button } from '@workspace/ui/components/button';
@@ -27,6 +26,7 @@ import { Check, ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react'
 import { Create } from '../item/components/create';
 import styles from './container.module.scss';
 
+import { createStep } from '@/app/(dashboard)/actions';
 import crypto from 'crypto';
 
 export interface Props {

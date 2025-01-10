@@ -1,4 +1,4 @@
-import { getAllTours, getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
+import { getAllTours, getToursForOwner, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 import { Recents } from './recents';
 
@@ -9,13 +9,15 @@ export default async function RecentsPage() {
     redirect('/sign-in');
   }
 
-  const team = await getTeamForUser(user.id);
+  const privateToursData = getToursForOwner(user.id, 'user');
+  const allToursData = getAllTours(user.id);
 
-  if (!team) return;
+  // Initiate both requests in parallel
+  const [privateTours, allTours] = await Promise.all([privateToursData, allToursData]);
 
   const tourData = {
-    private: await getToursForOwner(user.id, 'user'),
-    all: await getAllTours(user.id),
+    private: privateTours,
+    all: allTours,
   };
 
   return <Recents tourData={tourData} />;

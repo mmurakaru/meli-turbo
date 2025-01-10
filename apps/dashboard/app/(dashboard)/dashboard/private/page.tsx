@@ -1,14 +1,13 @@
-import { getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries';
+import { getToursForOwner, getUser } from '@/lib/db/queries';
+import { redirect } from 'next/navigation';
 import { Private } from './private';
 
 export default async function PrivatePage() {
   const user = await getUser();
 
-  if (!user) return;
-
-  const team = await getTeamForUser(user.id);
-
-  if (!team) return;
+  if (!user) {
+    redirect('/sign-in');
+  }
 
   const tourData = await getToursForOwner(user.id, 'user');
 

@@ -4,6 +4,7 @@ import { ChevronsUpDown, LogOut, Settings, Sparkles, UserCog } from 'lucide-reac
 
 import { signOut } from '@/app/(login)/actions';
 import { useUser } from '@/lib/auth';
+import { Team } from '@/lib/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import {
   DropdownMenu,
@@ -17,14 +18,31 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@wo
 import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getTeam } from '../../actions';
 
 export function NavUser() {
   const { user, setUser } = useUser();
-
   const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
-
   const router = useRouter();
+
+  const [team, setTeam] = useState<Team | null>(null);
+
+  useEffect(() => {
+    if (user?.id) {
+      const fetchTeam = async () => {
+        try {
+          const teamData = await getTeam(user.id);
+          console.log(teamData);
+          setTeam(teamData);
+        } catch (error) {
+          console.error('Error fetching team data:', error);
+        }
+      };
+      fetchTeam();
+    }
+  }, [user]);
 
   async function handleSignOut() {
     setUser(null);
@@ -100,7 +118,9 @@ export function NavUser() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-xs leading-tight">
                   <span className="font-medium truncate">{user?.email.split('@')[0]}</span>
-                  <span className="text-sidebar-foreground/70 truncate">Base plan</span>
+                  <span className="text-sidebar-foreground/70 truncate">
+                    {team?.planName ? `${team?.planName} plan` : 'Free plan'}
+                  </span>
                 </div>
               </div>
             </DropdownMenuGroup>
