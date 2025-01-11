@@ -1,16 +1,19 @@
 {
-  "name": "tour",
+  "name": "meli.js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Meli - Voice AI powered product tour renderer",
+  "keywords": [],
+  "author": "<founders@meli.com> (https://www.meli-ai.com/)",
+  "license": "ISC",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmurakaru/meli.js"
+  },
   "scripts": {
     "build": "rollup --config",
-    "bundle": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^12.1.1",
