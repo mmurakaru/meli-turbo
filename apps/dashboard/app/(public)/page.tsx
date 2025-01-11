@@ -3,7 +3,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -97,45 +96,16 @@ export default function HomePage() {
             </div>
 
             <div className="py-12 sm:py-16 mx-auto max-w-7xl lg:col-span-12">
-              <h2 className="text-base sm:text-xl lg:text-lg xl:text-xl tracking-tight text-center text-gray-900">
-                Trusted by
-              </h2>
-              <div className="mx-auto mt-8 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-                <Image
-                  className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                  src="logoipsum_1.svg"
-                  alt="Logoipsum"
-                  width="158"
-                  height="48"
-                />
-                <Image
-                  className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                  src="logoipsum_2.svg"
-                  alt="Logoipsum"
-                  width="158"
-                  height="48"
-                />
-                <Image
-                  className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                  src="logoipsum_3.svg"
-                  alt="Logoipsum"
-                  width="158"
-                  height="48"
-                />
-                <Image
-                  className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                  src="logoipsum_4.svg"
-                  alt="Logoipsum"
-                  width="158"
-                  height="48"
-                />
-                <Image
-                  className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-                  src="logoipsum_5.svg"
-                  alt="Logoipsum"
-                  width="158"
-                  height="48"
-                />
+              <h2 className="text-base tracking-tight text-center text-gray-900">Backed by</h2>
+              <div className="mt-4 grid place-items-center">
+                <a href="https://elevenlabs.io/text-to-speech">
+                  <img
+                    className="max-h-12 max-w-[260px]"
+                    loading="lazy"
+                    src="https://storage.googleapis.com/eleven-public-cdn/images/elevenlabs-grants-logo.png"
+                    alt="Text to Speech"
+                  ></img>
+                </a>
               </div>
             </div>
             <div className="py-12 sm:py-16 max-w-7xl lg:col-span-12">
