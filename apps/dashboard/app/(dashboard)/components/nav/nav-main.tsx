@@ -18,7 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@workspace/ui/components/sidebar';
+import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function NavMain({
   main,
@@ -30,6 +32,7 @@ export function NavMain({
   }[];
 }) {
   const { isMobile, toggleSidebar } = useSidebar();
+  const pathname = usePathname();
 
   return (
     <SidebarGroup>
@@ -40,6 +43,7 @@ export function NavMain({
             <SidebarMenuButton
               asChild
               onClick={isMobile ? toggleSidebar : undefined}
+              className={cn({ 'bg-gray-100': pathname === item.href })}
             >
               <Link href={item.href}>
                 <item.icon strokeWidth={1} />

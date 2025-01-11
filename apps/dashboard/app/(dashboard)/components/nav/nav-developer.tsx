@@ -53,10 +53,7 @@ export function NavDeveloper({
                 passHref
               >
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton
-                    tooltip={item.title}
-                    className={cn({ 'bg-gray-100': pathname === item.href })}
-                  >
+                  <SidebarMenuButton tooltip={item.title}>
                     {item.icon && <item.icon strokeWidth={1} />}
                     <span className="font-light">{item.title}</span>
                     <ChevronRight

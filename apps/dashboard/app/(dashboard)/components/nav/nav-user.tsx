@@ -85,7 +85,10 @@ export function NavUser() {
             sideOffset={4}
           >
             <DropdownMenuGroup>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton
+                asChild
+                className={cn({ 'bg-gray-100': pathname === '/dashboard/workspace' })}
+              >
                 <Link href="/dashboard/workspace">
                   <Settings strokeWidth={1} />
                   <span className="font-light">Workspace settings</span>
