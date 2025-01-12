@@ -70,7 +70,7 @@ export default function MetricsSection() {
               <CardContent>
                 <div className="flex items-center justify-center mb-4">{metric.icon}</div>
                 <h3 className="text-base font-bold text-gray-900 text-center mb-2">{metric.title}</h3>
-                <p className="text-sm text-gray-600 text-center">{metric.description}</p>
+                <p className="text-sm text-gray-500 text-center">{metric.description}</p>
               </CardContent>
             </Card>
           ))}
