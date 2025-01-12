@@ -1,4 +1,4 @@
-import { Terminal } from '@/app/(dashboard)/components/terminal';
+import { Terminal } from '@/app/(dashboard)/_components/terminal';
 
 export default async function GetStartedPage() {
   return (

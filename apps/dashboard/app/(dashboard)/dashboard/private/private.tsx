@@ -3,7 +3,7 @@
 import { Tour } from '@/lib/db/schema';
 import { Card } from '@workspace/ui/components/card';
 import Link from 'next/link';
-import { NewTourLink } from '../../components/new-tour-link';
+import { NewTourLink } from '../../_components/new-tour-link';
 import { normalizedTours } from '../../helper/normalize-tour.helper';
 
 export function Private({ tourData }: { tourData: Tour[] }) {

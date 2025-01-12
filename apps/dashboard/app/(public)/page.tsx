@@ -5,6 +5,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import MetricsSection from './_components/metrics-section';
 
 function VoiceWave() {
   const [amplitude, setAmplitude] = useState(0);
@@ -108,6 +109,10 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
+
+            <div className="py-12 sm:py-16 mx-auto max-w-7xl lg:col-span-12">
+              <MetricsSection />
+            </div>
             <div className="py-12 sm:py-16 max-w-7xl lg:col-span-12">
               <h2 className="font-bold text-base sm:text-xl lg:text-lg xl:text-xl tracking-tight text-gray-900">
                 FAQ's
@@ -125,7 +130,7 @@ export default function HomePage() {
                   <AccordionTrigger>Are tooltips styled & branded?</AccordionTrigger>
                   <AccordionContent>
                     Yes. Tooltips come with default styles and Meli branding, but you can get unbranded tooltips when
-                    choosing our Base or Pro plan.
+                    choosing our Base or Plus plan.
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3">
@@ -135,8 +140,8 @@ export default function HomePage() {
                 <AccordionItem value="item-4">
                   <AccordionTrigger>Is a developer needed to implement a product tour?</AccordionTrigger>
                   <AccordionContent>
-                    Yes. Setting up the product tour rendering requires developer intervention. Creating the tour itself
-                    can be done no-code.
+                    Yes. Loading the product tour in your webapp requires developer intervention. Creating the tour
+                    itself can be done no-code.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

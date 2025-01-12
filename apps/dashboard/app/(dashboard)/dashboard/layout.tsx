@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@works
 import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AppSidebar } from '../components/nav/app-sidebar';
+import { AppSidebar } from '../_components/nav/app-sidebar';
 import { NEW_TOUR_PATHNAME } from '../constants/dashboard.constants';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
