@@ -144,6 +144,28 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             </Button>
           </div>
         </div>
+
+        <div className="mt-6">
+          <div className="text-xs text-zinc-950/50 dark:text-white/50 decoration-zinc-950/30 dark:decoration-white/30 underline-offset-[3px]">
+            By signing {mode === 'signin' ? 'in' : 'up'}, you agree to the{' '}
+            <Link
+              href="/terms-of-use"
+              className="underline hover:dark:text-white/70 hover:dark:decoration-white/70"
+              target="_blank"
+            >
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="/privacy-policy"
+              className="underline hover:dark:text-white/70 hover:dark:decoration-white/70"
+              target="_blank"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </div>
+        </div>
       </div>
     </div>
   );
