@@ -205,6 +205,7 @@ export function Footer() {
     { href: '/product', label: 'Product overview' },
     { href: '/use-cases', label: 'Use cases' },
     { href: '/pricing', label: 'Pricing' },
+    { href: 'https://docs.meli-ai.com/', label: 'Docs' },
   ];
 
   const legalLinks = [
