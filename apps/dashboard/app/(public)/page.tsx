@@ -3,6 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
+// import { initMeli } from 'meli.js';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MetricsSection from './_components/metrics-section';
@@ -44,6 +45,14 @@ function VoiceWave() {
 }
 
 export default function HomePage() {
+  // "meli.js": "file:../../../meli.js/meli.js-1.0.0.tgz",
+  // useEffect(() => {
+  //   initMeli('/api/tours/1').then(() => {
+  //     console.log('Tour initialized!');
+  //     id="ms-dd809dceb71260420ff2d00c27b19b04"
+  //   });
+  // }, []);
+
   return (
     <main className="bg-gray-50">
       <section className="py-20">

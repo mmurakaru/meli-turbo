@@ -98,7 +98,7 @@ export const steps = pgTable('steps', {
   id: serial('id').primaryKey(),
   moduleId: integer('module_id')
     .notNull()
-    .references(() => tours.id, { onDelete: 'cascade' }),
+    .references(() => modules.id, { onDelete: 'cascade' }),
   selector: varchar('selector', { length: 255 }).notNull(),
   title: varchar('title', { length: 100 }).notNull(),
   text: text('text').notNull(),

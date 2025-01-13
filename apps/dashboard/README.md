@@ -150,3 +150,17 @@ In your Vercel project settings (or during deployment), add all the necessary en
 3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
 4. `POSTGRES_URL`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+
+### Test meli.js tour script locally
+
+Go to meli.js package and run:
+
+```bash
+npm run pack-local
+```
+
+then run the following command in the root to install the package:
+
+```bash
+pnpm add "../../../meli.js/meli.js-1.0.0.tgz"
+```
