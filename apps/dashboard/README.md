@@ -151,16 +151,22 @@ In your Vercel project settings (or during deployment), add all the necessary en
 4. `POSTGRES_URL`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
 
-### Test meli.js tour script locally
+### Test npm package locally
 
-Go to meli.js package and run:
+You can create a symlink like this. In the package:
 
 ```bash
-npm run pack-local
+npm link
 ```
 
-then run the following command in the root to install the package:
+In the project that uses the package:
 
 ```bash
-pnpm add "../../../meli.js/meli.js-1.0.0.tgz"
+pnpm link my-package
+```
+
+Now the packages are linked. To unlink:
+
+```bash
+pnpm unlink my-package
 ```

@@ -3,7 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
-// import { initMeli } from 'meli.js';
+import meli from 'meli.js';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MetricsSection from './_components/metrics-section';
@@ -45,17 +45,16 @@ function VoiceWave() {
 }
 
 export default function HomePage() {
-  // "meli.js": "file:../../../meli.js/meli.js-1.0.0.tgz",
-  // useEffect(() => {
-  //   initMeli('/api/tours/1').then(() => {
-  //     console.log('Tour initialized!');
-  //     id="ms-dd809dceb71260420ff2d00c27b19b04"
-  //   });
-  // }, []);
+  useEffect(() => {
+    console.log(meli);
+  }, []);
 
   return (
     <main className="bg-gray-50">
-      <section className="py-20">
+      <section
+        className="py-20"
+        id="ms-dd809dceb71260420ff2d00c27b19b04"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:text-center md:max-w-2xl md:mx-auto lg:col-span-12">
