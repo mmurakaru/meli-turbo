@@ -46,19 +46,19 @@ function VoiceWave() {
 
 export default function HomePage() {
   useEffect(() => {
-    console.log(meli);
+    meli.init('9');
   }, []);
 
   return (
     <main className="bg-gray-50">
-      <section
-        className="py-20"
-        id="ms-dd809dceb71260420ff2d00c27b19b04"
-      >
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:text-center md:max-w-2xl md:mx-auto lg:col-span-12">
-              <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
+              <h1
+                id="ms-dd809dceb71260420ff2d00c27b19b04"
+                className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl"
+              >
                 Transform Your User Onboarding Experience
                 <span className="bg-gradient-to-r from-[#2d3af7] to-[#c90add] text-transparent bg-clip-text inline-block sm:leading-[3.75rem] md:leading-[4.5rem]">
                   with Voice AI

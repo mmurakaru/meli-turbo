@@ -29,7 +29,7 @@
     "drizzle-orm": "^0.38.3",
     "google-one-tap": "^1.0.6",
     "lucide-react": "^0.469.0",
-    "meli.js": "^1.0.3",
+    "meli.js": "^1.0.4",
     "next": "15.1.1-canary.23",
     "postcss": "^8.4.49",
     "postgres": "^3.4.5",

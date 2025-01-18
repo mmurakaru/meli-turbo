@@ -153,20 +153,26 @@ In your Vercel project settings (or during deployment), add all the necessary en
 
 ### Test npm package locally
 
-You can create a symlink like this. In the package:
+To use yalc, you need to install it globally:
 
 ```bash
-npm link
+npm i yalc -g
+```
+
+In the package:
+
+```bash
+yalc publish
+```
+
+update existing package in store:
+
+```bash
+yalc push
 ```
 
 In the project that uses the package:
 
 ```bash
-pnpm link my-package
-```
-
-Now the packages are linked. To unlink:
-
-```bash
-pnpm unlink my-package
+yalc add exported_package_name
 ```
