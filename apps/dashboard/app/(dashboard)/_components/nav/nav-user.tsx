@@ -34,7 +34,6 @@ export function NavUser() {
       const fetchTeam = async () => {
         try {
           const teamData = await getTeam(user.id);
-          console.log(teamData);
           setTeam(teamData);
         } catch (error) {
           console.error('Error fetching team data:', error);
