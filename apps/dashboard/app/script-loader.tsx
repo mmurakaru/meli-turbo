@@ -3,23 +3,17 @@ import Script from 'next/script';
 export default function ScriptLoader() {
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://tour-meli-ai.vercel.app/bundle.min.css"
-      />
-      <Script defer>
+      <Script>
         {`
-        window.tourMeli = window.tourMeli || {};
-        window.tourMeli.scriptUrl = 'https://tour-meli-ai.vercel.app/bundle.min.js'
-        window.tourMeli.configUrl = 'https://meli-ai.com/api/tours/1';
+        window.meli = window.meli || {};
+        window.meli.url = 'https://meli-tour.vercel.app/bundle.min.js';
 
-        (function(w, d, s, c) {
+        (function(w, d, s, i) {
         var script = d.createElement('script');
         script.src = s;
         script.async = true;
-        script.onload = () => w.initProductTour(c);
         d.head.appendChild(script);
-        })(window, document, window.tourMeli.scriptUrl, window.tourMeli.configUrl);
+        })(window, document, window.meli.url);
         `}
       </Script>
     </>

@@ -3,7 +3,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
-import meli from 'meli.js';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MetricsSection from './_components/metrics-section';
@@ -45,10 +44,12 @@ function VoiceWave() {
 }
 
 export default function HomePage() {
-  useEffect(() => {
-    meli.init('9');
-  }, []);
+  const [demoOpen, setDemoOpen] = useState(false);
 
+  function startTour() {
+    setDemoOpen(false);
+    window.meli.init('9');
+  }
   return (
     <main className="bg-gray-50">
       <section className="py-20">
@@ -75,7 +76,10 @@ export default function HomePage() {
                 <Button asChild>
                   <Link href={'/sign-up'}>Sign up for free</Link>
                 </Button>
-                <Popover>
+                <Popover
+                  open={demoOpen}
+                  onOpenChange={setDemoOpen}
+                >
                   <PopoverTrigger className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
                     Get a demo
                   </PopoverTrigger>
@@ -95,9 +99,7 @@ export default function HomePage() {
 
                     <div className="flex items-center justify-between">
                       <VoiceWave />
-                      <Button asChild>
-                        <Link href="/sign-up">Create a tour</Link>
-                      </Button>
+                      <Button onClick={startTour}>Start tour</Button>
                     </div>
                   </PopoverContent>
                 </Popover>

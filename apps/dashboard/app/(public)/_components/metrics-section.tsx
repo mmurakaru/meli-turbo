@@ -62,10 +62,11 @@ export default function MetricsSection() {
           Enhance Your Key Onboarding Metrics
         </h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {metrics.map((metric) => (
+          {metrics.map((metric, index) => (
             <Card
               key={metric.title}
               className="bg-gray-50  rounded-[0.25rem] p-6"
+              id={index === 4 ? 'ms-dd809dceb71260420ff2d00c27b19b05' : undefined}
             >
               <CardContent>
                 <div className="flex items-center justify-center mb-4">{metric.icon}</div>
