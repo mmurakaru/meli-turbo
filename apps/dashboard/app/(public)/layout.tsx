@@ -19,8 +19,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
-import ScriptLoader from '../script-loader';
-// import ScriptLoader from '../script-loader';
 
 //const MeliC = dynamic(() => import('./_components/meli-init').then((module) => module.MeliInit), { ssr: false });
 
@@ -287,7 +285,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section className="flex flex-col min-h-screen pt-[4.25rem]">
       {/* <MeliC debug /> */}
-      <ScriptLoader />
       <Header />
       {children}
       <Footer />

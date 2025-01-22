@@ -4,6 +4,7 @@ import { Toaster } from '@workspace/ui/components/sonner';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import './globals.scss';
+// import ScriptLoader from './script-loader';
 
 export const metadata: Metadata = {
   title: 'Meli | Voice AI product tour',

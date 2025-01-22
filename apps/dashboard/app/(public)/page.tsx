@@ -3,6 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
+import meli from 'meli.js';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import MetricsSection from './_components/metrics-section';
@@ -48,7 +49,7 @@ export default function HomePage() {
 
   function startTour() {
     setDemoOpen(false);
-    window.meli.init('9');
+    meli.init('9');
   }
   return (
     <main className="bg-gray-50">

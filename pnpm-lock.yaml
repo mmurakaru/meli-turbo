@@ -66,8 +66,8 @@ importers:
         specifier: ^0.469.0
         version: 0.469.0(react@19.0.0)
       meli.js:
-        specifier: 1.0.9-alpha
-        version: 1.0.9-alpha
+        specifier: 1.0.10-alpha
+        version: 1.0.10-alpha
       next:
         specifier: 15.1.1-canary.23
         version: 15.1.1-canary.23(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.83.0)
@@ -3837,8 +3837,8 @@ packages:
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
 
-  meli.js@1.0.9-alpha:
-    resolution: {integrity: sha512-m8kjeq1jxYY6hmDWdeuIzNbDwVpKGgTUBI4WdCxSrFRdITIn9iUsRgrNuoyhx6zNC69COb5IdeEjaj8X4JEMqA==}
+  meli.js@1.0.10-alpha:
+    resolution: {integrity: sha512-yJ/fZ7HM+oXxHeCjR/mOtCjEicOyeIjEPrF44cKdGSRTSdY2BvWJiCE+HFCI9xruD5p9Va7f3+GShUjKg2GK6g==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -9321,7 +9321,7 @@ snapshots:
       tmpl: 1.0.5
     optional: true
 
-  meli.js@1.0.9-alpha: {}
+  meli.js@1.0.10-alpha: {}
 
   merge-stream@2.0.0:
     optional: true
