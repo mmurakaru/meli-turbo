@@ -2,53 +2,48 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@workspace/ui/components/accordion';
 import { Button } from '@workspace/ui/components/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import meli from 'meli.js';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import MetricsSection from './_components/metrics-section';
 
-function VoiceWave() {
-  const [amplitude, setAmplitude] = useState(0);
+// function VoiceWave() {
+//   const [amplitude, setAmplitude] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAmplitude((prev) => (prev + 1) % 5);
-    }, 200);
-    return () => clearInterval(interval);
-  }, []);
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setAmplitude((prev) => (prev + 1) % 5);
+//     }, 200);
+//     return () => clearInterval(interval);
+//   }, []);
 
-  return (
-    <div className="flex justify-center items-center bg-white">
-      <div className="relative flex items-center justify-center gap-1.5">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="rounded-full 
-              transition-all 
-              duration-300 
-              ease-in-out 
-              bg-gradient-to-b 
-              from-gray-50
-              to-purple-500
-              shadow-md"
-            style={{
-              width: '5px',
-              height: `${10 + (i === amplitude ? 20 : 0)}px`,
-              opacity: 0.4 + i * 0.1,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="flex justify-center items-center bg-white">
+//       <div className="relative flex items-center justify-center gap-1.5">
+//         {[...Array(5)].map((_, i) => (
+//           <div
+//             key={i}
+//             className="rounded-full
+//               transition-all
+//               duration-300
+//               ease-in-out
+//               bg-gradient-to-b
+//               from-gray-50
+//               to-purple-500
+//               shadow-md"
+//             style={{
+//               width: '5px',
+//               height: `${10 + (i === amplitude ? 20 : 0)}px`,
+//               opacity: 0.4 + i * 0.1,
+//             }}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 export default function HomePage() {
-  const [demoOpen, setDemoOpen] = useState(false);
-
   function startTour() {
-    setDemoOpen(false);
     meli.init('9');
   }
   return (
@@ -71,39 +66,22 @@ export default function HomePage() {
                 user through core features.
               </p>
             </div>
+            <a href="https://hi.meli-ai.com/founders"></a>
 
             <div className="mt-12 mx-auto max-w-2xl col-span-12">
               <div className="flex items-center gap-2">
-                <Button asChild>
+                <Button
+                  id="ms-dd809dceb71260420ff2d00c27b19b11"
+                  asChild
+                >
                   <Link href={'/sign-up'}>Sign up for free</Link>
                 </Button>
-                <Popover
-                  open={demoOpen}
-                  onOpenChange={setDemoOpen}
+                <Button
+                  variant="outline"
+                  onClick={startTour}
                 >
-                  <PopoverTrigger className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-                    Get a demo
-                  </PopoverTrigger>
-                  <PopoverContent
-                    sideOffset={10}
-                    side="bottom"
-                    className="bg-white flex flex-col gap-8 shadow-md max-w-80"
-                  >
-                    <div className="flex flex-col gap-4">
-                      <p className="font-bold text-sm leading-5 text-gray-900">AI-Powered Product Tours!</p>
-                      <p className="text-sm leading-5 text-gray-500">
-                        Revolutionize your user onboarding with our AI voice agent. Create interactive, voice-guided
-                        tours that engage users and showcase your SaaS product's best features. <br /> <br /> Boost
-                        adoption rates and user satisfaction in minutes, not days.
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <VoiceWave />
-                      <Button onClick={startTour}>Start tour</Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                  Get a demo
+                </Button>
               </div>
             </div>
 

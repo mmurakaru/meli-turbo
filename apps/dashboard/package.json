@@ -37,6 +37,7 @@
     "react-dom": "19.0.0",
     "server-only": "^0.0.1",
     "stripe": "^17.5.0",
+    "three": "^0.172.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "@types/three": "^0.172.0",
     "clsx": "^2.1.1",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
