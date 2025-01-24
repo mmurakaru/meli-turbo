@@ -6,42 +6,6 @@ import meli from 'meli.js';
 import Link from 'next/link';
 import MetricsSection from './_components/metrics-section';
 
-// function VoiceWave() {
-//   const [amplitude, setAmplitude] = useState(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setAmplitude((prev) => (prev + 1) % 5);
-//     }, 200);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <div className="flex justify-center items-center bg-white">
-//       <div className="relative flex items-center justify-center gap-1.5">
-//         {[...Array(5)].map((_, i) => (
-//           <div
-//             key={i}
-//             className="rounded-full
-//               transition-all
-//               duration-300
-//               ease-in-out
-//               bg-gradient-to-b
-//               from-gray-50
-//               to-purple-500
-//               shadow-md"
-//             style={{
-//               width: '5px',
-//               height: `${10 + (i === amplitude ? 20 : 0)}px`,
-//               opacity: 0.4 + i * 0.1,
-//             }}
-//           />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
 export default function HomePage() {
   function startTour() {
     meli.init('9');
@@ -66,7 +30,6 @@ export default function HomePage() {
                 user through core features.
               </p>
             </div>
-            <a href="https://hi.meli-ai.com/founders"></a>
 
             <div className="mt-12 mx-auto max-w-2xl col-span-12">
               <div className="flex items-center gap-2">
