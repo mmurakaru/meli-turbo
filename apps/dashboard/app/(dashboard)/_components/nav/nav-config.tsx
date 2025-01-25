@@ -18,7 +18,7 @@ import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export function NavDeveloper({
+export function NavConfiguration({
   items,
 }: {
   items: {
@@ -38,7 +38,7 @@ export function NavDeveloper({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Developer</SidebarGroupLabel>
+      <SidebarGroupLabel>Configuration</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

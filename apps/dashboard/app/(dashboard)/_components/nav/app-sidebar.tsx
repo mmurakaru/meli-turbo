@@ -1,9 +1,8 @@
 'use client';
 
-import { BookOpen, Bot, ChartColumn, CircleUser, Clock, Sparkles, SquareTerminal, UserPlus, Users } from 'lucide-react';
+import { CircleUser, Clock, Sparkles, UserPlus, Users } from 'lucide-react';
 import * as React from 'react';
 
-import { NavDeveloper } from '@/app/(dashboard)/_components/nav/nav-developer';
 import { Separator } from '@workspace/ui/components/separator';
 import {
   Sidebar,
@@ -40,58 +39,20 @@ const data = {
       href: '/dashboard/private',
       icon: CircleUser,
     },
-    {
-      name: 'Analytics',
-      href: '/dashboard/analytics',
-      icon: ChartColumn,
-    },
+    // {
+    //   name: 'Analytics',
+    //   href: '/dashboard/analytics',
+    //   icon: ChartColumn,
+    // },
   ],
-  developer: [
-    {
-      title: 'Documentation',
-      href: '/dashboard/documentation',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          href: '/dashboard/documentation/introduction',
-        },
-        {
-          title: 'Get Started',
-          href: '/dashboard/documentation/get-started',
-        },
-        {
-          title: 'Examples',
-          href: '/dashboard/documentation/examples',
-        },
-        {
-          title: 'Changelog',
-          href: '/dashboard/documentation/changelog',
-        },
-      ],
-    },
-    {
-      title: 'Playground',
-      href: '/dashboard/playground',
-      icon: SquareTerminal,
-      items: [
-        {
-          title: 'React',
-          href: '/dashboard/playground/react',
-        },
-        {
-          title: 'Angular',
-          href: '/dashboard/playground/angular',
-        },
-      ],
-    },
-    {
-      title: 'Voice AI',
-      href: '/dashboard/voice-ai',
-      icon: Bot,
-      items: null,
-    },
-  ],
+  // configuration: [
+  //   {
+  //     title: 'Voice AI',
+  //     href: '/dashboard/voice-ai',
+  //     icon: Bot,
+  //     items: null,
+  //   },
+  // ],
   settings: [{ href: '/dashboard/workspace', icon: UserPlus, label: 'Invite members' }],
 };
 
@@ -125,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
 
         <NavMain main={data.main} />
-        <NavDeveloper items={data.developer} />
+        {/* <NavConfiguration items={data.configuration} /> */}
       </SidebarContent>
       <SidebarFooter>
         <Separator className="my-2" />

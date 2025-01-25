@@ -7,10 +7,13 @@ import { useFormStatus } from 'react-dom';
 export function SubmitButton({ plan }: { plan: string }) {
   const { pending } = useFormStatus();
 
+  //TODO(MM): Amend once pricing model is defined
+  const isFreePlan = plan === 'Free';
+
   return (
     <Button
       type="submit"
-      disabled={pending}
+      disabled={pending || !isFreePlan}
     >
       {pending ? (
         <>

@@ -29,22 +29,29 @@ export default async function PricingPage() {
           price={0}
           interval="month"
           trialDays={0}
-          features={['Unlimited Usage', 'Branded tooltips', '2 Workspace members']}
+          features={['5 product tours', 'Branded overlays', 'Default Voice AI config', '2 Workspace members']}
           priceId="free_price"
         />
         <PricingCard
           name={basePlan?.name || 'Base'}
           price={basePrice?.unitAmount || 800}
           interval={basePrice?.interval || 'month'}
-          trialDays={basePrice?.trialPeriodDays || 7}
-          features={['Everything in Free, and:', 'Unbranded tooltips', 'Asset upload', '25 Workspace Members']}
+          trialDays={basePrice?.trialPeriodDays || 14}
+          features={[
+            'Everything in Free, and:',
+            'Unlimited Product tours',
+            'Unbranded Overlays',
+            'Costum Voice AI config',
+            'Asset upload',
+            '25 Workspace Members',
+          ]}
           priceId={basePrice?.id}
         />
         <PricingCard
           name={plusPlan?.name || 'Plus'}
           price={plusPrice?.unitAmount || 1200}
           interval={plusPrice?.interval || 'month'}
-          trialDays={plusPrice?.trialPeriodDays || 7}
+          trialDays={plusPrice?.trialPeriodDays || 14}
           features={[
             'Everything in Base, and:',
             'Unlimited Workspace Members',
