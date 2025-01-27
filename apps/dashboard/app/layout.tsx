@@ -3,6 +3,7 @@ import { getUser } from '@/lib/db/queries';
 import { Toaster } from '@workspace/ui/components/sonner';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
+import CookieConsent from './_components/cookie-consent';
 import './globals.scss';
 // import ScriptLoader from './script-loader';
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <UserProvider userPromise={userPromise}>{children}</UserProvider>
         {/* <ScriptLoader /> */}
         <Toaster />
+        <CookieConsent />
       </body>
     </html>
   );
