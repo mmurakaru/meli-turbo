@@ -19,6 +19,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
+import { GDPRBadge } from './_components/gdpr-badge';
 
 //const MeliC = dynamic(() => import('./_components/meli-init').then((module) => module.MeliInit), { ssr: false });
 
@@ -263,6 +264,7 @@ export function Footer() {
               © Copyright {new Date().getFullYear()} Meli Software. All rights reserved.
             </p>
           </div>
+          <GDPRBadge />
           {/*           <div className="flex gap-4">
             {socialLinks.map((link) => (
               <a
