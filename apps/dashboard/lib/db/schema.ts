@@ -199,6 +199,7 @@ export type NewTour = typeof tours.$inferInsert;
 export type TourWithTeam = Tour & {
   team: Pick<Team, 'id' | 'name'>;
 };
+export type OwnerType = 'team' | 'user';
 export type Module = typeof modules.$inferSelect;
 export type NewModule = typeof steps.$inferInsert;
 export type TourWithModules = Tour & {
@@ -223,6 +224,7 @@ export enum ActivityType {
   REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
   INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
+  CREATE_TOUR = 'CREATE_TOUR',
   CREATE_MODULE = 'CREATE_MODULE',
   CREATE_STEP = 'CREATE_STEP',
 }

@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { and, desc, eq, isNull, or } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, publicUsers, teamMembers, teams, tours } from './schema';
+import { activityLogs, OwnerType, publicUsers, teamMembers, teams, tours } from './schema';
 
 export async function getUser() {
   const supabase = await createClient();
@@ -121,7 +121,7 @@ export async function getTeamForUser(userId: string) {
   return result?.teamMembers[0]?.team || null;
 }
 
-export async function getToursForOwner(userId: string, ownerType: 'team' | 'user') {
+export async function getToursForOwner(userId: string, ownerType: OwnerType) {
   return await db
     .select({
       id: tours.id,

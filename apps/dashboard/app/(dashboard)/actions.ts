@@ -5,6 +5,7 @@ import { db } from '@/lib/db/drizzle';
 import { getTeamForUser, getUserWithTeam } from '@/lib/db/queries';
 import { ActivityType, modules, steps, tours } from '@/lib/db/schema';
 import { eq, sql } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { logActivity } from '../(login)/actions';
 
@@ -17,10 +18,32 @@ const createTourSchema = z.object({
 export const createTour = validatedActionWithUser(createTourSchema, async (data, _, user) => {
   const { title, description, owner } = data;
 
-  console.log(title);
-  console.log(description);
-  console.log(owner);
-  console.log(user);
+  const team = await getTeam(user.id);
+
+  if (!team) {
+    return { error: 'User is not authorized to create tour' };
+  }
+
+  const ownerId = owner === 'team' ? team.id : user.id;
+  const ownerType = owner === 'team' ? 'team' : 'user';
+
+  const [newTour] = await db
+    .insert(tours)
+    .values({
+      title,
+      description,
+      ownerType: ownerType,
+      ownerId: ownerId,
+    })
+    .returning();
+
+  if (!newTour) {
+    return { error: 'Failed to create Tour. Please try again.' };
+  }
+
+  await logActivity(team.id, user.id, ActivityType.CREATE_TOUR);
+
+  redirect(`/dashboard/tours/${newTour.id}`);
 });
 
 const updateTourSchema = z.object({

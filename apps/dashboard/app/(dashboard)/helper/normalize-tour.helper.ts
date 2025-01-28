@@ -1,8 +1,8 @@
-import { Tour } from '@/lib/db/schema';
+import { OwnerType, Tour } from '@/lib/db/schema';
 import { format } from 'date-fns';
 
 export function normalizeTour(tour: Tour): NormalizedTour {
-  function translateOwnerType(type: 'team' | 'user') {
+  function translateOwnerType(type: OwnerType) {
     switch (type) {
       case 'team':
         return 'Team';

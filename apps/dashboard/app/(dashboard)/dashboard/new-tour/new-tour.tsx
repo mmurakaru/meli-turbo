@@ -152,19 +152,6 @@ export function NewTour() {
           </Dialog>
         </div>
       </div>
-
-      {/* <div className={cn(styles.scrollableWrapper)}>
-        <div className={cn(styles.scrollable)}>
-          <MultipleContainers
-            itemCount={3}
-            strategy={rectSortingStrategy}
-            trashable
-            handle
-          />
-        </div>
-        <div className={styles.scrollableMaskStart}></div>
-        <div className={styles.scrollableMaskEnd}></div>
-      </div> */}
     </section>
   );
 }
