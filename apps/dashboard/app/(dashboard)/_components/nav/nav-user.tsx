@@ -17,7 +17,7 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@workspace/ui/components/sidebar';
 import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getTeam } from '../../actions';
 
@@ -25,7 +25,6 @@ export function NavUser() {
   const { user, setUser } = useUser();
   const pathname = usePathname();
   const { toggleSidebar, isMobile } = useSidebar();
-  const router = useRouter();
 
   const [team, setTeam] = useState<Team | null>(null);
 
@@ -46,7 +45,6 @@ export function NavUser() {
   async function handleSignOut() {
     setUser(null);
     await signOut();
-    router.push('/');
   }
 
   return (

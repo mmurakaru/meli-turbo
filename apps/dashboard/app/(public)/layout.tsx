@@ -17,7 +17,6 @@ import { LayoutDashboard, LogOut } from 'lucide-react';
 //import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
 import { GDPRBadge } from './_components/gdpr-badge';
 
@@ -26,12 +25,10 @@ import { GDPRBadge } from './_components/gdpr-badge';
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, setUser } = useUser();
-  const router = useRouter();
 
   async function handleSignOut() {
     setUser(null);
     await signOut();
-    router.push('/');
   }
 
   return (

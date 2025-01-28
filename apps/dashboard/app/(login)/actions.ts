@@ -234,6 +234,8 @@ export async function signOut() {
       await logActivity(userWithTeam.teamId, user.id, ActivityType.SIGN_OUT);
     }
   }
+
+  redirect('/');
 }
 
 const updatePasswordSchema = z

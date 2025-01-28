@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/componen
 import {
   AlertCircle,
   CheckCircle,
+  Columns3,
   Component,
   GalleryVertical,
   Lock,
@@ -27,8 +28,9 @@ const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.REMOVE_TEAM_MEMBER]: UserMinus,
   [ActivityType.INVITE_TEAM_MEMBER]: Mail,
   [ActivityType.ACCEPT_INVITATION]: CheckCircle,
-  [ActivityType.CREATE_MODULE]: Component,
+  [ActivityType.CREATE_TOUR]: Columns3,
   [ActivityType.CREATE_STEP]: GalleryVertical,
+  [ActivityType.CREATE_MODULE]: Component,
 };
 
 function getRelativeTime(date: Date) {
