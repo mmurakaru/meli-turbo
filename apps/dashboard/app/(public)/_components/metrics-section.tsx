@@ -56,26 +56,24 @@ const metrics = [
 
 export default function MetricsSection() {
   return (
-    <section className="px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl text-center mb-12">
-          Enhance Your Key Onboarding Metrics
-        </h2>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {metrics.map((metric, index) => (
-            <Card
-              key={metric.title}
-              className="bg-gray-50  rounded-[0.25rem] p-6"
-              id={index === 4 ? 'ms-dd809dceb71260420ff2d00c27b19b05' : undefined}
-            >
-              <CardContent>
-                <div className="flex items-center justify-center mb-4">{metric.icon}</div>
-                <h3 className="text-base font-bold text-gray-900 text-center mb-2">{metric.title}</h3>
-                <p className="text-sm text-gray-500 text-center">{metric.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+    <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl text-center mb-12">
+        Enhance Your Key Onboarding Metrics
+      </h2>
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {metrics.map((metric, index) => (
+          <Card
+            key={metric.title}
+            className="bg-gray-50  rounded-[0.25rem] p-6"
+            id={index === 4 ? 'ms-dd809dceb71260420ff2d00c27b19b05' : undefined}
+          >
+            <CardContent>
+              <div className="flex items-center justify-center mb-4">{metric.icon}</div>
+              <h3 className="text-base font-bold text-gray-900 text-center mb-2">{metric.title}</h3>
+              <p className="text-sm text-gray-500 text-center">{metric.description}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </section>
   );

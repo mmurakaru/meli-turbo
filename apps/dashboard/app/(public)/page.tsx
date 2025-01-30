@@ -75,19 +75,23 @@ export default function HomePage() {
                 className="w-full"
               >
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Are tooltips accessible?</AccordionTrigger>
-                  <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+                  <AccordionTrigger>Can I configure the voice agent?</AccordionTrigger>
+                  <AccordionContent>
+                    Yes. You will be able to choose from a set of options to configure the conversational AI.
+                  </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
                   <AccordionTrigger>Are tooltips styled & branded?</AccordionTrigger>
                   <AccordionContent>
-                    Yes. Tooltips come with default styles and Meli branding, but you can get unbranded tooltips when
-                    choosing our Base or Plus plan.
+                    Yes. Tooltips come with default styles and Meli branding, you can get unbranded tooltips when
+                    choosing our Base plan and above.
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3">
-                  <AccordionTrigger>Are tour steps animated?</AccordionTrigger>
-                  <AccordionContent>Yes. The tour steps are animated by default.</AccordionContent>
+                  <AccordionTrigger>Do I have control over when a tour starts or ends in my app?</AccordionTrigger>
+                  <AccordionContent>
+                    Yes. You will be able to define costum triggers to start and/or end tours and more.
+                  </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-4">
                   <AccordionTrigger>Is a developer needed to implement a product tour?</AccordionTrigger>
