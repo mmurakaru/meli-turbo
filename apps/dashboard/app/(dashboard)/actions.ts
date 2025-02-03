@@ -61,6 +61,46 @@ export const updateTour = validatedActionWithUser(updateTourSchema, async (data,
   console.log(user);
 });
 
+const createModuleSchema = z.object({
+  tourId: z.number(),
+  title: z.string().max(100),
+});
+
+export const createModule = validatedActionWithUser(createModuleSchema, async (data, _, user) => {
+  const { tourId, title } = data;
+
+  const [tour] = await db.select({ teamId: tours.ownerId }).from(tours).where(eq(tours.id, tourId)).limit(1);
+
+  if (!tour) {
+    return { error: 'Tour not found' };
+  }
+
+  const userWithTeam = await getUserWithTeam(user.id);
+
+  if (!userWithTeam || userWithTeam.teamId !== tour.teamId) {
+    return { error: 'User is not authorized to create modules for this tour' };
+  }
+
+  const [highestOrder] = await db.select({ maxOrder: sql<number>`MAX(${modules.order})` }).from(modules);
+
+  const nextOrder = (highestOrder?.maxOrder || 0) + 1;
+
+  const [newModule] = await db
+    .insert(modules)
+    .values({
+      tourId,
+      title,
+      order: nextOrder,
+    })
+    .returning();
+
+  if (!newModule) {
+    return { error: 'Failed to create module. Please try again.' };
+  }
+
+  await logActivity(tour.teamId, user.id, ActivityType.CREATE_MODULE);
+});
+
 const createStepSchema = z.object({
   moduleId: z.number(),
   selector: z.string().max(100),
@@ -84,6 +124,7 @@ export const createStep = validatedActionWithUser(createStepSchema, async (data,
   }
 
   const userWithTeam = await getUserWithTeam(user.id);
+
   if (!userWithTeam || userWithTeam.teamId !== tour.teamId) {
     return { error: 'User is not authorized to create steps for this tour' };
   }

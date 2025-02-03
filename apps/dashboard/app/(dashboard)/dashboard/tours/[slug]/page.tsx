@@ -36,13 +36,12 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
         description={tour.description}
         title={tour.title}
       />
-
       <div className={cn(styles.scrollableWrapper)}>
         <div className={cn(styles.scrollable)}>
           <MultipleContainers
-            itemCount={3}
             trashable
             handle
+            tourId={tour.id}
           />
         </div>
         <div className={styles.scrollableMaskStart}></div>

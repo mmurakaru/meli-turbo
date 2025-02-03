@@ -37,14 +37,17 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useActionState, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal, unstable_batchedUpdates } from 'react-dom';
 import { coordinateGetter as multipleContainersCoordinateGetter } from './multiple-containers-keyboard-coordinates';
 
 import { Container, ContainerProps, Item } from '..';
 
+import { createModule } from '@/app/(dashboard)/actions';
+import { ActionState } from '@/lib/auth/middleware';
+import { toast } from '@workspace/ui/components/sonner';
 import { useIsMobile } from '@workspace/ui/hooks/use-mobile';
-import { Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import { createRange } from '../../../utilities';
 
 export default {
@@ -140,6 +143,7 @@ interface Props {
   trashable?: boolean;
   scrollable?: boolean;
   vertical?: boolean;
+  tourId?: number;
 }
 
 export const TRASH_ID = 'void';
@@ -164,6 +168,7 @@ export function MultipleContainers({
   trashable = false,
   vertical = false,
   scrollable,
+  tourId,
 }: Props) {
   const [items, setItems] = useState<Modules>(
     () =>
@@ -411,6 +416,20 @@ export function MultipleContainers({
     });
   }, [items]);
 
+  const [createState, createModuleAction, isCreateModulePending] = useActionState<ActionState, FormData>(createModule, {
+    error: '',
+    success: '',
+  });
+
+  useEffect(() => {
+    if (createState?.error) {
+      toast.error(createState.error);
+    }
+    if (createState?.success) {
+      toast.success(createState.success);
+    }
+  }, [createState]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -477,19 +496,37 @@ export function MultipleContainers({
             </DroppableContainer>
           ))}
           {minimal ? undefined : (
-            <DroppableContainer
-              id={PLACEHOLDER_ID}
-              disabled={isSortingContainer}
-              items={empty}
-              onClick={handleAddColumn}
-              placeholder
-              moduleId={Number(PLACEHOLDER_ID)}
-            >
-              <Plus
-                className="w-6 h-6"
-                strokeWidth={1.5}
+            <form action={createModuleAction}>
+              <input
+                type="hidden"
+                name="tourId"
+                value={tourId}
+                required
               />
-            </DroppableContainer>
+              <input
+                type="hidden"
+                name="title"
+                value={'Module'}
+                required
+              />
+              <DroppableContainer
+                id={PLACEHOLDER_ID}
+                disabled={isSortingContainer}
+                items={empty}
+                onClick={handleAddColumn}
+                placeholder
+                moduleId={Number(PLACEHOLDER_ID)}
+              >
+                {isCreateModulePending ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  <Plus
+                    className="w-6 h-6"
+                    strokeWidth={1.5}
+                  />
+                )}
+              </DroppableContainer>
+            </form>
           )}
         </SortableContext>
       </div>
@@ -566,10 +603,13 @@ export function MultipleContainers({
   }
 
   function handleRemove(containerID: UniqueIdentifier) {
+    console.log('REMOVE MODULE');
+
     setContainers((containers) => containers.filter((id) => id !== containerID));
   }
 
   function handleAddColumn() {
+    console.log('ADD MODULE');
     const newContainerId = getNextContainerId();
 
     unstable_batchedUpdates(() => {
