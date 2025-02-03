@@ -609,16 +609,14 @@ export function MultipleContainers({
   }
 
   function handleAddColumn() {
-    console.log('ADD MODULE');
-    const newContainerId = getNextContainerId();
-
-    unstable_batchedUpdates(() => {
-      setContainers((containers) => [...containers, newContainerId]);
-      setItems((items) => ({
-        ...items,
-        [newContainerId]: [],
-      }));
-    });
+    //const newContainerId = getNextContainerId();
+    // unstable_batchedUpdates(() => {
+    //   setContainers((containers) => [...containers, newContainerId]);
+    //   setItems((items) => ({
+    //     ...items,
+    //     [newContainerId]: [],
+    //   }));
+    // });
   }
 
   function getNextContainerId() {

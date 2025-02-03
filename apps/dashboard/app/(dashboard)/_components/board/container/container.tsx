@@ -129,6 +129,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         )}
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
+        type={onClick ? 'submit' : undefined}
       >
         {label ? (
           <div className={styles.Header}>

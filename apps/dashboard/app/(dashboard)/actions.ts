@@ -62,7 +62,7 @@ export const updateTour = validatedActionWithUser(updateTourSchema, async (data,
 });
 
 const createModuleSchema = z.object({
-  tourId: z.number(),
+  tourId: z.coerce.number(),
   title: z.string().max(100),
 });
 
@@ -82,6 +82,8 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
   }
 
   const [highestOrder] = await db.select({ maxOrder: sql<number>`MAX(${modules.order})` }).from(modules);
+
+  console.log(highestOrder);
 
   const nextOrder = (highestOrder?.maxOrder || 0) + 1;
 
