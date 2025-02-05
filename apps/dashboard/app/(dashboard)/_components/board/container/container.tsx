@@ -26,7 +26,7 @@ import { Check, ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react'
 import { Create } from '../item/components/create';
 import styles from './container.module.scss';
 
-import { createStep } from '@/app/(dashboard)/actions';
+import { createStep, deleteModule } from '@/app/(dashboard)/actions';
 import crypto from 'crypto';
 
 export interface Props {
@@ -56,7 +56,6 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       horizontal,
       hover,
       onClick,
-      onRemove,
       label,
       placeholder,
       style,
@@ -86,6 +85,14 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       success: '',
     });
 
+    const [deleteState, deleteModuleAction, isDeleteModulePending] = useActionState<ActionState, FormData>(
+      deleteModule,
+      {
+        error: '',
+        success: '',
+      },
+    );
+
     useEffect(() => {
       if (createState?.error) {
         toast.error(createState.error);
@@ -94,6 +101,15 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         toast.success(createState.success);
       }
     }, [createState]);
+
+    useEffect(() => {
+      if (deleteState?.error) {
+        toast.error(deleteState.error);
+      }
+      if (deleteState?.success) {
+        toast.success(deleteState.success);
+      }
+    }, [deleteState]);
 
     const generateUUID = () => {
       return 'ms-' + crypto.randomBytes(16).toString('hex');
@@ -135,7 +151,15 @@ export const Container = forwardRef<HTMLDivElement, Props>(
           <div className={styles.Header}>
             {label}
             <div className={styles.Actions}>
-              {onRemove ? <Remove onClick={onRemove} /> : undefined}
+              <form action={deleteModuleAction}>
+                <input
+                  type="hidden"
+                  name="moduleId"
+                  value={moduleId || ''}
+                  required
+                />
+                {isDeleteModulePending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Remove type="submit" />}
+              </form>
               <Dialog>
                 <DialogTrigger asChild>
                   <Create />

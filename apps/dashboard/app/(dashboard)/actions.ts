@@ -164,7 +164,7 @@ export const updateModule = validatedActionWithUser(updateModuleSchema, async (d
 });
 
 const deleteModuleSchema = z.object({
-  moduleId: z.number(),
+  moduleId: z.coerce.number(),
 });
 
 export const deleteModule = validatedActionWithUser(deleteModuleSchema, async (data, _, user) => {
@@ -211,7 +211,7 @@ export const deleteModule = validatedActionWithUser(deleteModuleSchema, async (d
 });
 
 const createStepSchema = z.object({
-  moduleId: z.number(),
+  moduleId: z.coerce.number(),
   selector: z.string().max(100),
   title: z.string().max(100),
   text: z.string(),

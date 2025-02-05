@@ -9,23 +9,27 @@ export interface Props extends React.HTMLAttributes<HTMLButtonElement> {
     background: string;
   };
   cursor?: CSSProperties['cursor'];
+  type?: 'button' | 'submit';
 }
 
-export const Action = forwardRef<HTMLButtonElement, Props>(({ active, className, cursor, style, ...props }, ref) => {
-  return (
-    <button
-      ref={ref}
-      {...props}
-      className={cn(styles.Action, className)}
-      tabIndex={0}
-      style={
-        {
-          ...style,
-          cursor,
-          '--fill': active?.fill,
-          '--background': active?.background,
-        } as CSSProperties
-      }
-    />
-  );
-});
+export const Action = forwardRef<HTMLButtonElement, Props>(
+  ({ active, className, cursor, style, type = 'button', ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        {...props}
+        className={cn(styles.Action, className)}
+        tabIndex={0}
+        type={type}
+        style={
+          {
+            ...style,
+            cursor,
+            '--fill': active?.fill,
+            '--background': active?.background,
+          } as CSSProperties
+        }
+      />
+    );
+  },
+);
