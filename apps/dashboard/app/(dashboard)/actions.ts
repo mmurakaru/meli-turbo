@@ -107,6 +107,62 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
   return { success: 'Module created successfully', step: newModule };
 });
 
+const updateModuleSchema = z.object({
+  moduleId: z.number(),
+  title: z.string().max(100),
+  order: z.number(),
+});
+
+export const updateModule = validatedActionWithUser(updateModuleSchema, async (data, _, user) => {
+  const { moduleId, title, order } = data;
+
+  // Check if the module exists
+  const [module] = await db
+    .select({ id: modules.id, tourId: modules.tourId })
+    .from(modules)
+    .where(eq(modules.id, moduleId))
+    .limit(1);
+
+  if (!module) {
+    return { error: 'Module not found' };
+  }
+
+  // Fetch the related tour to verify ownership
+  const [tour] = await db
+    .select({ ownerId: tours.ownerId, id: tours.id })
+    .from(tours)
+    .where(eq(tours.id, module.tourId))
+    .limit(1);
+
+  if (!tour) {
+    return { error: 'Associated tour not found' };
+  }
+
+  const userWithTeam = await getUserWithTeam(user.id);
+
+  if (!userWithTeam || (userWithTeam.teamId !== tour.ownerId && user.id !== tour.ownerId)) {
+    return { error: 'User is not authorized to update modules for this tour' };
+  }
+
+  const updateData: { title?: string; order?: number } = {};
+  if (title) updateData.title = title;
+  if (order) updateData.order = order;
+
+  if (Object.keys(updateData).length === 0) {
+    return { error: 'No valid fields provided for update.' };
+  }
+
+  const updatedModule = await db.update(modules).set(updateData).where(eq(modules.id, moduleId)).returning();
+
+  if (!updatedModule.length) {
+    return { error: 'Failed to update module. Please try again.' };
+  }
+
+  await logActivity(userWithTeam.teamId, user.id, ActivityType.UPDATE_MODULE);
+
+  return { success: 'Module updated successfully', module: updatedModule[0] };
+});
+
 const deleteModuleSchema = z.object({
   moduleId: z.number(),
 });
