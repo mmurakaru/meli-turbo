@@ -29,8 +29,14 @@ const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.INVITE_TEAM_MEMBER]: Mail,
   [ActivityType.ACCEPT_INVITATION]: CheckCircle,
   [ActivityType.CREATE_TOUR]: Columns3,
+  [ActivityType.UPDATE_TOUR]: Columns3,
+  [ActivityType.DELETE_TOUR]: Columns3,
   [ActivityType.CREATE_STEP]: GalleryVertical,
+  [ActivityType.UPDATE_STEP]: GalleryVertical,
+  [ActivityType.DELETE_STEP]: GalleryVertical,
   [ActivityType.CREATE_MODULE]: Component,
+  [ActivityType.UPDATE_MODULE]: Component,
+  [ActivityType.DELETE_MODULE]: Component,
 };
 
 function getRelativeTime(date: Date) {

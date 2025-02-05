@@ -506,7 +506,7 @@ export function MultipleContainers({
               <input
                 type="hidden"
                 name="title"
-                value={'Module'}
+                value={''}
                 required
               />
               <DroppableContainer

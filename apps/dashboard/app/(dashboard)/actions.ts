@@ -69,9 +69,11 @@ const createModuleSchema = z.object({
 export const createModule = validatedActionWithUser(createModuleSchema, async (data, _, user) => {
   const { tourId, title } = data;
 
-  const [tour] = await db.select({ ownerId: tours.ownerId }).from(tours).where(eq(tours.id, tourId)).limit(1);
-
-  console.log(tour);
+  const [tour] = await db
+    .select({ ownerId: tours.ownerId, id: tours.id })
+    .from(tours)
+    .where(eq(tours.id, tourId))
+    .limit(1);
 
   if (!tour) {
     return { error: 'Tour not found' };
@@ -90,7 +92,7 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
   const [newModule] = await db
     .insert(modules)
     .values({
-      tourId,
+      tourId: tour.id,
       title,
       order: nextOrder,
     })
@@ -103,6 +105,53 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
   await logActivity(userWithTeam.teamId, user.id, ActivityType.CREATE_MODULE);
 
   return { success: 'Module created successfully', step: newModule };
+});
+
+const deleteModuleSchema = z.object({
+  moduleId: z.number(),
+});
+
+export const deleteModule = validatedActionWithUser(deleteModuleSchema, async (data, _, user) => {
+  const { moduleId } = data;
+
+  // Check if the module exists
+  const [module] = await db
+    .select({ id: modules.id, tourId: modules.tourId })
+    .from(modules)
+    .where(eq(modules.id, moduleId))
+    .limit(1);
+
+  if (!module) {
+    return { error: 'Module not found' };
+  }
+
+  // Fetch the related tour to verify ownership
+  const [tour] = await db
+    .select({ ownerId: tours.ownerId, id: tours.id })
+    .from(tours)
+    .where(eq(tours.id, module.tourId))
+    .limit(1);
+
+  if (!tour) {
+    return { error: 'Associated tour not found' };
+  }
+
+  const userWithTeam = await getUserWithTeam(user.id);
+
+  if (!userWithTeam || (userWithTeam.teamId !== tour.ownerId && user.id !== tour.ownerId)) {
+    return { error: 'User is not authorized to delete modules from this tour' };
+  }
+
+  // Delete the module
+  const deletedModule = await db.delete(modules).where(eq(modules.id, moduleId)).returning();
+
+  if (!deletedModule.length) {
+    return { error: 'Failed to delete module. Please try again.' };
+  }
+
+  await logActivity(userWithTeam.teamId, user.id, ActivityType.DELETE_MODULE);
+
+  return { success: 'Module deleted successfully' };
 });
 
 const createStepSchema = z.object({
