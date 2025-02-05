@@ -69,7 +69,9 @@ const createModuleSchema = z.object({
 export const createModule = validatedActionWithUser(createModuleSchema, async (data, _, user) => {
   const { tourId, title } = data;
 
-  const [tour] = await db.select({ teamId: tours.ownerId }).from(tours).where(eq(tours.id, tourId)).limit(1);
+  const [tour] = await db.select({ ownerId: tours.ownerId }).from(tours).where(eq(tours.id, tourId)).limit(1);
+
+  console.log(tour);
 
   if (!tour) {
     return { error: 'Tour not found' };
@@ -77,13 +79,11 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
 
   const userWithTeam = await getUserWithTeam(user.id);
 
-  if (!userWithTeam || userWithTeam.teamId !== tour.teamId) {
+  if (!userWithTeam || (userWithTeam.teamId !== tour.ownerId && user.id !== tour.ownerId)) {
     return { error: 'User is not authorized to create modules for this tour' };
   }
 
   const [highestOrder] = await db.select({ maxOrder: sql<number>`MAX(${modules.order})` }).from(modules);
-
-  console.log(highestOrder);
 
   const nextOrder = (highestOrder?.maxOrder || 0) + 1;
 
@@ -100,7 +100,9 @@ export const createModule = validatedActionWithUser(createModuleSchema, async (d
     return { error: 'Failed to create module. Please try again.' };
   }
 
-  await logActivity(tour.teamId, user.id, ActivityType.CREATE_MODULE);
+  await logActivity(userWithTeam.teamId, user.id, ActivityType.CREATE_MODULE);
+
+  return { success: 'Module created successfully', step: newModule };
 });
 
 const createStepSchema = z.object({
@@ -154,7 +156,7 @@ export const createStep = validatedActionWithUser(createStepSchema, async (data,
     return { error: 'Failed to create step. Please try again.' };
   }
 
-  await logActivity(tour.teamId, user.id, ActivityType.CREATE_STEP);
+  await logActivity(userWithTeam.teamId, user.id, ActivityType.CREATE_STEP);
 
   return { success: 'Step created successfully', step: newStep };
 });
