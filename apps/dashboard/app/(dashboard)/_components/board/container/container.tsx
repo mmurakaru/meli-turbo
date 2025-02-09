@@ -43,7 +43,6 @@ export interface Props {
   placeholder?: boolean;
   unstyled?: boolean;
   onClick?(): void;
-  onRemove?(): void;
   moduleId: number;
 }
 

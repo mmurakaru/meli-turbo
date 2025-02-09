@@ -45,10 +45,10 @@ import { Container, ContainerProps, Item } from '..';
 
 import { createModule } from '@/app/(dashboard)/actions';
 import { ActionState } from '@/lib/auth/middleware';
+import { ModuleWithSteps } from '@/lib/db/schema';
 import { toast } from '@workspace/ui/components/sonner';
 import { useIsMobile } from '@workspace/ui/hooks/use-mobile';
 import { Loader2, Plus } from 'lucide-react';
-import { createRange } from '../../../utilities';
 
 export default {
   title: 'Presets/Sortable/Multiple Containers',
@@ -133,8 +133,7 @@ interface Props {
     isDragOverlay: boolean;
   }): React.CSSProperties;
   wrapperStyle?(args: { index: number }): React.CSSProperties;
-  itemCount?: number;
-  modules?: Modules;
+  modules?: ModuleWithSteps[];
   handle?: boolean;
   renderItem?: any;
   strategy?: SortingStrategy;
@@ -150,13 +149,31 @@ export const TRASH_ID = 'void';
 const PLACEHOLDER_ID = 'placeholder';
 const empty: UniqueIdentifier[] = [];
 
+const transformModules = (modules: ModuleWithSteps[]): Record<string, string[]> => {
+  return modules?.reduce(
+    (acc, module) => {
+      acc[JSON.stringify({ id: module.id, title: module.title })] = module.steps.map((step) =>
+        JSON.stringify({ id: step.id, title: step.title }),
+      );
+      return acc;
+    },
+    {} as Record<string, string[]>,
+  );
+};
+
+// When retrieving, parse it back
+// const getStepData = (step: string) => JSON.parse(step);  Converts back to { id, title }
+const getModuleData = (module: string): { id: string; title: string } => JSON.parse(module);
+
+// Usage example
+// const exampleStep = getStepData(items[59][0]); { id: 4, title: "Step 1" }
+
 export function MultipleContainers({
   adjustScale = false,
-  itemCount = 3,
   cancelDrop,
   columns,
   handle = false,
-  modules: initialModules,
+  modules,
   containerStyle,
   coordinateGetter = multipleContainersCoordinateGetter,
   getItemStyles = () => ({}),
@@ -170,12 +187,7 @@ export function MultipleContainers({
   scrollable,
   tourId,
 }: Props) {
-  const [items, setItems] = useState<Modules>(
-    () =>
-      initialModules ?? {
-        1: createRange(itemCount, (index) => `Step ${index + 1}`),
-      },
-  );
+  const [items, setItems] = useState<Modules>(() => transformModules(modules ?? []));
   const [containers, setContainers] = useState(Object.keys(items) as UniqueIdentifier[]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const lastOverId = useRef<UniqueIdentifier | null>(null);
@@ -463,13 +475,12 @@ export function MultipleContainers({
             <DroppableContainer
               key={containerId}
               id={containerId}
-              label={minimal ? undefined : `Module ${containerId}`}
+              label={minimal ? undefined : getModuleData(containerId as string).id}
               columns={columns}
               items={items[containerId]}
               scrollable={scrollable}
               style={containerStyle}
               unstyled={minimal}
-              onRemove={() => handleRemove(containerId)}
               moduleId={Number(containerId)}
             >
               <SortableContext
@@ -571,7 +582,7 @@ export function MultipleContainers({
   function renderContainerDragOverlay(containerId: UniqueIdentifier) {
     return (
       <Container
-        label={`Module ${containerId}`}
+        label={getModuleData(containerId as string).title}
         columns={columns}
         style={{
           height: '100%',
@@ -602,11 +613,11 @@ export function MultipleContainers({
     );
   }
 
-  function handleRemove(containerID: UniqueIdentifier) {
-    console.log('REMOVE MODULE');
+  // function handleRemove(containerID: UniqueIdentifier) {
+  //   console.log('REMOVE MODULE');
 
-    setContainers((containers) => containers.filter((id) => id !== containerID));
-  }
+  //   setContainers((containers) => containers.filter((id) => id !== containerID));
+  // }
 
   function handleAddColumn() {
     //const newContainerId = getNextContainerId();

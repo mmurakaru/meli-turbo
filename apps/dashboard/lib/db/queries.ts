@@ -1,7 +1,17 @@
 import { createClient } from '@/utils/supabase/server';
 import { and, desc, eq, isNull, or } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, OwnerType, publicUsers, teamMembers, teams, tours } from './schema';
+import {
+  activityLogs,
+  modules,
+  OwnerType,
+  publicUsers,
+  steps,
+  teamMembers,
+  teams,
+  tours,
+  TourWithModules,
+} from './schema';
 
 export async function getUser() {
   const supabase = await createClient();
@@ -189,18 +199,22 @@ export async function getTour(tourId: number, userId: string) {
 
   if (!userWithTeam) return;
 
-  const query = db
+  const tourData = await db
     .select({
       id: tours.id,
       title: tours.title,
       ownerId: tours.ownerId,
       ownerType: tours.ownerType,
       description: tours.description,
+      modules: modules,
+      steps: steps,
       createdAt: tours.createdAt,
       updatedAt: tours.updatedAt,
       deletedAt: tours.deletedAt,
     })
     .from(tours)
+    .leftJoin(modules, eq(tours.id, modules.tourId))
+    .leftJoin(steps, eq(modules.id, steps.moduleId))
     .where(
       and(
         eq(tours.id, tourId),
@@ -209,10 +223,62 @@ export async function getTour(tourId: number, userId: string) {
           and(eq(tours.ownerId, userWithTeam.teamId!), eq(tours.ownerType, 'team')),
         ),
       ),
-    )
-    .limit(1);
+    );
 
-  const result = await query;
+  if (tourData.length === 0) return null;
 
-  return result.length > 0 ? result[0] : null;
+  const tour = tourData.reduce<TourWithModules | null>((acc, curr) => {
+    if (!acc) {
+      acc = {
+        id: curr.id,
+        title: curr.title,
+        description: curr.description,
+        ownerId: curr.ownerId,
+        ownerType: curr.ownerType,
+        createdAt: curr.createdAt,
+        updatedAt: curr.updatedAt,
+        deletedAt: curr.deletedAt,
+        modules: [],
+      };
+    }
+
+    let module = acc.modules.find((m) => m.id === curr.modules?.id);
+    if (curr.modules && !module) {
+      module = {
+        id: curr.modules.id,
+        tourId: curr.modules.tourId,
+        title: curr.modules.title,
+        order: curr.modules.order,
+        createdAt: curr.modules.createdAt,
+        updatedAt: curr.modules.updatedAt,
+        steps: [],
+      };
+      acc.modules.push(module);
+    }
+
+    if (curr.steps && module) {
+      module.steps.push({
+        id: curr.steps.id,
+        moduleId: curr.steps.moduleId,
+        selector: curr.steps.selector,
+        title: curr.steps.title,
+        text: curr.steps.text,
+        order: curr.steps.order,
+        createdAt: curr.steps.createdAt,
+        updatedAt: curr.steps.updatedAt,
+      });
+    }
+
+    return acc;
+  }, null);
+
+  // Sort modules by order
+  tour?.modules.sort((a, b) => a.order - b.order);
+
+  // Sort steps within each module
+  tour?.modules.forEach((module) => {
+    module.steps.sort((a, b) => a.order - b.order);
+  });
+
+  return tour;
 }

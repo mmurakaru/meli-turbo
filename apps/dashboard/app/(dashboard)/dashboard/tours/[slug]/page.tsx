@@ -42,6 +42,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug: str
             trashable
             handle
             tourId={tour.id}
+            modules={tour.modules}
           />
         </div>
         <div className={styles.scrollableMaskStart}></div>
