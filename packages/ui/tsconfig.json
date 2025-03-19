@@ -4,6 +4,6 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "include": ["src"],
+  "include": ["src", "@workspace/ui/components/chart.tsx"],
   "exclude": ["node_modules", "dist"]
 }

@@ -3,7 +3,7 @@ import tailwindcssAnimate from "tailwindcss-animate";
 import tailwindcssReactAriaComponents from "tailwindcss-react-aria-components";
 
 const config: Config = {
-  darkMode: ["class"],
+  //darkMode: ["class"],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
