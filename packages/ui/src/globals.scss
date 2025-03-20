@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+// TODO(MM) refactor config, -> css
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -77,7 +79,7 @@
   * {
     border-color: hsl(var(--border));
   }
-  
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
