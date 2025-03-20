@@ -119,17 +119,26 @@ type ChartTooltipContentProps = {
   label?: React.ReactNode;
   labelFormatter?: (label: any, payload: any[]) => React.ReactNode;
   labelClassName?: string;
-  formatter?: (value: any, name: string, props: any, index: number, payload: any) => React.ReactNode;
+  formatter?: (
+    value: any,
+    name: string,
+    props: any,
+    index: number,
+    payload: any,
+  ) => React.ReactNode;
   color?: string;
   nameKey?: string;
   labelKey?: string;
-} & Omit<React.ComponentProps<"div">, "color" | "label"> & 
-  Omit<React.ComponentProps<typeof RechartsPrimitive.Tooltip>, "content" | "ref">;
+} & Omit<React.ComponentProps<"div">, "color" | "label"> &
+  Omit<
+    React.ComponentProps<typeof RechartsPrimitive.Tooltip>,
+    "content" | "ref"
+  >;
 
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   ChartTooltipContentProps
-  >(
+>(
   (
     {
       active,
@@ -381,6 +390,5 @@ export {
   ChartLegendContent,
   ChartStyle,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 };
-
