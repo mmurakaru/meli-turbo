@@ -30,7 +30,7 @@
     "google-one-tap": "^1.0.6",
     "lucide-react": "^0.483.0",
     "meli.js": "1.0.10-alpha",
-    "next": "15.1.1-canary.23",
+    "next": "15.3.0-canary.19",
     "postcss": "^8.5.3",
     "postgres": "^3.4.5",
     "react": "19.0.0",
