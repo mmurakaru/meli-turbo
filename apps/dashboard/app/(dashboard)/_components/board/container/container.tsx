@@ -24,7 +24,7 @@ import { Textarea } from '@workspace/ui/components/textarea';
 import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea';
 import { Check, ChevronRight, ComponentIcon, Copy, Loader2 } from 'lucide-react';
 import { Create } from '../item/components/create';
-import styles from './container.module.scss';
+import styles from './container.module.css';
 
 import { createStep } from '@/app/(dashboard)/actions';
 import crypto from 'crypto';

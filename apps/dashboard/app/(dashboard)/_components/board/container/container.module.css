@@ -20,7 +20,7 @@
     margin: 10px;
   }
 
-  ul {
+  & ul {
     display: grid;
     grid-gap: 8px;
     grid-template-columns: repeat(var(--columns, 1), 1fr);

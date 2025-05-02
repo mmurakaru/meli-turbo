@@ -2,7 +2,7 @@ import { getTeamForUser, getTour, getUser } from '@/lib/db/queries';
 import { cn } from '@workspace/ui/lib/utils';
 import { redirect } from 'next/navigation';
 import { MultipleContainers } from '../../../_components/board/multiple-containers/multiple-containers';
-import styles from '../../../_components/board/multiple-containers/multiple-containers.module.scss';
+import styles from '../../../_components/board/multiple-containers/multiple-containers.module.css';
 import { TourHeader } from './tour-header';
 
 export default async function TourPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -4,7 +4,7 @@ group: unassigned
 info: Any user with at least the Maintainer role can merge updates to this content.
 ---
 
-# SCSS style guide
+# CSS style guide
 
 ## Utility Classes
 
