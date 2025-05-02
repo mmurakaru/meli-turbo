@@ -30,7 +30,7 @@
   }
 
   &.scrollable {
-    ul {
+    & ul {
       overflow-y: auto;
     }
   }
@@ -65,7 +65,7 @@
   &.horizontal {
     width: 100%;
 
-    ul {
+    & ul {
       grid-auto-flow: column;
     }
   }
@@ -103,7 +103,7 @@
 .Actions {
   display: flex;
 
-  > *:first-child:not(:last-child) {
+  & > *:first-child:not(:last-child) {
     opacity: 0;
     transition: opacity 0.15s ease-in-out;
 
