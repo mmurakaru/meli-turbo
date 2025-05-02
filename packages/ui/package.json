@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "exports": {
-    "./globals.scss": "./src/globals.scss",
+    "./globals.css": "./src/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./tailwind.config": "./tailwind.config.ts",
     "./components/*": [
@@ -62,7 +62,6 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "clsx": "^2.1.1",
-    "sass": "^1.87.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",

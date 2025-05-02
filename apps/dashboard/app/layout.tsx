@@ -4,7 +4,7 @@ import { Toaster } from '@workspace/ui/components/sonner';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import CookieConsent from './_components/cookie-consent';
-import './globals.scss';
+import './globals.css';
 // import ScriptLoader from './script-loader';
 
 export const metadata: Metadata = {

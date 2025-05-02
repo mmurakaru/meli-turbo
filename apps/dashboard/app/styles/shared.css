@@ -5,3 +5,7 @@
   -webkit-text-fill-color: transparent;
   max-inline-size: fit-content;
 }
+
+.lucide * {
+  vector-effect: non-scaling-stroke;
+} 
