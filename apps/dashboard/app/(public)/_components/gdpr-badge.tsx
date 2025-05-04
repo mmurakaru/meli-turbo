@@ -15,7 +15,7 @@ export function GDPRBadge() {
           height={24}
         />
       </div>
-      <div className="rounded-r-md border-[0.5px] border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground p-1.5 h-12 flex items-center">
+      <div className="rounded-r-md border-[0.5px] border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground p-1.5 h-12 flex items-center">
         <div>
           <span className="block text-xs">GDPR</span>
           <span className="block text-xs uppercase">Compliant</span>

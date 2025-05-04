@@ -27,8 +27,8 @@
     margin: auto;
     height: 100%;
     overflow: visible;
-    fill: hsl(var(--foreground));
-    stroke: hsl(var(--foreground));
+    fill: var(--foreground);
+    stroke: var(--foreground);
     transition: stroke 0.15s ease-in-out;
   }
 

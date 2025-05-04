@@ -29,7 +29,7 @@ export function Terminal({ tourId }: { tourId: string }) {
   };
 
   return (
-    <div className="w-full rounded-lg shadow-sm overflow-hidden bg-gray-50 text-white font-mono text-sm relative">
+    <div className="w-full rounded-lg shadow-xs overflow-hidden bg-gray-50 text-white font-mono text-sm relative">
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <p className="font-semibold text-sm text-gray-900">

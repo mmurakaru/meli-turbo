@@ -94,14 +94,14 @@ function Header() {
                   <AvatarImage alt={user.name || ''} />
                   <AvatarFallback className="bg-violet-200 text-white">
                     {user.email
-                      .split(' ')
+                      ?.split(' ')
                       .map((n) => n[0])
                       .join('')}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="bg-gray-50 w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg gap-2"
+                className="bg-gray-50 w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg gap-2"
                 side="bottom"
                 align="end"
                 sideOffset={4}

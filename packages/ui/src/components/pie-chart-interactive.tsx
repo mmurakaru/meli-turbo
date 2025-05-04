@@ -46,23 +46,23 @@ const chartConfig = {
   },
   january: {
     label: "Tour 1",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   february: {
     label: "Tour 2",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   march: {
     label: "Tour 3",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
   april: {
     label: "Tour 4",
-    color: "hsl(var(--chart-4))",
+    color: "var(--chart-4)",
   },
   may: {
     label: "Tour 5",
-    color: "hsl(var(--chart-5))",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
@@ -79,7 +79,7 @@ export function PieChartInteractive({
 
   const activeIndex = React.useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth],
+    [activeMonth]
   );
   const months = React.useMemo(() => desktopData.map((item) => item.month), []);
 

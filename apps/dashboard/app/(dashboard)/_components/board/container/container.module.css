@@ -11,9 +11,9 @@
   margin: 10px 0;
   border-radius: 0.25rem;
   min-height: 200px;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   font-size: 0.875rem;
-  background: hsl(var(--background));
+  background: var(--background);
 
   @media screen and (min-width: 768px) {
     min-width: 350px;
@@ -39,16 +39,16 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: hsl(var(--foreground) / 0.2);
+    color: var(--foreground) / 0.2;
     border-style: dashed;
-    border-color: hsl(var(--border));
+    border-color: var(--border);
     transition:
       color 0.15s ease-in-out,
       border-color 0.15s ease-in-out;
 
     &:hover {
-      border-color: hsl(var(--muted-foreground) / 0.3);
-      color: hsl(var(--foreground) / 0.4);
+      border-color: var(--muted-foreground) / 0.3;
+      color: var(--foreground) / 0.4;
     }
   }
 
@@ -88,10 +88,10 @@
   padding-right: 8px;
   align-items: center;
   justify-content: space-between;
-  background-color: hsl(var(--background));
+  background-color: var(--background);
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid var(--border);
 
   &:hover {
     .Actions > * {

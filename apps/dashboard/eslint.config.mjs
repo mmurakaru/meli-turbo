@@ -18,15 +18,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: [
-      '.next',
-      'node_modules',
-      'dist',
-      'lib/auth/middleware.ts',
-      'tailwind.config.ts',
-      'prettierrc.cjs',
-      'next.config.ts',
-    ],
+    ignores: ['.next', 'node_modules', 'dist', 'lib/auth/middleware.ts', 'prettierrc.cjs', 'next.config.ts'],
   },
   {
     rules: {

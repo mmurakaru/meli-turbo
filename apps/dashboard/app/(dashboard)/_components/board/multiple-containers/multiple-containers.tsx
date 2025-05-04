@@ -609,7 +609,7 @@ function Trash({ id }: { id: UniqueIdentifier }) {
         height: 60,
         borderRadius: 5,
         border: '1px solid',
-        borderColor: isOver ? 'red' : 'hsl(var(--border))',
+        borderColor: isOver ? 'red' : 'var(--border)',
       }}
     >
       Drop here to delete
