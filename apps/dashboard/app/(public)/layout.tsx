@@ -101,10 +101,9 @@ function Header() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="bg-gray-50 w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg gap-2"
+                className="bg-gray-50 min-w-56 rounded-lg gap-2"
                 side="bottom"
                 align="end"
-                sideOffset={4}
               >
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">

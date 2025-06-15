@@ -2,7 +2,12 @@
   "eslint.workingDirectories": [
     {
       "mode": "auto"
-    }
+    },
   ],
-  "cSpell.words": ["meli"]
+  "cSpell.words": [
+    "meli"
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
