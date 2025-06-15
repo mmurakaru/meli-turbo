@@ -76,7 +76,7 @@ export function NavUser() {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg gap-2"
+            className="min-w-56 rounded-lg gap-2"
             side="bottom"
             align="end"
             sideOffset={4}
