@@ -47,7 +47,7 @@ function Header() {
           />
           <span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
         </Link>
-        <div className="flex items-center space-x-4 hidden sm:block">
+        <div className="flex items-center space-x-4 sm:block">
           <Button
             variant="link"
             asChild
