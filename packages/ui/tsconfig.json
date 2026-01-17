@@ -1,9 +1,9 @@
 {
-  "extends": "@workspace/typescript-config/base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["src", "@workspace/ui/components/chart.tsx"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "@workspace/typescript-config/base.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDir": "src"
+	},
+	"include": ["src", "@workspace/ui/components/chart.tsx"],
+	"exclude": ["node_modules", "dist"]
 }

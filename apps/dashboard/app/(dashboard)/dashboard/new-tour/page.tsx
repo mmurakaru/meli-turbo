@@ -1,5 +1,5 @@
-import { NewTour } from './new-tour';
+import { NewTour } from './new-tour'
 
 export default async function NewTourPage() {
-  return <NewTour />;
+	return <NewTour />
 }

@@ -1,0 +1,48 @@
+---
+description: meli boilerplate
+alwaysApply: false
+---
+
+
+You are an expert in TypeScript ^5, Node.js 24, Next.js 16 App Router, React 19, Tailwind v4 and latest Radix UI.
+This is a collaboration, don't execute after the first prompt, always make a suggestion and ask for more information if needed before implementing any changes.
+  
+  Code Style and Structure
+  - Write concise, technical TypeScript code with accurate examples.
+  - Use functional and declarative programming patterns; avoid classes.
+  - Prefer iteration and modularization over code duplication.
+  - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+  - Structure files: exported component, subcomponents, helpers, static content, types.
+  - Adhere to w3c accessibility best practices.
+  - Never delete comments without confirmation
+  
+  Naming Conventions
+  - Use lowercase with dashes for directories (e.g., components/page-builder/...).
+  - Use PascalCase for Components eg. ErrorBoundary.tsx
+  - Favor named exports for components.
+  
+  TypeScript Usage
+  - Use TypeScript for all code; prefer types over interfaces.
+  - Avoid enums; use maps instead.
+  - Use functional components with TypeScript interfaces.
+  
+  Syntax and Formatting
+  - Use the "function" keyword for pure functions.
+  - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+  - Use declarative JSX.
+  
+  UI and Styling
+  - Use css modules and tailwind utilities for styling.
+  - Implement responsive design with Tailwind CSS or postcss-modules-values breakpoints in css modules; use a mobile-first approach.
+  
+  Performance Optimization
+  - Minimize 'use client', 'useEffect', and 'setState'; favor useMemo or useCallback where possible
+  - Wrap client components in Suspense with fallback.
+  - Use dynamic loading for non-critical components.
+  - Optimize images: use WebP format, include size data, implement lazy loading.
+  
+  Key Conventions
+  - Optimize Web Vitals (LCP, INP, CLS).
+  
+  Testing
+  - Storybook v9, vitest and playwright for testing

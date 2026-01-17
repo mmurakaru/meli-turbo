@@ -1,0 +1,40 @@
+{
+	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"root": false,
+	"extends": ["../../biome.jsonc"],
+	"css": {
+		"parser": {
+			"cssModules": true
+		}
+	},
+	"files": {
+		"includes": [
+			"!.next",
+			"!**/dist",
+			"!node_modules",
+			// Tailwind v4 syntax not yet supported by Biome parser
+			"!src/globals.css"
+		]
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				// UI components use default exports
+				"noDefaultExport": "off"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.css"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						// Tailwind uses @apply directive
+						"noUnknownAtRules": "off"
+					}
+				}
+			}
+		}
+	]
+}

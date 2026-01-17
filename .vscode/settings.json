@@ -1,8 +1,30 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-  "cSpell.words": ["meli"]
+	"editor.defaultFormatter": "biomejs.biome",
+	"files.associations": {
+		"*.css": "tailwindcss" // https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss#files.associations
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"javascript.preferences.importModuleSpecifier": "non-relative",
+	"i18n-ally.localesPaths": ["apps/ui/messages"],
+	"i18n-ally.keystyle": "nested",
+	"i18n-ally.displayLanguage": "en",
+	"i18n-ally.sourceLanguage": "en",
+	"i18n-ally.enabledFrameworks": ["next-intl"],
+	"i18n-ally.namespace": true,
+	"i18n-ally.pathMatcher": "{locale}.json"
 }

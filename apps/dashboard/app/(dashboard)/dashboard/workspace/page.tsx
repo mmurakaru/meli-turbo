@@ -1,19 +1,19 @@
-import { getTeamForUser, getUser } from '@/lib/db/queries';
-import { redirect } from 'next/navigation';
-import { Settings } from './settings';
+import { redirect } from 'next/navigation'
+import { getTeamForUser, getUser } from '@/lib/db/queries'
+import { Settings } from './settings'
 
 export default async function WorkspacePage() {
-  const user = await getUser();
+	const user = await getUser()
 
-  if (!user) {
-    redirect('/sign-in');
-  }
+	if (!user) {
+		redirect('/sign-in')
+	}
 
-  const teamData = await getTeamForUser(user.id);
+	const teamData = await getTeamForUser(user.id)
 
-  if (!teamData) {
-    throw new Error('Team not found');
-  }
+	if (!teamData) {
+		throw new Error('Team not found')
+	}
 
-  return <Settings teamData={teamData} />;
+	return <Settings teamData={teamData} />
 }

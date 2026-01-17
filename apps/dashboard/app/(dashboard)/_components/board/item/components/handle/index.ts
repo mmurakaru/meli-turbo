@@ -1,1 +1,1 @@
-export { Handle } from './handle';
+export { Handle } from './handle'

@@ -1,0 +1,139 @@
+{
+	"$schema": "node_modules/@biomejs/biome/configuration_schema.json",
+	"root": true,
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": {
+					"level": "on"
+				}
+			}
+		}
+	},
+	"json": {
+		"formatter": {
+			"enabled": true,
+			"lineWidth": 100,
+			"indentStyle": "tab"
+		},
+		"parser": {
+			"allowComments": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"enabled": true,
+			"indentWidth": 2,
+			"indentStyle": "tab",
+			"semicolons": "asNeeded",
+			"lineWidth": 100,
+			"quoteStyle": "single",
+			"trailingCommas": "all"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": true
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
+	},
+	"files": {
+		"includes": [
+			"**",
+			"!.next",
+			"!**/dist",
+			"!node_modules",
+			"!**/.vscode",
+			// Tailwind v4 syntax not yet supported by Biome parser
+			"!**/globals.css"
+		]
+	},
+	"linter": {
+		"rules": {
+			"recommended": true,
+			"performance": {
+				"noBarrelFile": "off"
+			},
+			"correctness": {
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error",
+				"noUnusedPrivateClassMembers": "error",
+				"noUndeclaredVariables": "error",
+				"useHookAtTopLevel": "error"
+			},
+			"suspicious": {
+				"noConsole": "warn",
+				"useAwait": "error",
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
+			},
+			"style": {
+				"noDefaultExport": "error",
+				"useShorthandAssign": "error",
+				"useForOf": "error",
+				"useExponentiationOperator": "off",
+				"noNonNullAssertion": "warn"
+			},
+			"complexity": {
+				"noEmptyTypeParameters": "off",
+				"noExcessiveCognitiveComplexity": {
+					"level": "warn",
+					"options": {
+						"maxAllowedComplexity": 25
+					}
+				}
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.test.ts", "**/*.test.tsx"],
+			"javascript": {
+				"globals": [
+					"describe",
+					"it",
+					"expect",
+					"beforeEach",
+					"afterEach",
+					"beforeAll",
+					"afterAll",
+					"vi"
+				]
+			},
+			"linter": {
+				"rules": {
+					"style": {
+						"noNonNullAssertion": "off"
+					},
+					"suspicious": {
+						"noExplicitAny": "off",
+						"noConsole": "off"
+					},
+					"correctness": {
+						"noUndeclaredVariables": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/*.css"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						// Tailwind uses @apply directive
+						"noUnknownAtRules": "off"
+					}
+				}
+			}
+		}
+	]
+}

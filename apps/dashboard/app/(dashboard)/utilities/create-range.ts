@@ -1,6 +1,9 @@
-const defaultInitializer = (index: number) => index;
+const defaultInitializer = (index: number) => index
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
-  return [...new Array(length)].map((_, index) => initializer(index));
+// default initializer returns the index for numeric ranges
+export function createRange<T = number>(
+	length: number,
+	initializer: (index: number) => T = defaultInitializer as (index: number) => T,
+): T[] {
+	return [...new Array(length)].map((_, index) => initializer(index))
 }

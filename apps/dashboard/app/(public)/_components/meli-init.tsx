@@ -1,24 +1,26 @@
-'use client';
+'use client'
 
-import meli, { Meli } from 'meli.js';
-import { useEffect } from 'react';
+import meli, { type Meli } from 'meli.js'
+import { useEffect } from 'react'
 
 declare global {
-  interface Window {
-    meli: Meli;
-  }
+	interface Window {
+		meli: Meli
+	}
 }
 
 export interface MeliInitProps {
-  debug?: boolean;
+	debug?: boolean
 }
 
 export function MeliInit(props: MeliInitProps) {
-  useEffect(() => {
-    meli.init('9');
+	// biome-ignore lint/correctness/useExhaustiveDependencies: init should only run once on mount
+	useEffect(() => {
+		meli.init('9')
 
-    if (props.debug) console.log('MeliInitComponent: initialized');
-  }, []);
+		// biome-ignore lint/suspicious/noConsole: debug logging is intentional
+		if (props.debug) console.log('MeliInitComponent: initialized')
+	}, [])
 
-  return null;
+	return null
 }

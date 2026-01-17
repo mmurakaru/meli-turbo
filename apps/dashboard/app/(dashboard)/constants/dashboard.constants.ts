@@ -1,1 +1,1 @@
-export const NEW_TOUR_PATHNAME = '/dashboard/new-tour' as const;
+export const NEW_TOUR_PATHNAME = '/dashboard/new-tour' as const

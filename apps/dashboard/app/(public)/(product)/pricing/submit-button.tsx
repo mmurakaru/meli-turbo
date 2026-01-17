@@ -1,28 +1,25 @@
-'use client';
+'use client'
 
-import { Button } from '@workspace/ui/components/button';
-import { Loader2 } from 'lucide-react';
-import { useFormStatus } from 'react-dom';
+import { Button } from '@workspace/ui/components/button'
+import { Loader2 } from 'lucide-react'
+import { useFormStatus } from 'react-dom'
 
 export function SubmitButton({ plan }: { plan: string }) {
-  const { pending } = useFormStatus();
+	const { pending } = useFormStatus()
 
-  //TODO(MM): Amend once pricing model is defined
-  const isFreePlan = plan === 'Free';
+	//TODO(MM): Amend once pricing model is defined
+	const isFreePlan = plan === 'Free'
 
-  return (
-    <Button
-      type="submit"
-      disabled={pending || !isFreePlan}
-    >
-      {pending ? (
-        <>
-          <Loader2 className="animate-spin mr-2 h-4 w-4" />
-          Loading...
-        </>
-      ) : (
-        <>{`Choose ${plan}`}</>
-      )}
-    </Button>
-  );
+	return (
+		<Button type="submit" disabled={pending || !isFreePlan}>
+			{pending ? (
+				<>
+					<Loader2 className="animate-spin mr-2 h-4 w-4" />
+					Loading...
+				</>
+			) : (
+				`Choose ${plan}`
+			)}
+		</Button>
+	)
 }

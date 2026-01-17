@@ -1,69 +1,69 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1726443359662,
-      "tag": "0000_soft_the_anarchist",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1733069033065,
-      "tag": "0001_fair_sage",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1734270388638,
-      "tag": "0002_narrow_the_enforcers",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1734888822152,
-      "tag": "0003_medical_whirlwind",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1735321992178,
-      "tag": "0004_chilly_overlord",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1735323126386,
-      "tag": "0005_damp_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1735327162650,
-      "tag": "0006_warm_nick_fury",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1736097354193,
-      "tag": "0007_flippant_squirrel_girl",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1736791564262,
-      "tag": "0008_common_the_leader",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1726443359662,
+			"tag": "0000_soft_the_anarchist",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1733069033065,
+			"tag": "0001_fair_sage",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1734270388638,
+			"tag": "0002_narrow_the_enforcers",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1734888822152,
+			"tag": "0003_medical_whirlwind",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1735321992178,
+			"tag": "0004_chilly_overlord",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1735323126386,
+			"tag": "0005_damp_thor",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1735327162650,
+			"tag": "0006_warm_nick_fury",
+			"breakpoints": true
+		},
+		{
+			"idx": 7,
+			"version": "7",
+			"when": 1736097354193,
+			"tag": "0007_flippant_squirrel_girl",
+			"breakpoints": true
+		},
+		{
+			"idx": 8,
+			"version": "7",
+			"when": 1736791564262,
+			"tag": "0008_common_the_leader",
+			"breakpoints": true
+		}
+	]
 }

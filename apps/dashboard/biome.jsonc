@@ -1,0 +1,41 @@
+{
+	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"root": false,
+	"extends": ["../../biome.jsonc"],
+	"files": {
+		"ignoreUnknown": true
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				// Next.js uses default exports for pages
+				"noDefaultExport": "off"
+			},
+			"suspicious": {
+				"noConsole": "warn",
+				// Next.js pages are often async for future data fetching
+				"useAwait": "off",
+				// Allow any in specific cases (dnd-kit, etc)
+				"noExplicitAny": "warn",
+				// Array index as key is sometimes acceptable for static lists
+				"noArrayIndexKey": "warn"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["lib/db/**/*.ts"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						// db scripts use console for logging
+						"noConsole": "off"
+					}
+				}
+			}
+		}
+	]
+}

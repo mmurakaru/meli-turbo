@@ -1,10 +1,9 @@
-import Script from 'next/script';
+import Script from 'next/script'
 
 export default function ScriptLoader() {
-  return (
-    <>
-      <Script>
-        {`
+	return (
+		<Script>
+			{`
         window.meli = window.meli || {};
         window.meli.url = 'https://meli-tour.vercel.app/bundle.min.js';
 
@@ -15,7 +14,6 @@ export default function ScriptLoader() {
         d.head.appendChild(script);
         })(window, document, window.meli.url);
         `}
-      </Script>
-    </>
-  );
+		</Script>
+	)
 }

@@ -1,2 +1,2 @@
-export { Container } from './container';
-export type { Props as ContainerProps } from './container';
+export type { Props as ContainerProps } from './container'
+export { Container } from './container'

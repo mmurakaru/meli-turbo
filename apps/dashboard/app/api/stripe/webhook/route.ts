@@ -1,32 +1,35 @@
-import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe';
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+import { type NextRequest, NextResponse } from 'next/server'
+import type Stripe from 'stripe'
+import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe'
 
 export async function POST(request: NextRequest) {
-  const payload = await request.text();
-  const signature = request.headers.get('stripe-signature') as string;
+	const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
-  let event: Stripe.Event;
+	if (!webhookSecret) {
+		return NextResponse.json({ error: 'Missing STRIPE_WEBHOOK_SECRET.' }, { status: 500 })
+	}
 
-  try {
-    event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
-  } catch (err) {
-    console.error('Webhook signature verification failed.', err);
-    return NextResponse.json({ error: 'Webhook signature verification failed.' }, { status: 400 });
-  }
+	const payload = await request.text()
+	const signature = request.headers.get('stripe-signature') as string
 
-  switch (event.type) {
-    case 'customer.subscription.updated':
-    case 'customer.subscription.deleted': {
-      const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionChange(subscription);
-      break;
-    }
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
+	let event: Stripe.Event
 
-  return NextResponse.json({ received: true });
+	try {
+		event = stripe.webhooks.constructEvent(payload, signature, webhookSecret)
+	} catch (_err) {
+		return NextResponse.json({ error: 'Webhook signature verification failed.' }, { status: 400 })
+	}
+
+	switch (event.type) {
+		case 'customer.subscription.updated':
+		case 'customer.subscription.deleted': {
+			const subscription = event.data.object as Stripe.Subscription
+			await handleSubscriptionChange(subscription)
+			break
+		}
+		default:
+			break
+	}
+
+	return NextResponse.json({ received: true })
 }
