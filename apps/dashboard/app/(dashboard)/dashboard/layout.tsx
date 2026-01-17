@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 strokeWidth={1}
                 className="w-3.5 h-3.5 text-violet-700 mr-1"
               />
-              <span className="text-sm font-medium uppercase">Meli</span>
+              <span className="text-sm font-medium lowercase">Meli</span>
             </div>
             <Breadcrumb>
               <BreadcrumbList>

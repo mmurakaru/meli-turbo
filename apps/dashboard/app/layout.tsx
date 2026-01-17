@@ -1,6 +1,7 @@
 import { Toaster } from '@workspace/ui/components/sonner'
 import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
+import { Suspense } from 'react'
 import { UserProvider } from '@/lib/auth'
 import { getUser } from '@/lib/db/queries'
 import CookieConsent from './_components/cookie-consent'
@@ -27,7 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
 		>
 			<body className="min-h-[100dvh]">
-				<UserProvider userPromise={userPromise}>{children}</UserProvider>
+				<Suspense fallback={null}>
+					<UserProvider userPromise={userPromise}>{children}</UserProvider>
+				</Suspense>
 				{/* <ScriptLoader /> */}
 				<Toaster />
 				<CookieConsent />

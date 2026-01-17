@@ -30,8 +30,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 		<div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
 			<div className="sm:mx-auto sm:w-full sm:max-w-sm">
 				<Link href={'/'} className="flex justify-center items-center">
-					<Image src="/icons/meli-with-gradient.svg" alt="Meli logo" width={32} height={32} />
-					<span className="ml-2 text-2xl font-semibold text-gray-900 uppercase">Meli</span>
+					<Image src="/icons/meli.svg" alt="Meli logo" width={30} height={30} />
+					<span className="ml-2 text-2xl font-semibold text-gray-900 lowercase">Meli</span>
 				</Link>
 				<h2 className="mt-6 text-center text-sm font-normal text-gray-900">
 					{mode === 'signin' ? 'Sign in to your account' : 'Create an account'}

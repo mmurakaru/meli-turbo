@@ -6,6 +6,13 @@ import {
 	type KeyboardCoordinateGetter,
 } from '@dnd-kit/core'
 
+type RectLike = {
+	top: number
+	left: number
+	width: number
+	height: number
+}
+
 const directions: string[] = [
 	KeyboardCode.Down,
 	KeyboardCode.Right,
@@ -33,7 +40,7 @@ function shouldSkipContainer(entry: DroppableContainer, activeType: string | und
 	return false
 }
 
-function isMovingToward(code: string, collisionRect: DOMRect, targetRect: DOMRect): boolean {
+function isMovingToward(code: string, collisionRect: RectLike, targetRect: RectLike): boolean {
 	switch (code) {
 		case KeyboardCode.Down:
 			return collisionRect.top < targetRect.top

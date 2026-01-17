@@ -15,7 +15,7 @@ import { LayoutDashboard, LogOut } from 'lucide-react'
 //import dynamic from 'next/dynamic';
 import Image from 'next/image'
 import Link from 'next/link'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { signOut } from '@/app/(login)/actions'
 import { useUser } from '@/lib/auth'
 import { GDPRBadge } from './_components/gdpr-badge'
@@ -35,8 +35,8 @@ function Header() {
 		<header className="fixed top-0 w-full border-b border-gray-200 bg-gray-50">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
 				<Link href="/" className="flex items-center" aria-label="Meli">
-					<Image src="/icons/meli-with-gradient.svg" alt="Meli logo" width={24} height={24} />
-					<span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
+					<Image src="/icons/meli.svg" alt="Meli logo" width={30} height={30} />
+					<span className="ml-2 text-xl font-semibold text-gray-900 lowercase">Meli</span>
 				</Link>
 				<div className="flex items-center space-x-4 hidden sm:block">
 					<Button variant="link" asChild>
@@ -157,6 +157,12 @@ function FooterLink({ href, label, external }: FooterLink) {
 }
 
 export function Footer() {
+	const [year, setYear] = useState<string>('')
+
+	useEffect(() => {
+		setYear(String(new Date().getFullYear()))
+	}, [])
+
 	const productLinks = [
 		{ href: '/product', label: 'Product overview' },
 		{ href: '/use-cases', label: 'Use cases' },
@@ -191,11 +197,11 @@ export function Footer() {
 				<div className="flex flex-col items-center justify-between gap-4 sm:flex-row w-full">
 					<div className="flex flex-col items-center gap-2 sm:items-start w-full">
 						<Link href="/" className="flex items-center" aria-label="Meli">
-							<Image src="/icons/meli-with-gradient.svg" alt="Meli logo" width={24} height={24} />
-							<span className="ml-2 text-xl font-semibold text-gray-900 uppercase">Meli</span>
+							<Image src="/icons/meli.svg" alt="Meli logo" width={24} height={24} />
+							<span className="ml-2 text-xl font-semibold text-gray-900 lowercase">Meli</span>
 						</Link>
 						<p className="text-xs text-muted-foreground">
-							© Copyright {new Date().getFullYear()} Meli Software. All rights reserved.
+							© Copyright {year} Meli Software. All rights reserved.
 						</p>
 					</div>
 					<GDPRBadge />

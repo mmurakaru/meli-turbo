@@ -13,8 +13,8 @@ export interface Props {
 	disabled?: boolean
 	dragging?: boolean
 	handle?: boolean
-	// handleProps aligns with ActionProps from Action
-	handleProps?: ActionProps
+	// handleProps aligns with Handle props, including ref
+	handleProps?: React.ComponentPropsWithRef<typeof Handle>
 	height?: number
 	index?: number
 	fadeIn?: boolean

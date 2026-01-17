@@ -7,7 +7,7 @@ export default function NotFound() {
 		<div className="flex items-center justify-center min-h-[100dvh]">
 			<div className="max-w-md space-y-8 p-4 text-center">
 				<Link href={'/'} className="flex justify-center">
-					<Image src="/icons/meli-with-gradient.svg" alt="Meli logo" width={48} height={48} />
+					<Image src="/icons/meli.svg" alt="Meli logo" width={48} height={48} />
 				</Link>
 				<h1 className="text-4xl font-bold text-gray-900 tracking-tight">Page Not Found</h1>
 				<p className="text-base text-gray-500">

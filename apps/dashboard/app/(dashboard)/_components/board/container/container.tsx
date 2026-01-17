@@ -28,6 +28,8 @@ import { Handle, Remove } from '../item'
 import { Create } from '../item/components/create'
 import styles from './container.module.css'
 
+type HandleProps = React.ComponentPropsWithRef<typeof Handle>
+
 export interface Props {
 	children: React.ReactNode
 	columns?: number
@@ -35,7 +37,7 @@ export interface Props {
 	style?: React.CSSProperties
 	horizontal?: boolean
 	hover?: boolean
-	handleProps?: React.HTMLAttributes<HTMLButtonElement>
+	handleProps?: HandleProps
 	scrollable?: boolean
 	shadow?: boolean
 	placeholder?: boolean
@@ -68,7 +70,7 @@ export const Container = forwardRef<ContainerElement, Props>(
 		}: Props,
 		ref,
 	) => {
-		const Component = onClick ? 'button' : 'div'
+		const isButton = Boolean(onClick)
 
 		const [value, setValue] = useState('')
 		const textAreaRef = useRef<HTMLTextAreaElement>(null)
@@ -111,28 +113,131 @@ export const Container = forwardRef<ContainerElement, Props>(
 			setTimeout(() => setCopied(false), 2000)
 		}
 
+		const containerProps = {
+			...props,
+			style: {
+				...style,
+				'--columns': columns,
+			} as React.CSSProperties,
+			className: cn(
+				styles.Container,
+				unstyled && styles.unstyled,
+				horizontal && styles.horizontal,
+				hover && styles.hover,
+				placeholder && styles.placeholder,
+				scrollable && styles.scrollable,
+				shadow && styles.shadow,
+			),
+			onClick,
+			tabIndex: isButton ? 0 : undefined,
+		}
+
+		if (isButton)
+			return (
+				<button
+					{...containerProps}
+					ref={ref as React.ForwardedRef<HTMLButtonElement>}
+					type="button"
+				>
+					{label ? (
+						<div className={styles.Header}>
+							{label}
+							<div className={styles.Actions}>
+								{onRemove ? <Remove onClick={onRemove} /> : undefined}
+								<Dialog>
+									<DialogTrigger asChild>
+										<Create />
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[750px] p-0 gap-0" aria-describedby={undefined}>
+										<DialogHeader className="p-3">
+											<div className="flex items-center gap-1.5 text-foreground">
+												<Badge variant="secondary" className="flex gap-1.5 py-1 text-xs font-normal">
+													<ComponentIcon className="size-3 stroke-violet-500" strokeWidth={1} />
+													Module
+												</Badge>
+												<ChevronRight strokeWidth={1} className="size-3" />
+												<DialogTitle className="text-xs font-normal">New step</DialogTitle>
+											</div>
+										</DialogHeader>
+
+										<form action={createAction}>
+											<div className="grid px-3 pb-3">
+												<input type="hidden" name="moduleId" value={moduleId || ''} required />
+												<Label htmlFor="title" className="sr-only">
+													Title
+												</Label>
+												<Input
+													name="title"
+													placeholder="Step title"
+													className="font-semibold"
+													variant="ghost"
+													required
+												/>
+												<Label htmlFor="text" className="sr-only">
+													Text
+												</Label>
+												<Textarea
+													name="text"
+													placeholder="Add description..."
+													className="max-h-[400px]"
+													variant="ghost"
+													onChange={handleChange}
+													ref={textAreaRef}
+													rows={1}
+													required
+												/>
+
+												<div className="flex items-center gap-2 mt-8">
+													<div className="grid flex-1">
+														<Label htmlFor="selector" className="sr-only">
+															Link
+														</Label>
+														<Input id="selector" defaultValue={uuid} readOnly required />
+													</div>
+													<Button
+														type="button"
+														size="icon"
+														className="px-3"
+														variant="secondary"
+														onClick={copyToClipboard}
+													>
+														<span className="sr-only">{copied ? 'Copied!' : 'Copy'}</span>
+														{copied ? <Check strokeWidth={1} /> : <Copy strokeWidth={1} />}
+													</Button>
+												</div>
+											</div>
+											<Separator />
+											<DialogFooter className="gap-1 p-3">
+												<div className="flex items-center gap-2">
+													<Switch id="create-more" />
+													<Label
+														htmlFor="create-more"
+														className="font-normal text-xs text-muted-foreground"
+													>
+														Create more
+													</Label>
+												</div>
+												<Button size="sm" type="submit" disabled={isCreatePending}>
+													{isCreatePending ? (
+														<Loader2 className="h-4 w-4 animate-spin" />
+													) : (
+														'Create step'
+													)}
+												</Button>
+											</DialogFooter>
+										</form>
+									</DialogContent>
+								</Dialog>
+								<Handle {...handleProps} />
+							</div>
+						</div>
+					) : null}
+					{placeholder ? children : <ul>{children}</ul>}
+				</button>
+			)
+
 		return (
-			<Component
-				{...props}
-				ref={ref as React.ForwardedRef<ContainerElement>}
-				style={
-					{
-						...style,
-						'--columns': columns,
-					} as React.CSSProperties
-				}
-				className={cn(
-					styles.Container,
-					unstyled && styles.unstyled,
-					horizontal && styles.horizontal,
-					hover && styles.hover,
-					placeholder && styles.placeholder,
-					scrollable && styles.scrollable,
-					shadow && styles.shadow,
-				)}
-				onClick={onClick}
-				tabIndex={onClick ? 0 : undefined}
-			>
+			<div {...containerProps} ref={ref as React.ForwardedRef<HTMLDivElement>}>
 				{label ? (
 					<div className={styles.Header}>
 						{label}
@@ -227,7 +332,7 @@ export const Container = forwardRef<ContainerElement, Props>(
 					</div>
 				) : null}
 				{placeholder ? children : <ul>{children}</ul>}
-			</Component>
+			</div>
 		)
 	},
 )

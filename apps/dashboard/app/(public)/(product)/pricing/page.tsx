@@ -9,8 +9,7 @@ import { SubmitButton } from './submit-button'
 const FREE_PLAN_ID = 'Free'
 const PLUS_PLAN_ID = 'Plus'
 
-// Prices are fresh for one hour max
-export const revalidate = 3600
+// Prices are fresh for one hour max (see cached Stripe helpers)
 
 export default async function PricingPage() {
 	const [prices, products] = await Promise.all([getStripePrices(), getStripeProducts()])
@@ -120,7 +119,7 @@ function PricingCard({
 			<ul className="space-y-4">
 				{features.map((feature) => (
 					<li key={feature} className="flex items-start">
-						<Check className="h-5 w-5 text-violet-700 mr-2 mt-0.5 flex-shrink-0" />
+						<Check className="h-5 w-5 text-violet-700 mr-2 mt-0.5 shrink-0" />
 						<span className="text-gray-700">{feature}</span>
 					</li>
 				))}
