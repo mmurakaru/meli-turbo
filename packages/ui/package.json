@@ -11,7 +11,6 @@
   "exports": {
     "./globals.css": "./src/globals.css",
     "./postcss.config": "./postcss.config.mjs",
-    "./tailwind.config": "./tailwind.config.ts",
     "./components/*": [
       "./src/components/*.tsx",
       "./src/components/*.ts"
@@ -63,9 +62,8 @@
     "@workspace/typescript-config": "workspace:*",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss": "^3.4.17",
-    "tailwindcss-animate": "^1.0.7",
-    "tailwindcss-react-aria-components": "2.0.0",
+    "tailwindcss": "^4.0.0",
+    "tw-animate-css": "^1.2.5",
     "typescript": "^5.8.2",
     "autoprefixer": "^10.4.21"
   }

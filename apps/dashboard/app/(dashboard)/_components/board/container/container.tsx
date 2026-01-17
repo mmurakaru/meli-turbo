@@ -36,8 +36,7 @@ export interface Props {
   style?: React.CSSProperties;
   horizontal?: boolean;
   hover?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleProps?: React.HTMLAttributes<any>;
+  handleProps?: React.HTMLAttributes<HTMLButtonElement>;
   scrollable?: boolean;
   shadow?: boolean;
   placeholder?: boolean;
