@@ -44,50 +44,53 @@ export default function CookieConsent({
 		}
 	}, [demo])
 
-	return variant === 'default' ? (
-		<div
-			className={cn(
-				'fixed z-[200] bottom-0 left-0 right-0 sm:left-4 sm:bottom-4 w-full sm:max-w-md duration-700',
-				!isOpen
-					? 'transition-[opacity,transform] translate-y-8 opacity-0'
-					: 'transition-[opacity,transform] translate-y-0 opacity-100',
-				hide && 'hidden',
-			)}
-		>
-			<div className="dark:bg-card bg-background rounded-md m-3 border border-border shadow-lg">
-				<div className="grid gap-2">
-					<div className="border-b border-border h-14 flex items-center justify-between p-4">
-						<h1 className="text-sm font-normal">We value your privacy</h1>
-						<CookieIcon className="h-[1.2rem] w-[1.2rem]" strokeWidth={1} />
-					</div>
-					<div className="p-4">
-						<p className="text-xs font-normal text-start">
-							We use cookies to analyze site performance and deliver personalized content. By
-							clicking "<span className="font-medium opacity-80">Accept</span>", you consent to the
-							storing of cookies.
-							<br />
-							<br />
-							<span className="text-xs">
-								You can revoke your consent at any time. Learn more about this in our{' '}
-								<Link target="_blank" href="/privacy-policy" className="text-xs underline">
-									privacy policy.
-								</Link>
-							</span>
-						</p>
-					</div>
-					<div className="flex gap-2 p-4 py-5 border-t border-border dark:bg-background/20">
-						<Button onClick={accept} className="w-full" size={'sm'}>
-							Accept
-						</Button>
-						<Button onClick={decline} className="w-full" variant="secondary" size={'sm'}>
-							Decline
-						</Button>
+	if (variant === 'default')
+		return (
+			<div
+				className={cn(
+					'fixed z-[200] bottom-0 left-0 right-0 sm:left-4 sm:bottom-4 w-full sm:max-w-md duration-700',
+					!isOpen
+						? 'transition-[opacity,transform] translate-y-8 opacity-0'
+						: 'transition-[opacity,transform] translate-y-0 opacity-100',
+					hide && 'hidden',
+				)}
+			>
+				<div className="dark:bg-card bg-background rounded-md m-3 border border-border shadow-lg">
+					<div className="grid gap-2">
+						<div className="border-b border-border h-14 flex items-center justify-between p-4">
+							<h1 className="text-sm font-normal">We value your privacy</h1>
+							<CookieIcon className="h-[1.2rem] w-[1.2rem]" strokeWidth={1} />
+						</div>
+						<div className="p-4">
+							<p className="text-xs font-normal text-start">
+								We use cookies to analyze site performance and deliver personalized content. By
+								clicking "<span className="font-medium opacity-80">Accept</span>", you consent to
+								the storing of cookies.
+								<br />
+								<br />
+								<span className="text-xs">
+									You can revoke your consent at any time. Learn more about this in our{' '}
+									<Link target="_blank" href="/privacy-policy" className="text-xs underline">
+										privacy policy.
+									</Link>
+								</span>
+							</p>
+						</div>
+						<div className="flex gap-2 p-4 py-5 border-t border-border dark:bg-background/20">
+							<Button onClick={accept} className="w-full" size={'sm'}>
+								Accept
+							</Button>
+							<Button onClick={decline} className="w-full" variant="secondary" size={'sm'}>
+								Decline
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	) : (
-		variant === 'small' && (
+		)
+
+	if (variant === 'small')
+		return (
 			<div
 				className={cn(
 					'fixed z-[200] bottom-0 left-0 right-0 sm:left-4 sm:bottom-4 w-full sm:max-w-md duration-700',
@@ -119,5 +122,6 @@ export default function CookieConsent({
 				</div>
 			</div>
 		)
-	)
+
+	return null
 }
