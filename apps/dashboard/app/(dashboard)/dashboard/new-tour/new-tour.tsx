@@ -24,7 +24,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import { createTour } from '../../actions';
 // import { cn } from '@workspace/ui/lib/utils';
 // import { MultipleContainers } from '../../components/board/multiple-containers/multiple-containers';
-// import styles from '../../components/board/multiple-containers/multiple-containers.module.scss';
+// import styles from '../../_components/board/multiple-containers/multiple-containers.module.css';
 
 export function NewTour() {
   const [value, setValue] = useState('');

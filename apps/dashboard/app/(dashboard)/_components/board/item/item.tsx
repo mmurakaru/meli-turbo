@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { Handle, Remove } from './components';
 
 import { cn } from '@workspace/ui/lib/utils';
-import styles from './item.module.scss';
+import styles from './item.module.css';
 
 export interface Props {
   dragOverlay?: boolean;

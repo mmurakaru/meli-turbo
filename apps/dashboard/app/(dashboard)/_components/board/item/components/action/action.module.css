@@ -1,6 +1,6 @@
-$focused-outline-color: hsl(258, 90%, 66%);
-
 .Action {
+  --focused-outline-color: hsl(258, 90%, 66%);
+
   display: flex;
   padding: 8px;
   align-items: center;
@@ -40,6 +40,6 @@ $focused-outline-color: hsl(258, 90%, 66%);
     outline: none;
     box-shadow:
       0 0 0 2px rgba(255, 255, 255, 0),
-      0 0px 0px 2px $focused-outline-color;
+      0 0px 0px 2px var(--focused-outline-color);
   }
 }
