@@ -35,25 +35,48 @@ pnpm install
 
 ## Running Locally
 
-Use the included setup script to create your `.env` file:
+### Prerequisites
+
+Install the required CLIs:
+
+```bash
+brew install stripe/stripe-cli/stripe
+brew install supabase/tap/supabase
+```
+
+```bash
+supabase status --output json
+```
+
+Authenticate with Stripe:
+
+```bash
+stripe login
+```
+
+Make sure Docker is running (required for local Supabase).
+
+### Setup
+
+Run the interactive setup script to configure your `.env` file:
 
 ```bash
 pnpm db:setup
 ```
 
-Then, run the database migrations and seed the database with a default user and team:
+Then, run the database migrations and seed the database:
 
 ```bash
 pnpm db:migrate
 pnpm db:seed
 ```
 
-This will create the following user and team:
+This creates a default user and team:
 
 - User: `test@test.com`
 - Password: `admin123`
 
-You can, of course, create new users as well through `/sign-up`.
+You can also create new users through `/sign-up`.
 
 Finally, run the Next.js development server:
 
@@ -63,46 +86,20 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
 
-Optionally, you can listen for Stripe webhooks locally through their CLI to handle subscription change events:
+### Local Development Tools
+
+**Supabase Studio** - Database management UI:
+[http://localhost:54323](http://localhost:54323)
+
+**Stripe webhooks** - Listen for subscription events:
 
 ```bash
 stripe listen --forward-to localhost:3000/api/stripe/webhook
 ```
 
-See [Getting started](https://supabase.com/docs/guides/local-development/cli/getting-started) for detailed info on installing the supabase CLI. Quickstart:
+### Stopping Local Services
 
-Install the CLI with Homebrew:
-
-```bash
-brew install supabase/tap/supabase
-```
-
-Inside the project root, run:
-
-```bash
-supabase init
-```
-
-Now, to start the Supabase stack, run:
-
-```bash
-supabase start
-```
-
-When the local development setup is running add the environment variables shown in the terminal:
-
-.env.local
-
-1. `NEXT_PUBLIC_SUPABASE_URL` = API URL
-2. `NEXT_PUBLIC_SUPABASE_ANON_KEY` = anon key
-
-.env
-
-1. `POSTGRES_URL` = DB URL
-
-Open [http://localhost:54323](http://localhost:54323) in your browser. The local development environment includes Supabase Studio, a graphical interface for working with your database.
-
-When finished, you can stop the stack:
+When finished, stop the Supabase stack:
 
 ```bash
 supabase stop

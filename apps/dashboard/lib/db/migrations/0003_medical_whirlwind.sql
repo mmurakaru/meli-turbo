@@ -1,9 +1,14 @@
-CREATE TABLE IF NOT EXISTS "auth"."users" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"email" varchar(255),
-	"password" text NOT NULL,
-	CONSTRAINT "users_email_unique" UNIQUE("email")
-);
+-- Note: auth.users is managed by Supabase, not created by migrations.
+-- If using plain Postgres (not Supabase), uncomment the following to create the auth schema and users table:
+--
+-- CREATE SCHEMA IF NOT EXISTS "auth";
+-- CREATE TABLE IF NOT EXISTS "auth"."users" (
+--   "id" uuid PRIMARY KEY NOT NULL,
+--   "email" varchar(255),
+--   "password" text NOT NULL,
+--   CONSTRAINT "users_email_unique" UNIQUE("email")
+-- );
+--
 --> statement-breakpoint
 ALTER TABLE "users" RENAME TO "profiles";--> statement-breakpoint
 ALTER TABLE "profiles" DROP CONSTRAINT "users_email_unique";--> statement-breakpoint
