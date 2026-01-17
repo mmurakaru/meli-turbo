@@ -4,7 +4,7 @@ group: unassigned
 info: Any user with at least the Maintainer role can merge updates to this content.
 ---
 
-# SCSS style guide
+# CSS style guide
 
 ## Utility Classes
 
@@ -163,7 +163,6 @@ to the utility-first philosophy. By avoiding to combine utility classes with cus
 unless absolutely necessary, we can prevent confusion and potential conflicts.
 
 - **Reasons for the Preference:**
-
   - **Smaller CSS File Size:** Utilizing utility classes directly can lead to more compact CSS files and
     promote a more consistent design system.
   - **Clarity and Maintainability:** When utility classes are used in HTML, it's clearer how styles are
