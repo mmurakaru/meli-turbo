@@ -69,6 +69,7 @@ export const Container = forwardRef<ContainerElement, Props>(
 			...props
 		}: Props,
 		ref,
+		// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: todo
 	) => {
 		const isButton = Boolean(onClick)
 
@@ -148,10 +149,16 @@ export const Container = forwardRef<ContainerElement, Props>(
 									<DialogTrigger asChild>
 										<Create />
 									</DialogTrigger>
-									<DialogContent className="sm:max-w-[750px] p-0 gap-0" aria-describedby={undefined}>
+									<DialogContent
+										className="sm:max-w-[750px] p-0 gap-0"
+										aria-describedby={undefined}
+									>
 										<DialogHeader className="p-3">
 											<div className="flex items-center gap-1.5 text-foreground">
-												<Badge variant="secondary" className="flex gap-1.5 py-1 text-xs font-normal">
+												<Badge
+													variant="secondary"
+													className="flex gap-1.5 py-1 text-xs font-normal"
+												>
 													<ComponentIcon className="size-3 stroke-violet-500" strokeWidth={1} />
 													Module
 												</Badge>

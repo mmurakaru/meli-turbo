@@ -1,8 +1,9 @@
-import { getTeamByStripeCustomerId, getUser, updateTeamSubscription } from '@/lib/db/queries'
-import type { Team } from '@/lib/db/schema'
 import { redirect } from 'next/navigation'
 import Stripe from 'stripe'
+import { getTeamByStripeCustomerId, getUser, updateTeamSubscription } from '@/lib/db/queries'
+import type { Team } from '@/lib/db/schema'
 
+// biome-ignore lint/style/noNonNullAssertion: todo
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 	apiVersion: '2025-08-27.basil',
 })
@@ -39,6 +40,7 @@ export async function createCheckoutSession({
 		},
 	})
 
+	// biome-ignore lint/style/noNonNullAssertion: todo
 	redirect(session.url!)
 }
 

@@ -4,7 +4,6 @@ import type { Transform } from '@dnd-kit/utilities'
 import { cn } from '@workspace/ui/lib/utils'
 import React, { useEffect } from 'react'
 import { Handle, Remove } from './components'
-import type { ActionProps } from './components/action'
 import styles from './item.module.css'
 
 export interface Props {
