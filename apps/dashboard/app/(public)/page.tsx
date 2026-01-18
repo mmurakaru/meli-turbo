@@ -7,15 +7,15 @@ import {
 	AccordionTrigger,
 } from '@workspace/ui/components/accordion'
 import { Button } from '@workspace/ui/components/button'
-import meli from 'meli.js'
+// import meli from 'meli.js'
 import Image from 'next/image'
 import Link from 'next/link'
 import MetricsSection from './_components/metrics-section'
 
 export default function HomePage() {
-	function startTour() {
-		meli.init('9')
-	}
+	// function startTour() {
+	// 	meli.init('9')
+	// }
 	return (
 		<main className="bg-gray-50">
 			<section className="py-20">
@@ -42,10 +42,10 @@ export default function HomePage() {
 						<div className="mt-12 mx-auto max-w-2xl col-span-12">
 							<div className="flex items-center gap-2">
 								<Button id="ms-dd809dceb71260420ff2d00c27b19b11" asChild>
-									<Link href={'/sign-up'}>Sign up for free</Link>
+									<Link href={'/sign-up'}>Sign Up</Link>
 								</Button>
-								<Button variant="outline" onClick={startTour}>
-									Get a demo
+								<Button variant="outline" asChild>
+									<Link href={'/create'}>Try it for free</Link>
 								</Button>
 							</div>
 						</div>
@@ -55,7 +55,7 @@ export default function HomePage() {
 							<div className="mt-4 grid place-items-center">
 								<a href="https://elevenlabs.io/text-to-speech">
 									<Image
-										className="max-h-12 max-w-[260px]"
+										className="max-h-12 max-w-65"
 										src="https://storage.googleapis.com/eleven-public-cdn/images/elevenlabs-grants-logo.png"
 										alt="Text to Speech"
 										width={260}
