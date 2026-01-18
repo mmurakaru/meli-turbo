@@ -37,6 +37,8 @@ pnpm install
 
 ### Prerequisites
 
+Use Node.js 22 LTS (see repo `.nvmrc`).
+
 Install the required CLIs:
 
 ```bash
