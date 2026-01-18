@@ -26,14 +26,16 @@ export default function HomePage() {
 								id="ms-dd809dceb71260420ff2d00c27b19b04"
 								className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl"
 							>
-								Transform Your User Onboarding Experience
-								<span className="bg-gradient-to-r from-[#2d3af7] to-[#c90add] text-transparent bg-clip-text inline-block sm:leading-[3.75rem] md:leading-[4.5rem]">
-									with Voice AI
-								</span>
+								The{' '}
+								<span className="bg-linear-to-r from-[#2d3af7] to-[#c90add] text-transparent bg-clip-text inline-block sm:leading-15 md:leading-18">
+									fastest
+								</span>{' '}
+								way to create spreadsheets.
 							</h1>
 							<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-								Build and Launch interactive product tours in record time. Define tour steps and let
-								Voice AI guide the user through core features.
+								The free, intuitive spreadsheet builder for teams who move fast.
+								<br />
+								From natural language to editable grid - ready in seconds.
 							</p>
 						</div>
 
