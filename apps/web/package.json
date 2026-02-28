@@ -55,7 +55,7 @@
 		"@types/google-one-tap": "^1.2.6",
 		"@types/node": "^25.3.2",
 		"@types/papaparse": "^5.3.16",
-		"@types/react": "^19.2.8",
+		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"clsx": "^2.1.1",
 		"tailwind-merge": "^3.0.2",
