@@ -1,0 +1,17 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"extends": ["//"],
+	"tasks": {
+		"build": {
+			"passThroughEnv": [
+				"POSTGRES_URL",
+				"STRIPE_SECRET_KEY",
+				"STRIPE_WEBHOOK_SECRET",
+				"BASE_URL",
+				"SESSION_SECRET",
+				"GOOGLE_CLIENT_ID",
+				"GOOGLE_CLIENT_SECRET"
+			]
+		}
+	}
+}
