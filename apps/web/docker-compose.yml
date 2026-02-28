@@ -5,13 +5,13 @@ services:
     image: postgres:18.3
     container_name: postgres
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: meli
+      POSTGRES_USER: meliuser
+      POSTGRES_PASSWORD: pass
     ports:
       - "54322:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres:/var/lib/postgresql
 
 volumes:
-  postgres_data:
+  postgres:

@@ -196,6 +196,10 @@ export default function CreatePage() {
 	const [isSheetVisible, setIsSheetVisible] = useState(false)
 	const [isSheetSelected, setIsSheetSelected] = useState(false)
 	const [isChatOpen, setIsChatOpen] = useState(false)
+	const [sitemapInput, setSitemapInput] = useState('')
+	const [isSitemapPromptOpen, setIsSitemapPromptOpen] = useState(false)
+	const [isSitemapLoading, setIsSitemapLoading] = useState(false)
+	const [sitemapError, setSitemapError] = useState('')
 
 	const updateCell = useCallback((rowIndex: number, columnId: string, value: string) => {
 		setTable((current) => {
@@ -234,6 +238,42 @@ export default function CreatePage() {
 		setIsSheetSelected(true)
 		ignoreNextSheetEnterRef.current = true
 	}, [])
+
+	const handleOpenSitemapPrompt = useCallback(() => {
+		setSitemapInput('')
+		setSitemapError('')
+		setIsSitemapPromptOpen(true)
+	}, [])
+
+	async function handleImportSitemap() {
+		const url = sitemapInput.trim()
+		if (!url) return
+		setIsSitemapLoading(true)
+		setSitemapError('')
+		try {
+			const res = await fetch(`/api/sitemap?url=${encodeURIComponent(url)}`)
+			const data = await res.json()
+			if (!res.ok || data.error) {
+				setSitemapError(data.error ?? 'Failed to import sitemap')
+				return
+			}
+			const urls: string[] = data.urls
+			const columns = [
+				{ id: 'col-1', label: 'URL' },
+				{ id: 'col-2', label: 'Status' },
+				{ id: 'col-3', label: 'Notes' },
+			]
+			const rows = urls.map((u) => ({ 'col-1': u, 'col-2': '', 'col-3': '' }))
+			setTable({ columns, rows })
+			setIsSheetVisible(true)
+			setIsSheetSelected(true)
+			setIsSitemapPromptOpen(false)
+		} catch {
+			setSitemapError('Something went wrong. Please try again.')
+		} finally {
+			setIsSitemapLoading(false)
+		}
+	}
 
 	async function handleFile(file: File | null) {
 		if (!file) return
@@ -329,11 +369,17 @@ export default function CreatePage() {
 				description: 'Create a blank 4x3 sheet',
 				action: handleCreateSheet,
 			},
+			{
+				title: 'Import sitemap',
+				description: 'Paste a sitemap URL to populate rows',
+				action: handleOpenSitemapPrompt,
+			},
 		],
-		[handleCreateSheet],
+		[handleCreateSheet, handleOpenSitemapPrompt],
 	)
 
 	const editor = useEditor({
+		immediatelyRender: false,
 		extensions: [
 			StarterKit,
 			Placeholder.configure({
@@ -439,6 +485,45 @@ export default function CreatePage() {
 
 	return (
 		<main className="bg-gray-50">
+			{isSitemapPromptOpen ? (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+					<div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
+						<h2 className="mb-1 text-sm font-semibold text-gray-900">Import sitemap</h2>
+						<p className="mb-4 text-xs text-gray-500">
+							Paste a sitemap URL and each &lt;loc&gt; will become a row.
+						</p>
+						<Input
+							placeholder="https://example.com/sitemap.xml"
+							value={sitemapInput}
+							onChange={(e) => setSitemapInput(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') void handleImportSitemap()
+								if (e.key === 'Escape') setIsSitemapPromptOpen(false)
+							}}
+							autoFocus
+						/>
+						{sitemapError ? <p className="mt-2 text-xs text-red-500">{sitemapError}</p> : null}
+						<div className="mt-4 flex justify-end gap-2">
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								onClick={() => setIsSitemapPromptOpen(false)}
+							>
+								Cancel
+							</Button>
+							<Button
+								type="button"
+								size="sm"
+								onClick={() => void handleImportSitemap()}
+								disabled={isSitemapLoading || !sitemapInput.trim()}
+							>
+								{isSitemapLoading ? 'Importing...' : 'Import'}
+							</Button>
+						</div>
+					</div>
+				</div>
+			) : null}
 			<section className="py-16">
 				<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div

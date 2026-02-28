@@ -1,0 +1,339 @@
+import { EventEmitter } from 'node:events'
+import type http from 'node:http'
+import type { ServerZoneType } from '@amplitude/analytics-types'
+import fastifyAuth from '@fastify/auth'
+import { fastifyAwilixPlugin } from '@fastify/awilix'
+import { fastifyCors } from '@fastify/cors'
+import fastifyHelmet from '@fastify/helmet'
+import type { Secret } from '@fastify/jwt'
+import fastifyJWT from '@fastify/jwt'
+import fastifySchedule from '@fastify/schedule'
+import fastifySwagger from '@fastify/swagger'
+import {
+  amplitudePlugin,
+  bugsnagErrorReporter,
+  bugsnagPlugin,
+  commonSyncHealthcheckPlugin,
+  createErrorHandler,
+  getFastifyAppLoggingConfig,
+  getRequestIdFastifyAppConfig,
+  metricsPlugin,
+  openTelemetryTransactionManagerPlugin,
+  requestContextProviderPlugin,
+  unhandledExceptionPlugin,
+} from '@lokalise/fastify-extras'
+import {
+  type CommonLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  resolveLogger,
+  stringValueSerializer,
+} from '@lokalise/node-core'
+import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
+import { type AwilixContainer, createContainer } from 'awilix'
+import type { FastifyInstance } from 'fastify'
+import fastify from 'fastify'
+import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
+import fastifyNoIcon from 'fastify-no-icon'
+import {
+  createJsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
+import {
+  type AbstractModule,
+  type DependencyInjectionOptions,
+  DIContext,
+  type NestedPartial,
+} from 'opinionated-machine'
+import { stdSerializers } from 'pino'
+import type {
+  Dependencies,
+  DependencyOverrides,
+  ExternalDependencies,
+} from './infrastructure/CommonModule.ts'
+import { type Config, getConfig, nodeEnv } from './infrastructure/config.ts'
+import {
+  dbHealthCheck,
+  redisHealthCheck,
+} from './infrastructure/healthchecks/healthchecksWrappers.ts'
+import { ALL_MODULES } from './modules.ts'
+import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
+
+EventEmitter.defaultMaxListeners = 12
+
+const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
+
+export type AppInstance = FastifyInstance<
+  http.Server,
+  http.IncomingMessage,
+  http.ServerResponse,
+  CommonLogger
+>
+
+export type ConfigOverrides = DependencyInjectionOptions & {
+  diContainer?: AwilixContainer
+  jwtKeys?: {
+    public: Secret
+  }
+  healthchecksEnabled?: boolean
+  monitoringEnabled?: boolean
+} & NestedPartial<Config>
+
+// do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
+export async function getApp(
+  configOverrides: ConfigOverrides = {},
+  dependencyOverrides: DependencyOverrides = {},
+  primaryModules: readonly AbstractModule<unknown>[] = ALL_MODULES,
+  secondaryModules?: readonly AbstractModule<unknown>[],
+): Promise<AppInstance> {
+  const config = getConfig()
+  const appConfig = config.app
+  const logger = resolveLogger(appConfig)
+
+  const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
+    ...getRequestIdFastifyAppConfig(),
+    ...getFastifyAppLoggingConfig(appConfig.logLevel),
+    loggerInstance: logger,
+  })
+
+  // biome-ignore lint/suspicious/noExplicitAny: we will build it incrementally later, so we do not care about the type
+  const diContainer: AwilixContainer<any> =
+    configOverrides.diContainer ??
+    createContainer({
+      injectionMode: 'PROXY',
+    })
+
+  app.setValidatorCompiler(validatorCompiler)
+  app.setSerializerCompiler(serializerCompiler)
+
+  // In production this should ideally be handled outside of application, e. g.
+  // on nginx or kubernetes level, but for local development it is convenient
+  // to have these headers set by application.
+  // If this service is never called from the browser, this entire block can be removed.
+  if (nodeEnv.isDevelopment) {
+    await app.register(fastifyCors, {
+      origin: '*',
+      credentials: true,
+      methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+      exposedHeaders: [
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-Headers',
+      ],
+    })
+  }
+
+  await app.register(
+    fastifyHelmet,
+    nodeEnv.isDevelopment
+      ? {
+          contentSecurityPolicy: false,
+        }
+      : {},
+  )
+
+  if (!nodeEnv.isDevelopment) {
+    await app.register(fastifyGracefulShutdown, {
+      resetHandlersOnInit: true,
+      timeout: GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS,
+    })
+  }
+
+  await app.register(fastifyNoIcon.default)
+
+  await app.register(fastifyAuth)
+  await app.register(fastifySwagger, {
+    transform: createJsonSchemaTransform({
+      skipList: [
+        '/documentation/',
+        '/documentation/initOAuth',
+        '/documentation/uiConfig',
+        '/documentation/yaml',
+        '/documentation/*',
+        '/documentation/static/*',
+        '*',
+      ],
+    }),
+    openapi: {
+      info: {
+        title: 'SampleApi',
+        description: 'Sample backend service',
+        version: '1.0.0',
+      },
+      servers: [
+        {
+          url:
+            appConfig.baseUrl ||
+            `http://${
+              appConfig.bindAddress === '0.0.0.0' ? 'localhost' : appConfig.bindAddress
+            }:${appConfig.port}`,
+        },
+      ],
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+    },
+  })
+
+  // Since DI config relies on having app-scoped OTel instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
+  await app.register(openTelemetryTransactionManagerPlugin, {
+    isEnabled: config.vendors.opentelemetry.isEnabled,
+  })
+
+  await app.register(scalarFastifyApiReference, {
+    routePrefix: '/documentation',
+  })
+
+  await app.register(fastifyAwilixPlugin, {
+    container: diContainer,
+    disposeOnClose: true,
+    asyncDispose: true,
+    asyncInit: true,
+    eagerInject: true,
+    disposeOnResponse: false,
+  })
+  await app.register(fastifySchedule)
+
+  await app.register(fastifyJWT, {
+    secret: configOverrides.jwtKeys ?? {
+      public: appConfig.jwtPublicKey,
+    },
+  })
+
+  await app.register(jwtTokenPlugin, {
+    skipList: new Set([
+      '/favicon.ico',
+      '/documentation',
+      '/documentation/',
+      '/documentation/openapi.json',
+      '/documentation/js/scalar.ts',
+      '/',
+      '/health',
+      '/metrics',
+    ]),
+  })
+
+  app.setErrorHandler(createErrorHandler({ errorReporter: bugsnagErrorReporter }))
+
+  const diContext = new DIContext<Dependencies, Config, ExternalDependencies>(
+    diContainer,
+    /**
+     * Running consumers and jobs introduces additional overhead and fragility when running tests,
+     * so we avoid doing that unless we intend to actually use them
+     */
+    {
+      enqueuedJobWorkersEnabled: configOverrides.enqueuedJobWorkersEnabled,
+      messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
+      jobQueuesEnabled: configOverrides.jobQueuesEnabled,
+      periodicJobsEnabled: configOverrides.periodicJobsEnabled,
+    },
+    config,
+  )
+
+  const externalDependencies: ExternalDependencies = {
+    app,
+    logger: app.log,
+  }
+  diContext.registerDependencies(
+    {
+      modules: primaryModules,
+      secondaryModules,
+      dependencyOverrides,
+      configOverrides,
+    },
+    externalDependencies,
+  )
+
+  await app.register(requestContextProviderPlugin)
+  await app.register(unhandledExceptionPlugin, {
+    shutdownAfterHandling: false,
+    errorObjectResolver: resolveGlobalErrorLogObject,
+    errorReporter: bugsnagErrorReporter,
+  })
+
+  if (configOverrides.monitoringEnabled) {
+    await app.register(metricsPlugin, {
+      bindAddress: appConfig.bindAddress,
+      errorObjectResolver: resolveGlobalErrorLogObject,
+      logger,
+      disablePrometheusRequestLogging: true,
+    })
+  }
+
+  if (configOverrides.healthchecksEnabled) {
+    await app.register(commonSyncHealthcheckPlugin, {
+      healthChecks: [
+        {
+          name: 'postgres',
+          isMandatory: true,
+          checker: dbHealthCheck,
+        },
+        {
+          name: 'redis',
+          isMandatory: true,
+          checker: redisHealthCheck,
+        },
+      ],
+      responsePayload: {
+        version: appConfig.appVersion,
+        gitCommitSha: appConfig.gitCommitSha,
+      },
+    })
+  }
+
+  // Vendor-specific plugins
+  await app.register(bugsnagPlugin, {
+    isEnabled: config.vendors.bugsnag.isEnabled,
+    bugsnag: {
+      apiKey: config.vendors.bugsnag.apiKey ?? '',
+      releaseStage: appConfig.appEnv,
+      appVersion: appConfig.appVersion,
+      ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
+    },
+  })
+
+  await app.register(amplitudePlugin, {
+    isEnabled: config.vendors.amplitude.isEnabled,
+    apiKey: config.vendors.amplitude.apiKey,
+    options: {
+      serverZone: config.vendors.amplitude.serverZone as ServerZoneType,
+      flushIntervalMillis: config.vendors.amplitude.flushIntervalMillis,
+      flushMaxRetries: config.vendors.amplitude.flushMaxRetries,
+      flushQueueSize: config.vendors.amplitude.flushQueueSize,
+    },
+  })
+
+  app.after(() => {
+    // Register routes
+    diContext.registerRoutes(app)
+
+    // Graceful shutdown hook
+    if (!nodeEnv.isDevelopment) {
+      app.gracefulShutdown(async (_signal) => {
+        app.log.info('Starting graceful shutdown')
+        await gracefulOtelShutdown()
+      })
+    }
+  })
+
+  try {
+    await app.ready()
+  } catch (err) {
+    app.log.error(
+      { error: isError(err) ? stdSerializers.err(err) : stringValueSerializer(err) },
+      'Error while initializing app: ',
+    )
+    throw err
+  }
+
+  return app
+}

@@ -1,0 +1,102 @@
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    open-pull-requests-limit: 5
+
+  # apps/web (Next.js)
+  - package-ecosystem: 'npm'
+    directory: '/apps/web'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+    groups:
+      next:
+        patterns:
+          - 'next'
+          - 'next-*'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      radix-ui:
+        patterns:
+          - '@radix-ui/*'
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+      tailwind:
+        patterns:
+          - 'tailwindcss'
+          - 'tailwind-*'
+          - '@tailwindcss/*'
+      types:
+        patterns:
+          - '@types/*'
+      typescript:
+        patterns:
+          - 'typescript'
+      biomejs:
+        patterns:
+          - '@biomejs/*'
+
+  # services/cortex (Fastify)
+  - package-ecosystem: 'npm'
+    directory: '/services/cortex'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+    groups:
+      fastify:
+        patterns:
+          - 'fastify'
+          - 'fastify-*'
+          - '@fastify/*'
+      ai-sdk:
+        patterns:
+          - 'ai'
+          - '@ai-sdk/*'
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+      message-queue-toolkit:
+        patterns:
+          - '@message-queue-toolkit/*'
+      awilix:
+        patterns:
+          - 'awilix'
+          - 'awilix-*'
+      aws:
+        patterns:
+          - '@aws-sdk/*'
+      lokalise:
+        patterns:
+          - '@lokalise/*'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      types:
+        patterns:
+          - '@types/*'
+      typescript:
+        patterns:
+          - 'typescript'
+      biomejs:
+        patterns:
+          - '@biomejs/*'
+      esbuild:
+        patterns:
+          - '@esbuild/*'
+      rollup:
+        patterns:
+          - '@rollup/*'

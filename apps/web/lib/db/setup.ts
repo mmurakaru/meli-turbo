@@ -64,7 +64,7 @@ async function writeEnvFile() {
 	const sessionSecret = crypto.randomBytes(32).toString('base64')
 
 	const postgresUrl = await question(
-		'POSTGRES_URL [postgres://postgres:postgres@localhost:54322/postgres]: ',
+		'POSTGRES_URL [postgres://meliuser:pass@localhost:54322/meli]: ',
 	)
 	const baseUrl = await question('BASE_URL [http://localhost:3000]: ')
 	const googleClientId = await question('GOOGLE_CLIENT_ID (leave blank to skip): ')
@@ -76,7 +76,7 @@ async function writeEnvFile() {
 
 	const envContent = [
 		`# Database`,
-		`POSTGRES_URL=${postgresUrl || 'postgres://postgres:postgres@localhost:54322/postgres'}`,
+		`POSTGRES_URL=${postgresUrl || 'postgres://meliuser:pass@localhost:54322/meli'}`,
 		``,
 		`# App`,
 		`BASE_URL=${baseUrl || 'http://localhost:3000'}`,

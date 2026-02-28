@@ -38,7 +38,7 @@ next-env.d.ts
 .vscode
 
 # Docker
-postgres_data/
+postgres/
 
 # packages
 .yalc
