@@ -50,7 +50,7 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@tailwindcss/postcss": "^4.0.0",
+		"@tailwindcss/postcss": "^4.2.0",
 		"@types/bcryptjs": "^3.0.0",
 		"@types/google-one-tap": "^1.2.6",
 		"@types/node": "^25.3.2",
@@ -58,8 +58,8 @@
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
 		"clsx": "^2.1.1",
-		"tailwind-merge": "^3.0.2",
-		"tailwindcss": "^4.0.0",
+		"tailwind-merge": "^3.5.0",
+		"tailwindcss": "^4.2.0",
 		"tw-animate-css": "^1.2.5",
 		"typescript": "^5.9.3",
 		"uuid": "^13.0.0"
