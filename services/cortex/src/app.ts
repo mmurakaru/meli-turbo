@@ -26,7 +26,7 @@ import {
   type CommonLogger,
   isError,
   resolveGlobalErrorLogObject,
-  resolveLogger,
+  resolveMonorepoLogger,
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
@@ -90,7 +90,12 @@ export async function getApp(
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
-  const logger = resolveLogger(appConfig)
+
+  const logger = resolveMonorepoLogger({
+    ...appConfig,
+    append: true,
+    targetFile: './src/cortex.log',
+  })
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
@@ -154,7 +159,8 @@ export async function getApp(
         '/documentation/yaml',
         '/documentation/*',
         '/documentation/static/*',
-        '*',
+        // Uncommenting '*' hides all routes from the OpenAPI spec — only do this to suppress docs entirely
+        // '*',
       ],
     }),
     openapi: {

@@ -1,6 +1,7 @@
 import type { ModuleAwareQueueManager } from '@lokalise/background-jobs-common'
 import { buildFastifyRoute } from '@lokalise/fastify-api-contracts'
 import { generateUuid7 } from '@lokalise/id-utils'
+import { randomUUID } from 'node:crypto'
 import type { Redis } from 'ioredis'
 import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
 import type { BullmqSupportedQueues } from '../../../infrastructure/CommonModule.ts'
@@ -33,6 +34,7 @@ export class SheetController extends AbstractController<SheetControllerContracts
     const jobId = generateUuid7()
 
     await this.bullmqQueueManager.schedule(SheetGenerationJob.QUEUE_ID, {
+      metadata: { correlationId: randomUUID() },
       jobId,
       prompt,
       sourceUrl,

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
 	const url = req.nextUrl.searchParams.get('url')
@@ -29,8 +29,7 @@ export async function GET(req: NextRequest) {
 
 	const urls: string[] = []
 	const locRegex = /<loc>\s*(.*?)\s*<\/loc>/gi
-	let match: RegExpExecArray | null
-	while ((match = locRegex.exec(text)) !== null) {
+	for (const match of text.matchAll(locRegex)) {
 		if (match[1]) urls.push(match[1])
 	}
 

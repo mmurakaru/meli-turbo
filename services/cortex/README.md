@@ -75,8 +75,8 @@ pnpm run docker:start:dev
 ```
 
 Starts:
-- **PostgreSQL** on port `5433`
-- **Redis** on port `6380`
+- **PostgreSQL** on port `5433` — `postgresql://sheetuser:pass@127.0.0.1:5433/sheet_db`
+- **Redis** on port `6380` — `redis://:sOmE_sEcUrE_pAsS@127.0.0.1:6380`
 - **Ollama** on port `11434`
 
 ### 3. Pull the AI model (first time only)
@@ -91,13 +91,46 @@ docker exec -it $(docker compose ps -q ollama) ollama pull qwen2.5:7b
 pnpm run db:apply-migrations
 ```
 
-### 5. Start the service
+### 5. Generate a service-to-service JWT (first time only)
+
+Cortex uses RS256 JWT authentication. The public key is committed in `.env.default`. You need the corresponding private key locally to mint tokens.
+
+Generate a new keypair under `scripts/keys/` (gitignored):
+
+```bash
+mkdir -p scripts/keys
+openssl genrsa -out scripts/keys/jwtRS256.key 4096
+openssl rsa -in scripts/keys/jwtRS256.key -pubout -out scripts/keys/jwtRS256.key.pub
+```
+
+Then update `JWT_PUBLIC_KEY` in `.env` (and `.env.default`) with the newly generated public key:
+
+```bash
+pnpm run jwt:generate
+# Copy the "Public key:" output and paste it as JWT_PUBLIC_KEY in .env / .env.default
+```
+
+The script also prints a signed JWT. Copy it into `CORTEX_API_KEY` in `apps/web/.env.local` so the web app can authenticate against Cortex:
+
+```env
+# apps/web/.env.local
+CORTEX_API_KEY=eyJhbGci...
+```
+
+> The token does not expire by default in the dev config. Re-run `pnpm run jwt:generate` whenever you rotate the keypair.
+
+### 6. Start the service
 
 ```bash
 pnpm run start:dev
 ```
 
 Service runs on **http://localhost:3001**.
+
+Logs are automatically written to `src/cortex.log` (gitignored) via pino's file transport. To tail:
+```bash
+tail -f src/cortex.log
+```
 
 For hot-reload during development:
 ```bash
@@ -113,8 +146,9 @@ pnpm run start:dev:watch
 | `REDIS_HOST` | `localhost` | Redis host |
 | `REDIS_PORT` | `6380` | Redis port |
 | `AI_BASE_URL` | `http://localhost:11434/v1` | Ollama (or any OpenAI-compatible) base URL |
-| `AI_MODEL` | `qwen2.5:7b` | Model to use for generation |
+| `AI_MODEL` | `qwen2.5:3b` | Model to use for generation. Use `qwen2.5:7b` or `qwen3` for higher quality (requires more RAM) |
 | `AI_API_KEY` | `ollama` | API key (use `ollama` for local) |
+| `JWT_PUBLIC_KEY` | *(see `.env.default`)* | RS256 public key for verifying incoming JWTs (multiline, `\n`-separated) |
 
 Full list in [`.env.default`](./.env.default).
 

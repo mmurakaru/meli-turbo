@@ -3,14 +3,16 @@ import { z } from 'zod'
 
 export const env = createEnv({
 	server: {
-		POSTGRES_URL: z.string().url(),
+		POSTGRES_URL: z.url(),
 		STRIPE_SECRET_KEY: z.string().startsWith('sk_').optional(),
 		STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_').optional(),
-		BASE_URL: z.string().url(),
+		BASE_URL: z.url(),
 		SESSION_SECRET: z.string().min(32),
 		GOOGLE_CLIENT_ID: z.string().min(1).optional(),
 		GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
 		NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+		CORTEX_URL: z.url().default('http://localhost:3001'),
+		CORTEX_API_KEY: z.string().min(1),
 	},
 	client: {},
 	runtimeEnv: {
@@ -22,5 +24,7 @@ export const env = createEnv({
 		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		NODE_ENV: process.env.NODE_ENV,
+		CORTEX_URL: process.env.CORTEX_URL,
+		CORTEX_API_KEY: process.env.CORTEX_API_KEY,
 	},
 })

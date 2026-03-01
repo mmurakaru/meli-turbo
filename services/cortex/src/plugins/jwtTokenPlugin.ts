@@ -19,7 +19,10 @@ function plugin(
   fastify.addHook(
     'onRequest',
     (req: FastifyRequest, _res: FastifyReply, done: HookHandlerDoneFunction) => {
-      if (req.routeOptions.url && pluginOptions.skipList.has(req.routeOptions.url)) {
+      const url = req.routeOptions.url ?? ''
+      // DEV: prefix-match so Scalar's asset sub-paths (/documentation/js/scalar.js etc.) are also skipped.
+      // Before deploying, revert to the exact-match only: `if (pluginOptions.skipList.has(url))`
+      if (pluginOptions.skipList.has(url) || url.startsWith('/documentation')) {
         return done()
       }
 

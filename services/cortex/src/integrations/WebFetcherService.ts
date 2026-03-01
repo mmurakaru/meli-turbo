@@ -6,7 +6,7 @@ export type FetchedContent = {
 
 export class WebFetcherService {
   private static readonly TIMEOUT_MS = 15_000
-  private static readonly USER_AGENT = 'Meli/sheet-service (url-fetcher)'
+  private static readonly USER_AGENT = 'Meli/cortex (url-fetcher)'
 
   async fetch(url: string): Promise<FetchedContent> {
     let parsed: URL

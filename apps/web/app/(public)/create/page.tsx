@@ -200,6 +200,8 @@ export default function CreatePage() {
 	const [isSitemapPromptOpen, setIsSitemapPromptOpen] = useState(false)
 	const [isSitemapLoading, setIsSitemapLoading] = useState(false)
 	const [sitemapError, setSitemapError] = useState('')
+	const [isGenerating, setIsGenerating] = useState(false)
+	const [generationError, setGenerationError] = useState('')
 
 	const updateCell = useCallback((rowIndex: number, columnId: string, value: string) => {
 		setTable((current) => {
@@ -244,6 +246,48 @@ export default function CreatePage() {
 		setSitemapError('')
 		setIsSitemapPromptOpen(true)
 	}, [])
+
+	async function handleGenerate(prompt: string, sourceUrl?: string) {
+		const trimmed = prompt.trim()
+		if (!trimmed) return
+		setIsGenerating(true)
+		setGenerationError('')
+		try {
+			const enqueueRes = await fetch('/api/generate', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ prompt: trimmed, sourceUrl }),
+			})
+			const enqueueData = await enqueueRes.json()
+			if (!enqueueRes.ok || !enqueueData.jobId) {
+				setGenerationError(enqueueData.error ?? 'Failed to start generation')
+				return
+			}
+			const { jobId } = enqueueData
+			const POLL_INTERVAL_MS = 1500
+			const MAX_POLLS = 60
+			for (let i = 0; i < MAX_POLLS; i++) {
+				await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
+				const pollRes = await fetch(`/api/jobs/${jobId}`)
+				const pollData = await pollRes.json()
+				if (pollData.status === 'completed' && pollData.sheet) {
+					setTable(pollData.sheet)
+					setIsSheetVisible(true)
+					setIsSheetSelected(true)
+					return
+				}
+				if (pollData.status === 'failed') {
+					setGenerationError(pollData.error ?? 'Generation failed')
+					return
+				}
+			}
+			setGenerationError('Generation timed out. Please try again.')
+		} catch {
+			setGenerationError('Something went wrong. Please try again.')
+		} finally {
+			setIsGenerating(false)
+		}
+	}
 
 	async function handleImportSitemap() {
 		const url = sitemapInput.trim()
@@ -331,37 +375,6 @@ export default function CreatePage() {
 		XLSX.writeFile(workbook, 'sheet.xlsx')
 	}
 
-	function handleRefine() {
-		const input = refineInput.trim()
-		if (!input) return
-		setRefineLog((current) => [`You: ${input}`, ...current].slice(0, 6))
-		setRefineInput('')
-		const normalized = input.toLowerCase()
-
-		if (normalized.includes('add total row')) {
-			setTable((current) => {
-				const totalRow = Object.fromEntries(
-					current.columns.map((column, index) => [column.id, index === 0 ? 'Total' : '']),
-				)
-				return { ...current, rows: [...current.rows, totalRow] }
-			})
-			return
-		}
-
-		if (normalized.startsWith('sort by')) {
-			const target = normalized.replace('sort by', '').trim()
-			if (!target) return
-			setTable((current) => {
-				const targetColumn = current.columns.find((column) => column.label.toLowerCase() === target)
-				if (!targetColumn) return current
-				const sortedRows = [...current.rows].sort((a, b) =>
-					(a[targetColumn.id] ?? '').localeCompare(b[targetColumn.id] ?? ''),
-				)
-				return { ...current, rows: sortedRows }
-			})
-		}
-	}
-
 	const slashItems = useMemo<SlashCommandItem[]>(
 		() => [
 			{
@@ -393,6 +406,19 @@ export default function CreatePage() {
 				class: 'min-h-[120px] bg-transparent px-0 py-0 text-sm text-gray-600 outline-none',
 			},
 			handleKeyDown: (_view, event) => {
+				if (
+					event.key === 'Enter' &&
+					!event.shiftKey &&
+					editor &&
+					!editor.isEmpty &&
+					!isSheetVisible
+				) {
+					event.preventDefault()
+					const prompt = editor.getText()
+					editor.commands.clearContent()
+					void handleGenerate(prompt)
+					return true
+				}
 				if (event.key !== 'Backspace') return false
 				if (!editor) return false
 				if (isSheetVisible) return false
@@ -631,9 +657,27 @@ export default function CreatePage() {
 											</p>
 										</div>
 									) : null}
+									{generationError ? (
+										<p className="mt-2 text-xs text-red-500">{generationError}</p>
+									) : null}
+									{isGenerating && !isSheetVisible ? (
+										<div className="mt-4 flex items-center gap-2 text-xs text-gray-400">
+											<Sparkles className="h-4 w-4 animate-pulse text-violet-400" strokeWidth={1} />
+											Generating spreadsheet...
+										</div>
+									) : null}
 									{isSheetVisible ? (
 										<div className="mt-4 space-y-4">
 											<div className="relative">
+												{isGenerating ? (
+													<div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-xl bg-white/80 backdrop-blur-sm">
+														<Sparkles
+															className="h-5 w-5 animate-pulse text-violet-500"
+															strokeWidth={1}
+														/>
+														<p className="text-xs text-gray-500">Generating spreadsheet...</p>
+													</div>
+												) : null}
 												<div
 													className={[
 														'overflow-auto rounded-xl border bg-white',
@@ -712,27 +756,31 @@ export default function CreatePage() {
 							<div className="space-y-4">
 								<div className="rounded-xl border border-gray-200/0 bg-transparent p-0">
 									<div className="flex flex-wrap items-center justify-between gap-3">
-										<h2 className="text-sm font-semibold text-gray-900">Refine with chat (stub)</h2>
-										<p className="text-xs text-gray-500">
-											Try “add total row” or “sort by {'{column}'}”.
-										</p>
+										<h2 className="text-sm font-semibold text-gray-900">Refine with AI</h2>
+										<p className="text-xs text-gray-500">Describe a change and press Enter.</p>
 									</div>
 									<div className="mt-4 flex flex-col gap-3">
 										<Input
-											placeholder="Add a total row, sort by date, group by..."
+											placeholder="Add a status column, group rows by category..."
 											value={refineInput}
 											onChange={(event) => setRefineInput(event.target.value)}
+											onKeyDown={(event) => {
+												if (event.key === 'Enter' && refineInput.trim()) {
+													event.preventDefault()
+													const currentTable = JSON.stringify(table)
+													const prompt = `Given this spreadsheet: ${currentTable}\n\n${refineInput.trim()}`
+													setRefineLog((current) =>
+														[`You: ${refineInput.trim()}`, ...current].slice(0, 6),
+													)
+													setRefineInput('')
+													void handleGenerate(prompt)
+												}
+											}}
 											variant="ghost"
 											className="px-0"
+											disabled={isGenerating}
 										/>
-										<div className="flex gap-2">
-											<Button type="button" variant="ghost" onClick={handleRefine}>
-												Run
-											</Button>
-											<Button type="button" variant="ghost" onClick={() => setRefineLog([])}>
-												Clear
-											</Button>
-										</div>
+										{isGenerating ? <p className="text-xs text-violet-500">Generating...</p> : null}
 										{refineLog.length ? (
 											<ul className="space-y-2 text-xs text-gray-500">
 												{refineLog.map((entry) => (
