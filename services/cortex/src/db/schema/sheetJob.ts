@@ -1,6 +1,6 @@
 import { jsonb, pgSchema, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import { z } from 'zod/v4'
+import type { z } from 'zod/v4'
 import type { Sheet } from '../../modules/sheets/schemas/sheetSchemas.ts'
 
 export const sheetSchema = pgSchema('sheet')

@@ -45,11 +45,7 @@ export class SheetJobRepository {
   }
 
   async findById(jobId: string) {
-    const rows = await this.db
-      .select()
-      .from(sheetJob)
-      .where(eq(sheetJob.id, jobId))
-      .limit(1)
+    const rows = await this.db.select().from(sheetJob).where(eq(sheetJob.id, jobId)).limit(1)
 
     return rows[0] ?? null
   }
