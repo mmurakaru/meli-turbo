@@ -85,6 +85,11 @@ Starts:
 docker exec -it $(docker compose ps -q ollama) ollama pull qwen2.5:7b
 ```
 
+To list all downloaded models:
+```bash
+docker exec -it $(docker compose ps -q ollama) ollama list
+```
+
 ### 4. Run database migrations
 
 ```bash
@@ -132,10 +137,39 @@ Logs are automatically written to `src/cortex.log` (gitignored) via pino's file 
 tail -f src/cortex.log
 ```
 
+For pretty-printed output:
+```bash
+tail -f src/cortex.log | npx pino-pretty
+```
+
 For hot-reload during development:
 ```bash
 pnpm run start:dev:watch
 ```
+
+## Local Observability (Prometheus + Grafana)
+
+The docker-compose setup includes a local Prometheus + Grafana stack for observing metrics during development.
+
+After starting infrastructure (`docker compose up -d`) and the service (`pnpm run start:dev`):
+
+| URL | What |
+|---|---|
+| http://localhost:9090 | Prometheus — raw metric explorer and PromQL queries |
+| http://localhost:3030 | Grafana — dashboards (login: `admin` / `pass`) |
+
+A "Cortex" dashboard is auto-provisioned with four panels:
+
+- **HTTP Request Rate** — requests per second by route and method
+- **HTTP P95 Latency** — 95th percentile response time by route
+- **Node.js Heap Used** — memory usage over time
+- **HTTP Error Rate** — 4xx and 5xx responses by route
+
+Prometheus scrapes the `/metrics` endpoint on port `9080` (a separate server started by `metricsPlugin`) every 15 seconds. Metrics are only available while `pnpm run start:dev` is running.
+
+To add custom metrics (e.g. BullMQ job duration), use `prom-client` directly — the registry is available via `fastify.metrics.client`.
+
+For distributed tracing and log aggregation, Tempo and Loki can be added to the docker-compose later — enabling `OTEL_ENABLED=true` and pointing `OTEL_EXPORTER_URL` at a local Tempo instance would give span-level visibility into every HTTP request, Postgres query, and Redis call.
 
 ## Environment Variables
 

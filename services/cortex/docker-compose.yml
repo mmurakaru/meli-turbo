@@ -36,10 +36,37 @@ services:
     environment:
       - OLLAMA_KEEP_ALIVE=24h
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3030:3000'
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
 volumes:
   postgres:
     driver: local
   redis:
     driver: local
   ollama:
+    driver: local
+  grafana:
+    driver: local
+  prometheus:
     driver: local
