@@ -3,10 +3,16 @@ import path from 'node:path'
 
 import { createSigner, createVerifier } from 'fast-jwt'
 
-import { getRootDirectory } from './utils/pathUtils.ts'
+import { getRootDirectory } from './utils/pathUtils'
 
-const privateKey = readFileSync(`${path.join(getRootDirectory(), 'scripts', 'keys')}/jwtRS256.key`, 'utf8')
-const publicKey = readFileSync(`${path.join(getRootDirectory(), 'scripts', 'keys')}/jwtRS256.key.pub`, 'utf8')
+const privateKey = readFileSync(
+	`${path.join(getRootDirectory(), 'scripts', 'keys')}/jwtRS256.key`,
+	'utf8',
+)
+const publicKey = readFileSync(
+	`${path.join(getRootDirectory(), 'scripts', 'keys')}/jwtRS256.key.pub`,
+	'utf8',
+)
 
 const sign = createSigner({ algorithm: 'RS256', key: privateKey })
 const verify = createVerifier({ key: publicKey })
