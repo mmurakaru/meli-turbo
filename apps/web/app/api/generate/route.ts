@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { env } from '@/env'
+import { signJwtToken } from '@/lib/jwt'
 
 export async function POST(req: NextRequest) {
 	let body: unknown
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${env.CORTEX_API_KEY}`,
+				Authorization: `Bearer ${signJwtToken()}`,
 			},
 			body: JSON.stringify(body),
 			signal: AbortSignal.timeout(10_000),

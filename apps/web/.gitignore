@@ -43,3 +43,6 @@ postgres/
 # packages
 .yalc
 yalc.lock
+
+# JWT keys (never commit private keys)
+/scripts/keys/

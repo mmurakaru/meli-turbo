@@ -12,7 +12,7 @@ export const env = createEnv({
 		GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
 		NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 		CORTEX_URL: z.url().default('http://localhost:3001'),
-		CORTEX_API_KEY: z.string().min(1),
+		CORTEX_JWT_PRIVATE_KEY: z.string().min(1),
 	},
 	client: {},
 	runtimeEnv: {
@@ -25,6 +25,6 @@ export const env = createEnv({
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		NODE_ENV: process.env.NODE_ENV,
 		CORTEX_URL: process.env.CORTEX_URL,
-		CORTEX_API_KEY: process.env.CORTEX_API_KEY,
+		CORTEX_JWT_PRIVATE_KEY: process.env.CORTEX_JWT_PRIVATE_KEY,
 	},
 })

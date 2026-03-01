@@ -53,7 +53,9 @@ const envSchema = {
       'JWT_PUBLIC_KEY',
       z
         .string()
-        .describe("JWT validation public key (use '||' as newline separator)")
+        .describe(
+          'JWT validation public key (multi-line PEM in double quotes, or use || as newline separator)',
+        )
         .transform(decodeJwtConfig),
     ),
     logLevel: envvar(
