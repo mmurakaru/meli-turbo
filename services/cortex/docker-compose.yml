@@ -7,15 +7,16 @@ services:
     ports:
       - '5433:5432'
     environment:
-      - POSTGRES_USER=sheetuser
+      - POSTGRES_USER=cortexuser
       - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=sheet_db
+      - POSTGRES_DB=cortex
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -h localhost -p 5432"]
       interval: 1s
       timeout: 5s
       retries: 10
     volumes:
+      - postgres:/var/lib/postgresql/data
       - ./scripts/db/init-dbs.sh:/docker-entrypoint-initdb.d/init-dbs.sh
 
   redis:
@@ -24,7 +25,7 @@ services:
     ports:
       - '6380:6379'
     volumes:
-      - redis:/redis/data:cached
+      - redis:/data
 
   ollama:
     image: ollama/ollama:latest
@@ -36,6 +37,8 @@ services:
       - OLLAMA_KEEP_ALIVE=24h
 
 volumes:
+  postgres:
+    driver: local
   redis:
     driver: local
   ollama:

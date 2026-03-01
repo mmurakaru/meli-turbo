@@ -75,7 +75,7 @@ pnpm run docker:start:dev
 ```
 
 Starts:
-- **PostgreSQL** on port `5433` — `postgresql://sheetuser:pass@127.0.0.1:5433/sheet_db`
+- **PostgreSQL** on port `5433` — `postgresql://cortexuser:pass@127.0.0.1:5433/cortex`
 - **Redis** on port `6380` — `redis://:sOmE_sEcUrE_pAsS@127.0.0.1:6380`
 - **Ollama** on port `11434`
 
@@ -209,11 +209,11 @@ GET /sheets/jobs/:jobId
 
 ```bash
 # All jobs
-docker exec meli-cortex-postgres-1 psql -U sheetuser -d sheet_db \
+docker exec meli-cortex-postgres-1 psql -U cortexuser -d cortex \
   -c "SELECT id, status, prompt, created_at FROM sheet.sheet_jobs ORDER BY created_at DESC;"
 
 # A specific job (including result JSONB)
-docker exec meli-cortex-postgres-1 psql -U sheetuser -d sheet_db \
+docker exec meli-cortex-postgres-1 psql -U cortexuser -d cortex \
   -c "SELECT id, status, result, error FROM sheet.sheet_jobs WHERE id='<jobId>';"
 ```
 
@@ -224,6 +224,7 @@ No manual action needed. The next poll to `GET /sheets/jobs/:jobId` will fall ba
 If a job was enqueued in BullMQ but not yet picked up when Redis crashed, the `sheet_jobs` row will remain in `pending` state in Postgres. You can identify and re-enqueue such jobs by querying:
 
 ```sql
+-- Run via: docker exec meli-cortex-postgres-1 psql -U cortexuser -d cortex
 SELECT id, prompt, source_url, created_at
 FROM sheet.sheet_jobs
 WHERE status = 'pending'
