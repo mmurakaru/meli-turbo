@@ -175,6 +175,61 @@ AI_MODEL=gpt-4o-mini
 AI_API_KEY=sk-...
 ```
 
+## Job Persistence
+
+Sheet jobs use a **Redis + Postgres hybrid** to balance speed and durability.
+
+### How it works
+
+| Layer | Role |
+|---|---|
+| **Postgres** (`sheet.sheet_jobs`) | Source of truth. Written on every state transition: `pending` → `processing` → `completed` / `failed`. Survives Redis restarts. |
+| **Redis** (`sheet-job:<jobId>`) | Cache for fast polling. TTL 1 hour. Populated on each state transition and re-seeded from Postgres on a cache miss. |
+
+### State flow
+
+```
+POST /sheets/generate
+  1. Write "pending" record to Postgres
+  2. Enqueue BullMQ job
+  3. Return jobId (202)
+
+SheetGenerationJob.process
+  4. Update Postgres → "processing", write to Redis cache
+  5. Call Ollama
+  6a. Success → Update Postgres → "completed" + result JSONB, write to Redis
+  6b. Failure → Update Postgres → "failed" + error, write to Redis
+
+GET /sheets/jobs/:jobId
+  → Redis hit: return cached result (fast path)
+  → Redis miss: query Postgres, re-populate Redis, return result
+```
+
+### Inspecting jobs in Postgres
+
+```bash
+# All jobs
+docker exec meli-cortex-postgres-1 psql -U sheetuser -d sheet_db \
+  -c "SELECT id, status, prompt, created_at FROM sheet.sheet_jobs ORDER BY created_at DESC;"
+
+# A specific job (including result JSONB)
+docker exec meli-cortex-postgres-1 psql -U sheetuser -d sheet_db \
+  -c "SELECT id, status, result, error FROM sheet.sheet_jobs WHERE id='<jobId>';"
+```
+
+### Recovery after a Redis restart
+
+No manual action needed. The next poll to `GET /sheets/jobs/:jobId` will fall back to Postgres and re-seed Redis automatically.
+
+If a job was enqueued in BullMQ but not yet picked up when Redis crashed, the `sheet_jobs` row will remain in `pending` state in Postgres. You can identify and re-enqueue such jobs by querying:
+
+```sql
+SELECT id, prompt, source_url, created_at
+FROM sheet.sheet_jobs
+WHERE status = 'pending'
+  AND created_at < NOW() - INTERVAL '10 minutes';
+```
+
 ## Database Migrations
 
 Generate a new migration after changing a schema file:

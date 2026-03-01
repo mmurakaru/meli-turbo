@@ -15,6 +15,7 @@ import {
   SHEET_GENERATION_JOB_PAYLOAD,
   SheetGenerationJob,
 } from './job-queue-processors/SheetGenerationJob.ts'
+import { SheetJobRepository } from './services/SheetJobRepository.ts'
 import { SheetService } from './services/SheetService.ts'
 
 export type SheetsInjectableDependencies = SheetsModuleDependencies & PublicDependencies
@@ -31,6 +32,7 @@ export class SheetModule extends AbstractModule {
   resolveDependencies(diOptions: DependencyInjectionOptions) {
     return {
       sheetService: asServiceClass(SheetService),
+      sheetJobRepository: asServiceClass(SheetJobRepository),
 
       sheetGenerationJob: asEnqueuedJobWorkerClass(SheetGenerationJob, {
         diOptions,
