@@ -1,10 +1,7 @@
-import { env } from '@/env'
 import { type NextRequest, NextResponse } from 'next/server'
+import { env } from '@/env'
 
-export async function GET(
-	_req: NextRequest,
-	{ params }: { params: Promise<{ jobId: string }> },
-) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ jobId: string }> }) {
 	const { jobId } = await params
 
 	try {

@@ -150,6 +150,7 @@ function createSlashCommandExtension(items: SlashCommandItem[]) {
 									popup.style.top = `${rect.bottom + 8}px`
 								}
 							},
+							// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: TODO reduce complexity
 							onKeyDown: (props) => {
 								if (!popup) return false
 								if (props.event.key === 'ArrowDown') {
@@ -183,6 +184,7 @@ function createSlashCommandExtension(items: SlashCommandItem[]) {
 	})
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: TODO reduce complexity
 export default function CreatePage() {
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 	const titleInputRef = useRef<HTMLInputElement | null>(null)
