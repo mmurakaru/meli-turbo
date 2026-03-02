@@ -65,7 +65,7 @@
         "@message-queue-toolkit/sns": "^24.6.0",
         "@message-queue-toolkit/sqs": "^24.2.1",
         "@opentelemetry/auto-instrumentations-node": "^0.70.0",
-        "@opentelemetry/exporter-trace-otlp-grpc": "^0.210.0",
+        "@opentelemetry/exporter-trace-otlp-grpc": "^0.212.0",
         "@scalar/fastify-api-reference": "^1.44.25",
         "ai": "^6.0.105",
         "amqplib": "^0.10.9",
