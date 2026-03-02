@@ -1,0 +1,48 @@
+name: Update pnpm lockfile on Dependabot PRs
+
+on:
+  pull_request:
+    paths:
+      - '**/package.json'
+
+jobs:
+  update-lockfile:
+    # Only run on Dependabot PRs
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Commit lockfile changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet pnpm-lock.yaml; then
+            echo "No lockfile changes to commit"
+          else
+            git add pnpm-lock.yaml
+            git commit -m "chore: update pnpm-lock.yaml"
+            git push
+          fi
