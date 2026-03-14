@@ -28,7 +28,7 @@ export function RadialChart() {
 	return (
 		<Card className="flex flex-col">
 			<CardHeader className="items-center pb-0">
-				<CardTitle>Tour completion rate</CardTitle>
+				<CardTitle>Document completion rate</CardTitle>
 				<CardDescription>July - December 2024</CardDescription>
 			</CardHeader>
 			<CardContent className="flex-1 pb-0">
@@ -87,7 +87,7 @@ export function RadialChart() {
 					Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
 				</div>
 				<div className="leading-none text-muted-foreground">
-					Showing average tour completion rate for the last 6 months
+					Showing average document completion rate for the last 6 months
 				</div>
 			</CardFooter>
 		</Card>

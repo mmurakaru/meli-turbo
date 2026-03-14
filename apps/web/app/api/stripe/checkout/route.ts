@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { getUser } from '@/lib/auth/dal'
 import { db } from '@/lib/db/drizzle'
-import { publicUsers, teamMembers, teams } from '@/lib/db/schema'
+import { publicUsers, workspaceMembers, workspaces } from '@/lib/db/schema'
 import { stripe } from '@/lib/payments/stripe'
 
 export async function GET(request: NextRequest) {
@@ -64,20 +64,20 @@ export async function GET(request: NextRequest) {
 			throw new Error('User not found in database.')
 		}
 
-		const userTeam = await db
+		const userWorkspace = await db
 			.select({
-				teamId: teamMembers.teamId,
+				workspaceId: workspaceMembers.workspaceId,
 			})
-			.from(teamMembers)
-			.where(eq(teamMembers.userId, user[0].id))
+			.from(workspaceMembers)
+			.where(eq(workspaceMembers.userId, user[0].id))
 			.limit(1)
 
-		if (userTeam.length === 0) {
-			throw new Error('User is not associated with any team.')
+		if (userWorkspace.length === 0) {
+			throw new Error('User is not associated with any workspace.')
 		}
 
 		await db
-			.update(teams)
+			.update(workspaces)
 			.set({
 				stripeCustomerId: customerId,
 				stripeSubscriptionId: subscriptionId,
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
 				subscriptionStatus: subscription.status,
 				updatedAt: new Date(),
 			})
-			.where(eq(teams.id, userTeam[0].teamId))
+			.where(eq(workspaces.id, userWorkspace[0].workspaceId))
 
 		return NextResponse.redirect(new URL('/dashboard', request.url))
 	} catch (_error) {

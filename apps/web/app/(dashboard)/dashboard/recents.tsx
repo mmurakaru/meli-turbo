@@ -7,7 +7,7 @@ import type { Document } from '@/lib/db/schema'
 import { NewDocumentLink } from '../_components/new-document-link'
 import { normalizedDocuments } from '../helper/normalize-document.helper'
 
-export function Recents({ tourData }: { tourData: { private: Document[]; all: Document[] } }) {
+export function Recents({ documentData }: { documentData: { private: Document[]; all: Document[] } }) {
 	return (
 		<section className="flex-1">
 			<h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
@@ -21,9 +21,9 @@ export function Recents({ tourData }: { tourData: { private: Document[]; all: Do
 
 				<TabsContent value="private" className="mt-4">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-						{normalizedDocuments(tourData.private).map((doc) => (
+						{normalizedDocuments(documentData.private).map((doc) => (
 							<div key={doc.id}>
-								<Link href={`/dashboard/documents/${doc.id}`}>
+								<Link href={`/document/${doc.id}`}>
 									<Image
 										src={`/api/og?title=${encodeURIComponent(doc.title)}`}
 										alt={doc.title}
@@ -50,9 +50,9 @@ export function Recents({ tourData }: { tourData: { private: Document[]; all: Do
 
 				<TabsContent value="all" className="mt-4">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-						{normalizedDocuments(tourData.all).map((doc) => (
+						{normalizedDocuments(documentData.all).map((doc) => (
 							<div key={doc.id}>
-								<Link href={`/dashboard/documents/${doc.id}`}>
+								<Link href={`/document/${doc.id}`}>
 									<Image
 										src={`/api/og?title=${encodeURIComponent(doc.title)}`}
 										alt={doc.title}

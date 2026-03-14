@@ -104,13 +104,13 @@ export default async function AnalyticsPage() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
 					<RadialChart />
 					<PieChartInteractive
-						chartTitle="Total tour interactions"
-						chartDescription="Showing total views of all configured tours"
+						chartTitle="Total document interactions"
+						chartDescription="Showing total views of all configured documents"
 					/>
 				</div>
 
 				<AreaChartInteractive
-					chartTitle="Total tour views by device"
+					chartTitle="Total document views by device"
 					chartDescription="Showing total views for the last 3 months"
 					chartData={chartData}
 				/>

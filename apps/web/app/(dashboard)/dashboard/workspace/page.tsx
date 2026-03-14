@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getTeamForUser, getUser } from '@/lib/db/queries'
-import { Settings } from './settings'
+import { getUser, getWorkspacesForUser } from '@/lib/db/queries'
 
 export default async function WorkspacePage() {
 	const user = await getUser()
@@ -9,11 +8,12 @@ export default async function WorkspacePage() {
 		redirect('/sign-in')
 	}
 
-	const teamData = await getTeamForUser(user.id)
+	const workspacesList = await getWorkspacesForUser(user.id)
+	const firstWorkspace = workspacesList[0]
 
-	if (!teamData) {
-		throw new Error('Team not found')
+	if (!firstWorkspace) {
+		throw new Error('Workspace not found')
 	}
 
-	return <Settings teamData={teamData} />
+	redirect(`/workspace/${firstWorkspace.id}/settings`)
 }

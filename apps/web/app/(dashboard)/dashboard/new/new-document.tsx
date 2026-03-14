@@ -20,10 +20,12 @@ import { toast } from '@workspace/ui/components/sonner'
 import { Columns3, Loader2 } from 'lucide-react'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import type { ActionState } from '@/lib/auth/middleware'
+import type { Workspace } from '@/lib/db/schema'
 import { createDocument } from '../../actions'
 
-export function NewDocument() {
+export function NewDocument({ workspaces }: { workspaces: Workspace[] }) {
 	const [description, setDescription] = useState('')
+	const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>('private')
 	const textAreaRef = useRef<HTMLTextAreaElement>(null)
 	useAutosizeTextArea(textAreaRef.current, description)
 
@@ -93,16 +95,26 @@ export function NewDocument() {
 										ref={textAreaRef}
 										rows={1}
 									/>
-									<RadioGroup className="px-3" defaultValue="private" name="owner">
+									<RadioGroup
+										className="px-3"
+										defaultValue="private"
+										name="owner"
+										onValueChange={setSelectedWorkspaceId}
+									>
 										<div className="flex items-center space-x-2">
-											<RadioGroupItem value="private" id="r1" />
-											<Label htmlFor="r1">Private</Label>
+											<RadioGroupItem value="private" id="r-private" />
+											<Label htmlFor="r-private">Private</Label>
 										</div>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value="team" id="r3" />
-											<Label htmlFor="r3">Team</Label>
-										</div>
+										{workspaces.map((workspace) => (
+											<div key={workspace.id} className="flex items-center space-x-2">
+												<RadioGroupItem value={workspace.id} id={`r-${workspace.id}`} />
+												<Label htmlFor={`r-${workspace.id}`}>{workspace.name}</Label>
+											</div>
+										))}
 									</RadioGroup>
+									{selectedWorkspaceId !== 'private' && (
+										<input type="hidden" name="workspaceId" value={selectedWorkspaceId} />
+									)}
 								</div>
 								<Separator />
 								<DialogFooter className="gap-1 p-3">

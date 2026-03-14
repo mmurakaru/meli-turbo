@@ -9,12 +9,12 @@ import { db } from '@/lib/db/drizzle'
 import {
 	ActivityType,
 	invitations,
-	type NewTeam,
-	type NewTeamMember,
+	type NewWorkspace,
+	type NewWorkspaceMember,
 	type NewUser,
 	publicUsers,
-	teamMembers,
-	teams,
+	workspaceMembers,
+	workspaces,
 } from '@/lib/db/schema'
 
 export async function GET(request: Request) {
@@ -69,13 +69,13 @@ export async function GET(request: Request) {
 
 		if (existingUser.length) {
 			userId = existingUser[0].id
-			const userWithTeam = await db
-				.select({ teamId: teamMembers.teamId })
-				.from(teamMembers)
-				.where(eq(teamMembers.userId, userId))
+			const userWithWorkspace = await db
+				.select({ workspaceId: workspaceMembers.workspaceId })
+				.from(workspaceMembers)
+				.where(eq(workspaceMembers.userId, userId))
 				.limit(1)
 
-			await logActivity(userWithTeam[0]?.teamId, userId, ActivityType.SIGN_IN)
+			await logActivity(userWithWorkspace[0]?.workspaceId, userId, ActivityType.SIGN_IN)
 		} else {
 			const newUser: NewUser = {
 				email: googleUser.email,
@@ -89,7 +89,7 @@ export async function GET(request: Request) {
 			}
 
 			userId = createdUser.id
-			let teamId: string
+			let workspaceId: string
 
 			if (inviteId) {
 				const [invitation] = await db
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
 					.limit(1)
 
 				if (invitation) {
-					teamId = invitation.teamId
+					workspaceId = invitation.workspaceId
 					await db
 						.update(invitations)
 						.set({ status: 'accepted' })
@@ -114,24 +114,24 @@ export async function GET(request: Request) {
 						.update(publicUsers)
 						.set({ role: invitation.role })
 						.where(eq(publicUsers.id, userId))
-					await logActivity(teamId, userId, ActivityType.ACCEPT_INVITATION)
+					await logActivity(workspaceId, userId, ActivityType.ACCEPT_INVITATION)
 				} else {
 					return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 				}
 			} else {
-				const newTeam: NewTeam = { name: `${googleUser.email}'s Team` }
-				const [createdTeam] = await db.insert(teams).values(newTeam).returning()
-				if (!createdTeam) {
+				const newWorkspace: NewWorkspace = { name: `${googleUser.email}'s Workspace` }
+				const [createdWorkspace] = await db.insert(workspaces).values(newWorkspace).returning()
+				if (!createdWorkspace) {
 					return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 				}
-				teamId = createdTeam.id
-				await logActivity(teamId, userId, ActivityType.CREATE_TEAM)
+				workspaceId = createdWorkspace.id
+				await logActivity(workspaceId, userId, ActivityType.CREATE_WORKSPACE)
 			}
 
-			const newTeamMember: NewTeamMember = { userId, teamId, role: 'owner' }
+			const newWorkspaceMember: NewWorkspaceMember = { userId, workspaceId, role: 'owner' }
 			await Promise.all([
-				db.insert(teamMembers).values(newTeamMember),
-				logActivity(teamId, userId, ActivityType.SIGN_UP),
+				db.insert(workspaceMembers).values(newWorkspaceMember),
+				logActivity(workspaceId, userId, ActivityType.SIGN_UP),
 			])
 		}
 

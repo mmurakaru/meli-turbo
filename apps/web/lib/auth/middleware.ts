@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import type { z } from 'zod'
-import { getTeamForUser } from '@/lib/db/queries'
-import type { TeamDataWithMembers, User } from '@/lib/db/schema'
+import { getWorkspacesForUser } from '@/lib/db/queries'
+import type { WorkspaceDataWithMembers, User } from '@/lib/db/schema'
 import { getUser, verifySession } from './dal'
 
 export type ActionState = {
@@ -55,20 +55,21 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, T>(
 	}
 }
 
-type ActionWithTeamFunction<T> = (formData: FormData, team: TeamDataWithMembers) => Promise<T>
+type ActionWithWorkspaceFunction<T> = (formData: FormData, workspace: WorkspaceDataWithMembers) => Promise<T>
 
-export function withTeam<T>(action: ActionWithTeamFunction<T>) {
+export function withWorkspace<T>(action: ActionWithWorkspaceFunction<T>) {
 	return async (formData: FormData): Promise<T> => {
 		const session = await verifySession().catch(() => null)
 		if (!session) {
 			redirect('/sign-in')
 		}
 
-		const team = await getTeamForUser(session.userId)
-		if (!team) {
-			throw new Error('Team not found')
+		const workspaces = await getWorkspacesForUser(session.userId)
+		const workspace = workspaces[0] as WorkspaceDataWithMembers | undefined
+		if (!workspace) {
+			throw new Error('Workspace not found')
 		}
 
-		return action(formData, team)
+		return action(formData, workspace)
 	}
 }

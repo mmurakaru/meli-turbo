@@ -15,10 +15,10 @@ export default async function RecentsPage() {
 	// Initiate both requests in parallel
 	const [privateDocuments, allDocuments] = await Promise.all([privateDocumentsData, allDocumentsData])
 
-	const tourData = {
+	const documentData = {
 		private: privateDocuments,
 		all: allDocuments,
 	}
 
-	return <Recents tourData={tourData} />
+	return <Recents documentData={documentData} />
 }

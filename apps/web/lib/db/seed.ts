@@ -6,7 +6,7 @@ loadEnvConfig(process.cwd())
 async function seed() {
 	const bcrypt = await import('bcryptjs')
 	const { db } = await import('./drizzle')
-	const { publicUsers, teamMembers, teams } = await import('./schema')
+	const { publicUsers, workspaceMembers, workspaces } = await import('./schema')
 
 	const email = 'test@test.com'
 	const password = 'admin123'
@@ -31,20 +31,20 @@ async function seed() {
 
 	console.log('User created.')
 
-	const [team] = await db
-		.insert(teams)
+	const [workspace] = await db
+		.insert(workspaces)
 		.values({
-			name: 'Test Team',
+			name: 'Test Workspace',
 		})
 		.returning()
 
-	await db.insert(teamMembers).values({
-		teamId: team.id,
+	await db.insert(workspaceMembers).values({
+		workspaceId: workspace.id,
 		userId: publicUser.id,
 		role: 'owner',
 	})
 
-	console.log('Team created.')
+	console.log('Workspace created.')
 }
 
 seed()

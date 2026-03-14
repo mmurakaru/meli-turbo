@@ -4,8 +4,8 @@ import type { Document, OwnerType } from '@/lib/db/schema'
 export function normalizeDocument(document: Document): NormalizedDocument {
 	function translateOwnerType(type: OwnerType) {
 		switch (type) {
-			case 'team':
-				return 'Team'
+			case 'workspace':
+				return 'Workspace'
 			default:
 				return 'Private'
 		}

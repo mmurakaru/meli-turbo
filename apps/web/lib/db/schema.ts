@@ -21,7 +21,7 @@ export const publicUsers = pgTable('profiles', {
 	deletedAt: timestamp('deleted_at'),
 })
 
-export const teams = pgTable('teams', {
+export const workspaces = pgTable('workspaces', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	name: varchar('name', { length: 100 }).notNull(),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -33,23 +33,23 @@ export const teams = pgTable('teams', {
 	subscriptionStatus: varchar('subscription_status', { length: 20 }),
 })
 
-export const teamMembers = pgTable('team_members', {
+export const workspaceMembers = pgTable('workspace_members', {
 	id: serial('id').primaryKey(),
 	userId: uuid('user_id')
 		.notNull()
 		.references(() => publicUsers.id, { onDelete: 'cascade' }),
-	teamId: uuid('team_id')
+	workspaceId: uuid('workspace_id')
 		.notNull()
-		.references(() => teams.id),
+		.references(() => workspaces.id),
 	role: varchar('role', { length: 50 }).notNull(),
 	joinedAt: timestamp('joined_at').notNull().defaultNow(),
 })
 
 export const activityLogs = pgTable('activity_logs', {
 	id: serial('id').primaryKey(),
-	teamId: uuid('team_id')
+	workspaceId: uuid('workspace_id')
 		.notNull()
-		.references(() => teams.id),
+		.references(() => workspaces.id),
 	userId: uuid('user_id').references(() => publicUsers.id),
 	action: text('action').notNull(),
 	timestamp: timestamp('timestamp').notNull().defaultNow(),
@@ -58,9 +58,9 @@ export const activityLogs = pgTable('activity_logs', {
 
 export const invitations = pgTable('invitations', {
 	id: serial('id').primaryKey(),
-	teamId: uuid('team_id')
+	workspaceId: uuid('workspace_id')
 		.notNull()
-		.references(() => teams.id),
+		.references(() => workspaces.id),
 	email: varchar('email', { length: 255 }).notNull(),
 	role: varchar('role', { length: 50 }).notNull(),
 	invitedBy: uuid('invited_by')
@@ -70,10 +70,10 @@ export const invitations = pgTable('invitations', {
 	status: varchar('status', { length: 20 }).notNull().default('pending'),
 })
 
-export const ownerTypeEnum = pgEnum('owner_type', ['team', 'user'])
+export const ownerTypeEnum = pgEnum('owner_type', ['workspace', 'user'])
 
 export const documents = pgTable('documents', {
-	id: serial('id').primaryKey(),
+	id: uuid('id').primaryKey(),
 	ownerId: uuid('owner_id').notNull(),
 	ownerType: ownerTypeEnum('owner_type').notNull(),
 	title: varchar('title', { length: 100 }).notNull(),
@@ -84,21 +84,21 @@ export const documents = pgTable('documents', {
 	deletedAt: timestamp('deleted_at'),
 })
 
-export const teamsRelations = relations(teams, ({ many }) => ({
-	teamMembers: many(teamMembers),
+export const workspacesRelations = relations(workspaces, ({ many }) => ({
+	workspaceMembers: many(workspaceMembers),
 	activityLogs: many(activityLogs),
 	invitations: many(invitations),
 }))
 
 export const usersRelations = relations(publicUsers, ({ many }) => ({
-	teamMembers: many(teamMembers),
+	workspaceMembers: many(workspaceMembers),
 	invitationsSent: many(invitations),
 }))
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({
-	team: one(teams, {
-		fields: [invitations.teamId],
-		references: [teams.id],
+	workspace: one(workspaces, {
+		fields: [invitations.workspaceId],
+		references: [workspaces.id],
 	}),
 	invitedBy: one(publicUsers, {
 		fields: [invitations.invitedBy],
@@ -106,21 +106,21 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
 	}),
 }))
 
-export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
+export const workspaceMembersRelations = relations(workspaceMembers, ({ one }) => ({
 	user: one(publicUsers, {
-		fields: [teamMembers.userId],
+		fields: [workspaceMembers.userId],
 		references: [publicUsers.id],
 	}),
-	team: one(teams, {
-		fields: [teamMembers.teamId],
-		references: [teams.id],
+	workspace: one(workspaces, {
+		fields: [workspaceMembers.workspaceId],
+		references: [workspaces.id],
 	}),
 }))
 
 export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
-	team: one(teams, {
-		fields: [activityLogs.teamId],
-		references: [teams.id],
+	workspace: one(workspaces, {
+		fields: [activityLogs.workspaceId],
+		references: [workspaces.id],
 	}),
 	user: one(publicUsers, {
 		fields: [activityLogs.userId],
@@ -129,10 +129,10 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 }))
 
 export const documentsRelations = relations(documents, ({ one }) => ({
-	team: one(teams, {
+	workspace: one(workspaces, {
 		fields: [documents.ownerId],
-		references: [teams.id],
-		relationName: 'teamDocuments',
+		references: [workspaces.id],
+		relationName: 'workspaceDocuments',
 	}),
 	user: one(publicUsers, {
 		fields: [documents.ownerId],
@@ -143,25 +143,25 @@ export const documentsRelations = relations(documents, ({ one }) => ({
 
 export type User = typeof publicUsers.$inferSelect
 export type NewUser = typeof publicUsers.$inferInsert
-export type Team = typeof teams.$inferSelect
-export type NewTeam = typeof teams.$inferInsert
-export type TeamMember = typeof teamMembers.$inferSelect
-export type NewTeamMember = typeof teamMembers.$inferInsert
+export type Workspace = typeof workspaces.$inferSelect
+export type NewWorkspace = typeof workspaces.$inferInsert
+export type WorkspaceMember = typeof workspaceMembers.$inferSelect
+export type NewWorkspaceMember = typeof workspaceMembers.$inferInsert
 export type ActivityLog = typeof activityLogs.$inferSelect
 export type NewActivityLog = typeof activityLogs.$inferInsert
 export type Invitation = typeof invitations.$inferSelect
 export type NewInvitation = typeof invitations.$inferInsert
-export type TeamDataWithMembers = Team & {
-	teamMembers: (TeamMember & {
+export type WorkspaceDataWithMembers = Workspace & {
+	workspaceMembers: (WorkspaceMember & {
 		user: Pick<User, 'id' | 'name' | 'email'>
 	})[]
 }
 export type Document = typeof documents.$inferSelect
 export type NewDocument = typeof documents.$inferInsert
-export type DocumentWithTeam = Document & {
-	team: Pick<Team, 'id' | 'name'>
+export type DocumentWithWorkspace = Document & {
+	workspace: Pick<Workspace, 'id' | 'name'>
 }
-export type OwnerType = 'team' | 'user'
+export type OwnerType = 'workspace' | 'user'
 
 export enum ActivityType {
 	SIGN_UP = 'SIGN_UP',
@@ -170,9 +170,9 @@ export enum ActivityType {
 	UPDATE_PASSWORD = 'UPDATE_PASSWORD',
 	DELETE_ACCOUNT = 'DELETE_ACCOUNT',
 	UPDATE_ACCOUNT = 'UPDATE_ACCOUNT',
-	CREATE_TEAM = 'CREATE_TEAM',
-	REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
-	INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
+	CREATE_WORKSPACE = 'CREATE_WORKSPACE',
+	REMOVE_WORKSPACE_MEMBER = 'REMOVE_WORKSPACE_MEMBER',
+	INVITE_WORKSPACE_MEMBER = 'INVITE_WORKSPACE_MEMBER',
 	ACCEPT_INVITATION = 'ACCEPT_INVITATION',
 	CREATE_DOCUMENT = 'CREATE_DOCUMENT',
 }

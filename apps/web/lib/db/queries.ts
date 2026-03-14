@@ -1,22 +1,22 @@
 import { and, desc, eq, or } from 'drizzle-orm'
 import { getUser as getSessionUser } from '@/lib/auth/dal'
 import { db } from './drizzle'
-import { activityLogs, documents, type OwnerType, publicUsers, teamMembers, teams } from './schema'
+import { activityLogs, documents, type OwnerType, publicUsers, workspaceMembers, workspaces } from './schema'
 
 export { getUser } from '@/lib/auth/dal'
 
-export async function getTeamByStripeCustomerId(customerId: string) {
+export async function getWorkspaceByStripeCustomerId(customerId: string) {
 	const result = await db
 		.select()
-		.from(teams)
-		.where(eq(teams.stripeCustomerId, customerId))
+		.from(workspaces)
+		.where(eq(workspaces.stripeCustomerId, customerId))
 		.limit(1)
 
 	return result.length > 0 ? result[0] : null
 }
 
-export async function updateTeamSubscription(
-	teamId: string,
+export async function updateWorkspaceSubscription(
+	workspaceId: string,
 	subscriptionData: {
 		stripeSubscriptionId: string | null
 		stripeProductId: string | null
@@ -25,22 +25,22 @@ export async function updateTeamSubscription(
 	},
 ) {
 	await db
-		.update(teams)
+		.update(workspaces)
 		.set({
 			...subscriptionData,
 			updatedAt: new Date(),
 		})
-		.where(eq(teams.id, teamId))
+		.where(eq(workspaces.id, workspaceId))
 }
 
-export async function getUserWithTeam(userId: string) {
+export async function getUserWithWorkspace(userId: string) {
 	const [result] = await db
 		.select({
 			user: publicUsers,
-			teamId: teamMembers.teamId,
+			workspaceId: workspaceMembers.workspaceId,
 		})
 		.from(publicUsers)
-		.leftJoin(teamMembers, eq(publicUsers.id, teamMembers.userId))
+		.leftJoin(workspaceMembers, eq(publicUsers.id, workspaceMembers.userId))
 		.where(eq(publicUsers.id, userId))
 		.limit(1)
 
@@ -68,15 +68,15 @@ export async function getActivityLogs() {
 		.limit(10)
 }
 
-export async function getTeamForUser(userId: string) {
+export async function getWorkspacesForUser(userId: string) {
 	const result = await db.query.publicUsers.findFirst({
 		where: eq(publicUsers.id, userId),
 		with: {
-			teamMembers: {
+			workspaceMembers: {
 				with: {
-					team: {
+					workspace: {
 						with: {
-							teamMembers: {
+							workspaceMembers: {
 								with: {
 									user: {
 										columns: {
@@ -94,10 +94,40 @@ export async function getTeamForUser(userId: string) {
 		},
 	})
 
-	return result?.teamMembers[0]?.team || null
+	return result?.workspaceMembers.map((wm) => wm.workspace) ?? []
 }
 
-export async function getDocumentsForOwner(userId: string, ownerType: OwnerType) {
+export async function getWorkspaceById(workspaceId: string, userId: string) {
+	const result = await db.query.publicUsers.findFirst({
+		where: eq(publicUsers.id, userId),
+		with: {
+			workspaceMembers: {
+				where: eq(workspaceMembers.workspaceId, workspaceId),
+				with: {
+					workspace: {
+						with: {
+							workspaceMembers: {
+								with: {
+									user: {
+										columns: {
+											id: true,
+											email: true,
+											name: true,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+
+	return result?.workspaceMembers[0]?.workspace || null
+}
+
+export async function getDocumentsForOwner(ownerId: string, ownerType: OwnerType) {
 	return await db
 		.select({
 			id: documents.id,
@@ -110,16 +140,16 @@ export async function getDocumentsForOwner(userId: string, ownerType: OwnerType)
 			deletedAt: documents.deletedAt,
 		})
 		.from(documents)
-		.where(and(eq(documents.ownerId, userId), eq(documents.ownerType, ownerType)))
+		.where(and(eq(documents.ownerId, ownerId), eq(documents.ownerType, ownerType)))
 		.orderBy(desc(documents.updatedAt))
 		.limit(10)
 }
 
 export async function getAllDocuments(userId: string) {
-	const userWithTeam = await getUserWithTeam(userId)
+	const userWithWorkspace = await getUserWithWorkspace(userId)
 
-	if (!userWithTeam || !userWithTeam.teamId) {
-		// If the user is not part of a team, only return their personal documents
+	if (!userWithWorkspace || !userWithWorkspace.workspaceId) {
+		// If the user is not part of a workspace, only return their personal documents
 		return await db
 			.select({
 				id: documents.id,
@@ -137,7 +167,7 @@ export async function getAllDocuments(userId: string) {
 			.limit(10)
 	}
 
-	// If the user is part of a team, return both their personal documents and their team's documents
+	// If the user is part of a workspace, return both their personal documents and their workspace's documents
 	return await db
 		.select({
 			id: documents.id,
@@ -153,23 +183,23 @@ export async function getAllDocuments(userId: string) {
 		.where(
 			or(
 				and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')),
-				and(eq(documents.ownerId, userWithTeam.teamId), eq(documents.ownerType, 'team')),
+				and(eq(documents.ownerId, userWithWorkspace.workspaceId), eq(documents.ownerType, 'workspace')),
 			),
 		)
 		.orderBy(desc(documents.updatedAt))
 		.limit(10)
 }
 
-export async function getDocument(documentId: number, userId: string) {
-	const userWithTeam = await getUserWithTeam(userId)
+export async function getDocument(documentId: string, userId: string) {
+	const userWithWorkspace = await getUserWithWorkspace(userId)
 
-	if (!userWithTeam) return
+	if (!userWithWorkspace) return
 
-	const teamId = userWithTeam.teamId
-	const ownershipFilter = teamId
+	const workspaceId = userWithWorkspace.workspaceId
+	const ownershipFilter = workspaceId
 		? or(
 				and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')),
-				and(eq(documents.ownerId, teamId), eq(documents.ownerType, 'team')),
+				and(eq(documents.ownerId, workspaceId), eq(documents.ownerType, 'workspace')),
 			)
 		: and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user'))
 

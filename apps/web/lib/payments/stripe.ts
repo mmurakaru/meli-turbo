@@ -1,23 +1,27 @@
 import { redirect } from 'next/navigation'
 import Stripe from 'stripe'
 import { env } from '@/env'
-import { getTeamByStripeCustomerId, getUser, updateTeamSubscription } from '@/lib/db/queries'
-import type { Team } from '@/lib/db/schema'
+import {
+	getUser,
+	getWorkspaceByStripeCustomerId,
+	updateWorkspaceSubscription,
+} from '@/lib/db/queries'
+import type { Workspace } from '@/lib/db/schema'
 
-export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-	apiVersion: '2025-08-27.basil',
+export const stripe = new Stripe(env.STRIPE_SECRET_KEY ?? '', {
+	apiVersion: '2026-02-25.clover',
 })
 
 export async function createCheckoutSession({
-	team,
+	workspace,
 	priceId,
 }: {
-	team: Team | null
+	workspace: Workspace | null
 	priceId: string
 }) {
 	const user = await getUser()
 
-	if (!team || !user) {
+	if (!workspace || !user) {
 		redirect(`/sign-up?redirect=checkout&priceId=${priceId}`)
 	}
 
@@ -32,7 +36,7 @@ export async function createCheckoutSession({
 		mode: 'subscription',
 		success_url: `${env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
 		cancel_url: `${env.BASE_URL}/pricing`,
-		customer: team.stripeCustomerId || undefined,
+		customer: workspace.stripeCustomerId || undefined,
 		client_reference_id: user.id.toString(),
 		allow_promotion_codes: true,
 		subscription_data: {
@@ -44,8 +48,8 @@ export async function createCheckoutSession({
 	redirect(session.url!)
 }
 
-export async function createCustomerPortalSession(team: Team) {
-	if (!team.stripeCustomerId || !team.stripeProductId) {
+export async function createCustomerPortalSession(workspace: Workspace) {
+	if (!workspace.stripeCustomerId || !workspace.stripeProductId) {
 		redirect('/pricing')
 	}
 
@@ -55,9 +59,9 @@ export async function createCustomerPortalSession(team: Team) {
 	if (configurations.data.length > 0) {
 		configuration = configurations.data[0]
 	} else {
-		const product = await stripe.products.retrieve(team.stripeProductId)
+		const product = await stripe.products.retrieve(workspace.stripeProductId)
 		if (!product.active) {
-			throw new Error("Team's product is not active in Stripe")
+			throw new Error("Workspace's product is not active in Stripe")
 		}
 
 		const prices = await stripe.prices.list({
@@ -65,7 +69,7 @@ export async function createCustomerPortalSession(team: Team) {
 			active: true,
 		})
 		if (prices.data.length === 0) {
-			throw new Error("No active prices found for the team's product")
+			throw new Error("No active prices found for the workspace's product")
 		}
 
 		configuration = await stripe.billingPortal.configurations.create({
@@ -97,7 +101,7 @@ export async function createCustomerPortalSession(team: Team) {
 	}
 
 	return stripe.billingPortal.sessions.create({
-		customer: team.stripeCustomerId,
+		customer: workspace.stripeCustomerId,
 		return_url: `${env.BASE_URL}/dashboard`,
 		configuration: configuration.id,
 	})
@@ -108,23 +112,23 @@ export async function handleSubscriptionChange(subscription: Stripe.Subscription
 	const subscriptionId = subscription.id
 	const status = subscription.status
 
-	const team = await getTeamByStripeCustomerId(customerId)
+	const workspace = await getWorkspaceByStripeCustomerId(customerId)
 
-	if (!team) {
-		// console.error('Team not found for Stripe customer:', customerId)
+	if (!workspace) {
+		// console.error('Workspace not found for Stripe customer:', customerId)
 		return
 	}
 
 	if (status === 'active' || status === 'trialing') {
 		const plan = subscription.items.data[0]?.plan
-		await updateTeamSubscription(team.id, {
+		await updateWorkspaceSubscription(workspace.id, {
 			stripeSubscriptionId: subscriptionId,
 			stripeProductId: plan?.product as string,
 			planName: (plan?.product as Stripe.Product).name,
 			subscriptionStatus: status,
 		})
 	} else if (status === 'canceled' || status === 'unpaid') {
-		await updateTeamSubscription(team.id, {
+		await updateWorkspaceSubscription(workspace.id, {
 			stripeSubscriptionId: null,
 			stripeProductId: null,
 			planName: null,

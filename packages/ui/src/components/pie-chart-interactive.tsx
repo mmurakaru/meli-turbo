@@ -44,23 +44,23 @@ const chartConfig = {
 		label: 'Mobile',
 	},
 	january: {
-		label: 'Tour 1',
+		label: 'Document 1',
 		color: 'hsl(var(--chart-1))',
 	},
 	february: {
-		label: 'Tour 2',
+		label: 'Document 2',
 		color: 'hsl(var(--chart-2))',
 	},
 	march: {
-		label: 'Tour 3',
+		label: 'Document 3',
 		color: 'hsl(var(--chart-3))',
 	},
 	april: {
-		label: 'Tour 4',
+		label: 'Document 4',
 		color: 'hsl(var(--chart-4))',
 	},
 	may: {
-		label: 'Tour 5',
+		label: 'Document 5',
 		color: 'hsl(var(--chart-5))',
 	},
 } satisfies ChartConfig

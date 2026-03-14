@@ -7,12 +7,12 @@ import { useActionState, useEffect } from 'react'
 import { updateDocument } from '@/app/(dashboard)/actions'
 import type { ActionState } from '@/lib/auth/middleware'
 
-export function TourHeader({
-	tourId,
+export function DocumentHeader({
+	documentId,
 	title,
 	description,
 }: {
-	tourId: number
+	documentId: string
 	title: string
 	description: string
 }) {
@@ -33,7 +33,7 @@ export function TourHeader({
 	return (
 		<div>
 			<form action={updateAction}>
-				<input type="hidden" name="tourId" value={tourId} />
+				<input type="hidden" name="documentId" value={documentId} />
 				<Label htmlFor="title" className="sr-only">
 					Title
 				</Label>

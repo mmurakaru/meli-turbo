@@ -23,27 +23,27 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { signOut } from '@/app/(login)/actions'
 import { useUser } from '@/lib/auth'
-import type { Team } from '@/lib/db/schema'
-import { getTeam } from '../../actions'
+import type { Workspace } from '@/lib/db/schema'
+import { getWorkspace } from '../../actions'
 
 export function NavUser() {
 	const { user, setUser } = useUser()
 	const pathname = usePathname()
 	const { toggleSidebar, isMobile } = useSidebar()
 
-	const [team, setTeam] = useState<Team | null>(null)
+	const [workspace, setWorkspace] = useState<Workspace | null>(null)
 
 	useEffect(() => {
 		if (user?.id) {
-			const fetchTeam = async () => {
+			const fetchWorkspace = async () => {
 				try {
-					const teamData = await getTeam(user.id)
-					setTeam(teamData)
+					const workspaces = await getWorkspace(user.id)
+					setWorkspace(workspaces[0] ?? null)
 				} catch (_error) {
-					toast.error('Error fetching team data')
+					toast.error('Error fetching workspace data')
 				}
 			}
-			fetchTeam()
+			fetchWorkspace()
 		}
 	}, [user])
 
@@ -120,7 +120,7 @@ export function NavUser() {
 								<div className="grid flex-1 text-left text-xs leading-tight">
 									<span className="font-medium truncate">{user?.email.split('@')[0]}</span>
 									<span className="text-sidebar-foreground/70 truncate">
-										{team?.planName ? `${team?.planName} plan` : 'Free plan'}
+										{workspace?.planName ? `${workspace?.planName} plan` : 'Free plan'}
 									</span>
 								</div>
 							</div>

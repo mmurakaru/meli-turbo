@@ -10,32 +10,32 @@ import { getUser } from '@/lib/auth/dal'
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware'
 import { createSession, deleteSession } from '@/lib/auth/session'
 import { db } from '@/lib/db/drizzle'
-import { getUserWithTeam } from '@/lib/db/queries'
+import { getUserWithWorkspace } from '@/lib/db/queries'
 import {
 	ActivityType,
 	activityLogs,
 	invitations,
 	type NewActivityLog,
-	type NewTeam,
-	type NewTeamMember,
+	type NewWorkspace,
+	type NewWorkspaceMember,
 	type NewUser,
 	publicUsers,
-	teamMembers,
-	teams,
+	workspaceMembers,
+	workspaces,
 } from '@/lib/db/schema'
 import { createCheckoutSession } from '@/lib/payments/stripe'
 
 export async function logActivity(
-	teamId: string | null | undefined,
+	workspaceId: string | null | undefined,
 	userId: string,
 	type: ActivityType,
 	ipAddress?: string,
 ) {
-	if (teamId === null || teamId === undefined) {
+	if (workspaceId === null || workspaceId === undefined) {
 		return
 	}
 	const newActivity: NewActivityLog = {
-		teamId,
+		workspaceId,
 		userId,
 		action: type,
 		ipAddress: ipAddress || '',
@@ -102,19 +102,19 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 		return { error: 'Invalid email or password. Please try again.' }
 	}
 
-	const userWithTeam = await getUserWithTeam(user.id)
+	const userWithWorkspace = await getUserWithWorkspace(user.id)
 
-	await Promise.all([logActivity(userWithTeam?.teamId, user.id, ActivityType.SIGN_IN)])
+	await Promise.all([logActivity(userWithWorkspace?.workspaceId, user.id, ActivityType.SIGN_IN)])
 
 	await createSession(user.id)
 
 	const redirectTo = formData.get('redirect') as string | null
 	if (redirectTo === 'checkout') {
 		const priceId = formData.get('priceId') as string
-		const team = userWithTeam?.teamId
-			? (await db.select().from(teams).where(eq(teams.id, userWithTeam.teamId)).limit(1))[0]
+		const workspace = userWithWorkspace?.workspaceId
+			? (await db.select().from(workspaces).where(eq(workspaces.id, userWithWorkspace.workspaceId)).limit(1))[0]
 			: null
-		return createCheckoutSession({ team: team ?? null, priceId })
+		return createCheckoutSession({ workspace: workspace ?? null, priceId })
 	}
 
 	redirect('/dashboard')
@@ -153,9 +153,9 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 		return { error: 'Failed to create user. Please try again.' }
 	}
 
-	let teamId: string
+	let workspaceId: string
 	let userRole: string
-	let createdTeam: typeof teams.$inferSelect | null = null
+	let createdWorkspace: typeof workspaces.$inferSelect | null = null
 
 	if (inviteId) {
 		const [invitation] = await db
@@ -171,7 +171,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 			.limit(1)
 
 		if (invitation) {
-			teamId = invitation.teamId
+			workspaceId = invitation.workspaceId
 			userRole = invitation.role
 
 			await db
@@ -180,38 +180,38 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 				.where(eq(invitations.id, invitation.id))
 			await db.update(publicUsers).set({ role: userRole }).where(eq(publicUsers.id, createdUser.id))
 
-			await logActivity(teamId, createdUser.id, ActivityType.ACCEPT_INVITATION)
+			await logActivity(workspaceId, createdUser.id, ActivityType.ACCEPT_INVITATION)
 
-			;[createdTeam] = await db.select().from(teams).where(eq(teams.id, teamId)).limit(1)
+			;[createdWorkspace] = await db.select().from(workspaces).where(eq(workspaces.id, workspaceId)).limit(1)
 		} else {
 			return { error: 'Invalid or expired invitation.' }
 		}
 	} else {
-		const newTeam: NewTeam = {
-			name: `${email}'s Team`,
+		const newWorkspace: NewWorkspace = {
+			name: `${email}'s Workspace`,
 		}
 
-		;[createdTeam] = await db.insert(teams).values(newTeam).returning()
+		;[createdWorkspace] = await db.insert(workspaces).values(newWorkspace).returning()
 
-		if (!createdTeam) {
-			return { error: 'Failed to create team. Please try again.' }
+		if (!createdWorkspace) {
+			return { error: 'Failed to create workspace. Please try again.' }
 		}
 
-		teamId = createdTeam.id
+		workspaceId = createdWorkspace.id
 		userRole = 'owner'
 
-		await logActivity(teamId, createdUser.id, ActivityType.CREATE_TEAM)
+		await logActivity(workspaceId, createdUser.id, ActivityType.CREATE_WORKSPACE)
 	}
 
-	const newTeamMember: NewTeamMember = {
+	const newWorkspaceMember: NewWorkspaceMember = {
 		userId: createdUser.id,
-		teamId,
+		workspaceId,
 		role: userRole,
 	}
 
 	await Promise.all([
-		db.insert(teamMembers).values(newTeamMember),
-		logActivity(teamId, createdUser.id, ActivityType.SIGN_UP),
+		db.insert(workspaceMembers).values(newWorkspaceMember),
+		logActivity(workspaceId, createdUser.id, ActivityType.SIGN_UP),
 	])
 
 	await createSession(createdUser.id)
@@ -219,7 +219,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 	const redirectTo = formData.get('redirect') as string | null
 	if (redirectTo === 'checkout') {
 		const priceId = formData.get('priceId') as string
-		return createCheckoutSession({ team: createdTeam, priceId })
+		return createCheckoutSession({ workspace: createdWorkspace, priceId })
 	}
 
 	redirect('/dashboard')
@@ -229,9 +229,9 @@ export async function signOut() {
 	const user = await getUser()
 
 	if (user) {
-		const userWithTeam = await getUserWithTeam(user.id)
-		if (userWithTeam) {
-			await logActivity(userWithTeam.teamId, user.id, ActivityType.SIGN_OUT)
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
+		if (userWithWorkspace) {
+			await logActivity(userWithWorkspace.workspaceId, user.id, ActivityType.SIGN_OUT)
 		}
 	}
 
@@ -275,8 +275,8 @@ export const updatePassword = validatedActionWithUser(
 			.set({ passwordHash: newPasswordHash })
 			.where(eq(publicUsers.id, user.id))
 
-		const userWithTeam = await getUserWithTeam(user.id)
-		await logActivity(userWithTeam?.teamId, user.id, ActivityType.UPDATE_PASSWORD)
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
+		await logActivity(userWithWorkspace?.workspaceId, user.id, ActivityType.UPDATE_PASSWORD)
 
 		return { success: 'Password updated successfully.' }
 	},
@@ -298,9 +298,9 @@ export const deleteAccount = validatedActionWithUser(deleteAccountSchema, async 
 		return { error: 'Incorrect password. Account deletion failed.' }
 	}
 
-	const userWithTeam = await getUserWithTeam(user.id)
+	const userWithWorkspace = await getUserWithWorkspace(user.id)
 
-	await logActivity(userWithTeam?.teamId, user.id, ActivityType.DELETE_ACCOUNT)
+	await logActivity(userWithWorkspace?.workspaceId, user.id, ActivityType.DELETE_ACCOUNT)
 
 	await db
 		.update(publicUsers)
@@ -311,10 +311,10 @@ export const deleteAccount = validatedActionWithUser(deleteAccountSchema, async 
 		})
 		.where(eq(publicUsers.id, user.id))
 
-	if (userWithTeam?.teamId) {
+	if (userWithWorkspace?.workspaceId) {
 		await db
-			.delete(teamMembers)
-			.where(and(eq(teamMembers.userId, user.id), eq(teamMembers.teamId, userWithTeam.teamId)))
+			.delete(workspaceMembers)
+			.where(and(eq(workspaceMembers.userId, user.id), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
 	}
 
 	await deleteSession()
@@ -328,64 +328,64 @@ const updateAccountSchema = z.object({
 
 export const updateAccount = validatedActionWithUser(updateAccountSchema, async (data, _, user) => {
 	const { name, email } = data
-	const userWithTeam = await getUserWithTeam(user.id)
+	const userWithWorkspace = await getUserWithWorkspace(user.id)
 
 	await Promise.all([
 		db.update(publicUsers).set({ name, email }).where(eq(publicUsers.id, user.id)),
-		logActivity(userWithTeam?.teamId, user.id, ActivityType.UPDATE_ACCOUNT),
+		logActivity(userWithWorkspace?.workspaceId, user.id, ActivityType.UPDATE_ACCOUNT),
 	])
 
 	return { success: 'Account updated successfully.' }
 })
 
-const removeTeamMemberSchema = z.object({
+const removeWorkspaceMemberSchema = z.object({
 	memberId: z.number(),
 })
 
-export const removeTeamMember = validatedActionWithUser(
-	removeTeamMemberSchema,
+export const removeWorkspaceMember = validatedActionWithUser(
+	removeWorkspaceMemberSchema,
 	async (data, _, user) => {
 		const { memberId } = data
-		const userWithTeam = await getUserWithTeam(user.id)
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
 
-		if (!userWithTeam?.teamId) {
-			return { error: 'User is not part of a team' }
+		if (!userWithWorkspace?.workspaceId) {
+			return { error: 'User is not part of a workspace' }
 		}
 
 		await db
-			.delete(teamMembers)
-			.where(and(eq(teamMembers.id, memberId), eq(teamMembers.teamId, userWithTeam.teamId)))
+			.delete(workspaceMembers)
+			.where(and(eq(workspaceMembers.id, memberId), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
 
-		await logActivity(userWithTeam.teamId, user.id, ActivityType.REMOVE_TEAM_MEMBER)
+		await logActivity(userWithWorkspace.workspaceId, user.id, ActivityType.REMOVE_WORKSPACE_MEMBER)
 
-		return { success: 'Team member removed successfully' }
+		return { success: 'Workspace member removed successfully' }
 	},
 )
 
-const inviteTeamMemberSchema = z.object({
+const inviteWorkspaceMemberSchema = z.object({
 	email: z.string().email('Invalid email address'),
 	role: z.enum(['member', 'owner']),
 })
 
-export const inviteTeamMember = validatedActionWithUser(
-	inviteTeamMemberSchema,
+export const inviteWorkspaceMember = validatedActionWithUser(
+	inviteWorkspaceMemberSchema,
 	async (data, _, user) => {
 		const { email, role } = data
-		const userWithTeam = await getUserWithTeam(user.id)
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
 
-		if (!userWithTeam?.teamId) {
-			return { error: 'User is not part of a team' }
+		if (!userWithWorkspace?.workspaceId) {
+			return { error: 'User is not part of a workspace' }
 		}
 
 		const existingMember = await db
 			.select()
 			.from(publicUsers)
-			.leftJoin(teamMembers, eq(publicUsers.id, teamMembers.userId))
-			.where(and(eq(publicUsers.email, email), eq(teamMembers.teamId, userWithTeam.teamId)))
+			.leftJoin(workspaceMembers, eq(publicUsers.id, workspaceMembers.userId))
+			.where(and(eq(publicUsers.email, email), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
 			.limit(1)
 
 		if (existingMember.length > 0) {
-			return { error: 'User is already a member of this team' }
+			return { error: 'User is already a member of this workspace' }
 		}
 
 		const existingInvitation = await db
@@ -394,7 +394,7 @@ export const inviteTeamMember = validatedActionWithUser(
 			.where(
 				and(
 					eq(invitations.email, email),
-					eq(invitations.teamId, userWithTeam.teamId),
+					eq(invitations.workspaceId, userWithWorkspace.workspaceId),
 					eq(invitations.status, 'pending'),
 				),
 			)
@@ -405,14 +405,14 @@ export const inviteTeamMember = validatedActionWithUser(
 		}
 
 		await db.insert(invitations).values({
-			teamId: userWithTeam.teamId,
+			workspaceId: userWithWorkspace.workspaceId,
 			email,
 			role,
 			invitedBy: user.id,
 			status: 'pending',
 		})
 
-		await logActivity(userWithTeam.teamId, user.id, ActivityType.INVITE_TEAM_MEMBER)
+		await logActivity(userWithWorkspace.workspaceId, user.id, ActivityType.INVITE_WORKSPACE_MEMBER)
 
 		// TODO: Send invitation email and include ?inviteId={id} to sign-up URL
 

@@ -7,7 +7,7 @@ import { Label } from '@workspace/ui/components/label'
 import { RadioGroup, RadioGroupItem } from '@workspace/ui/components/radio-group'
 import { Loader2 } from 'lucide-react'
 import { useActionState } from 'react'
-import { inviteTeamMember } from '@/app/(login)/actions'
+import { inviteWorkspaceMember } from '@/app/(login)/actions'
 import { useUser } from '@/lib/auth'
 
 type ActionState = {
@@ -19,7 +19,7 @@ export function InviteMember() {
 	const { user } = useUser()
 	const isOwner = user?.role === 'owner'
 	const [inviteState, inviteAction, isInvitePending] = useActionState<ActionState, FormData>(
-		inviteTeamMember,
+		inviteWorkspaceMember,
 		{
 			error: '',
 			success: '',
@@ -81,7 +81,7 @@ export function InviteMember() {
 			{!isOwner && (
 				<CardFooter>
 					<p className="text-sm text-muted-foreground">
-						You must be a team owner to invite new members.
+						You must be a workspace owner to invite new members.
 					</p>
 				</CardFooter>
 			)}

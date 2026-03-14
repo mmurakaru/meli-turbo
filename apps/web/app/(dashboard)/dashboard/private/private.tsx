@@ -6,16 +6,16 @@ import type { Document } from '@/lib/db/schema'
 import { NewDocumentLink } from '../../_components/new-document-link'
 import { normalizedDocuments } from '../../helper/normalize-document.helper'
 
-export function Private({ tourData }: { tourData: Document[] }) {
+export function Private({ documentData }: { documentData: Document[] }) {
 	return (
 		<section className="flex-1">
 			<h1 className="text-lg lg:text-2xl font-extrabold mb-6">Private</h1>
 			<NewDocumentLink />
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-				{normalizedDocuments(tourData).map((doc) => (
+				{normalizedDocuments(documentData).map((doc) => (
 					<div key={doc.id}>
-						<Link href={`/dashboard/documents/${doc.id}`}>
+						<Link href={`/document/${doc.id}`}>
 							<Image
 								src={`/api/og?title=${encodeURIComponent(doc.title)}`}
 								alt={doc.title}

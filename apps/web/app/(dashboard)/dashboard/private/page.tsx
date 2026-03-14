@@ -9,7 +9,7 @@ export default async function PrivatePage() {
 		redirect('/sign-in')
 	}
 
-	const tourData = await getDocumentsForOwner(user.id, 'user')
+	const documentData = await getDocumentsForOwner(user.id, 'user')
 
-	return <Private tourData={tourData} />
+	return <Private documentData={documentData} />
 }

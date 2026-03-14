@@ -6,11 +6,10 @@ import { UserProvider } from '@/lib/auth'
 import { getUser } from '@/lib/db/queries'
 import CookieConsent from './_components/cookie-consent'
 import './globals.css'
-// import ScriptLoader from './script-loader';
 
 export const metadata: Metadata = {
-	title: 'Meli | Voice AI product tour',
-	description: 'Voice AI product tour',
+	title: 'Meli | AI spreadsheet builder',
+	description: 'AI spreadsheet builder',
 }
 
 export const viewport: Viewport = {
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<Suspense fallback={null}>
 					<UserProvider userPromise={userPromise}>{children}</UserProvider>
 				</Suspense>
-				{/* <ScriptLoader /> */}
 				<Toaster />
 				<CookieConsent />
 			</body>

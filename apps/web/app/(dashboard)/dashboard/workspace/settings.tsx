@@ -4,8 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/av
 import { Button } from '@workspace/ui/components/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card'
 import { useActionState } from 'react'
-import { removeTeamMember } from '@/app/(login)/actions'
-import type { TeamDataWithMembers, User } from '@/lib/db/schema'
+import { removeWorkspaceMember } from '@/app/(login)/actions'
+import type { WorkspaceDataWithMembers, User } from '@/lib/db/schema'
 import { customerPortalAction } from '@/lib/payments/actions'
 import { InviteMember } from './invite-member'
 
@@ -14,9 +14,9 @@ type ActionState = {
 	success?: string
 }
 
-export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
+export function Settings({ workspaceData }: { workspaceData: WorkspaceDataWithMembers }) {
 	const [removeState, removeAction, isRemovePending] = useActionState<ActionState, FormData>(
-		removeTeamMember,
+		removeWorkspaceMember,
 		{
 			error: '',
 			success: '',
@@ -39,12 +39,12 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
 						<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
 							<div className="mb-4 sm:mb-0">
 								<p className="text-sm font-medium text-gradient">
-									Current Plan: {teamData.planName || 'Free'}
+									Current Plan: {workspaceData.planName || 'Free'}
 								</p>
 								<p className="text-xs text-muted-foreground">
-									{teamData.subscriptionStatus === 'active'
+									{workspaceData.subscriptionStatus === 'active'
 										? 'Billed monthly'
-										: teamData.subscriptionStatus === 'trialing'
+										: workspaceData.subscriptionStatus === 'trialing'
 											? 'Trial period'
 											: 'No active subscription'}
 								</p>
@@ -64,7 +64,7 @@ export function Settings({ teamData }: { teamData: TeamDataWithMembers }) {
 				</CardHeader>
 				<CardContent>
 					<ul className="space-y-4">
-						{teamData.teamMembers.map((member, index) => (
+						{workspaceData.workspaceMembers.map((member, index) => (
 							<li key={member.id} className="flex items-center justify-between">
 								<div className="flex items-center space-x-4">
 									<Avatar>
