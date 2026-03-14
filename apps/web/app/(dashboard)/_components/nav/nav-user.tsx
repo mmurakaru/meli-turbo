@@ -53,7 +53,8 @@ export function NavUser({ activeWorkspaceId }: { activeWorkspaceId: string | nul
 		await signOut()
 	}
 
-	const activeWorkspace = workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? workspaces[0]
+	const activeWorkspace =
+		workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? workspaces[0]
 
 	return (
 		<SidebarMenu>

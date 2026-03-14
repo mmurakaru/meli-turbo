@@ -1,15 +1,23 @@
 'use server'
 
+import { and, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { v7 as uuidv7 } from 'uuid'
 import { z } from 'zod'
-import { setActiveWorkspaceId } from '@/lib/auth/session'
 import { validatedActionWithUser } from '@/lib/auth/middleware'
+import { setActiveWorkspaceId } from '@/lib/auth/session'
 import { db } from '@/lib/db/drizzle'
 import { getWorkspacesForUser } from '@/lib/db/queries'
-import { and, eq } from 'drizzle-orm'
-import { ActivityType, activityLogs, documents, invitations, publicUsers, workspaceMembers, workspaces } from '@/lib/db/schema'
+import {
+	ActivityType,
+	activityLogs,
+	documents,
+	invitations,
+	publicUsers,
+	workspaceMembers,
+	workspaces,
+} from '@/lib/db/schema'
 import { logActivity } from '../(login)/actions'
 
 const createDocumentSchema = z.object({
@@ -111,14 +119,18 @@ export const deleteWorkspace = validatedActionWithUser(
 		const [membership] = await db
 			.select()
 			.from(workspaceMembers)
-			.where(and(eq(workspaceMembers.userId, user.id), eq(workspaceMembers.workspaceId, workspaceId)))
+			.where(
+				and(eq(workspaceMembers.userId, user.id), eq(workspaceMembers.workspaceId, workspaceId)),
+			)
 			.limit(1)
 
 		if (!membership || membership.role !== 'owner') {
 			return { error: 'Only the workspace owner can delete this workspace' }
 		}
 
-		await db.delete(documents).where(and(eq(documents.ownerId, workspaceId), eq(documents.ownerType, 'workspace')))
+		await db
+			.delete(documents)
+			.where(and(eq(documents.ownerId, workspaceId), eq(documents.ownerType, 'workspace')))
 		await db.delete(invitations).where(eq(invitations.workspaceId, workspaceId))
 		await db.delete(workspaceMembers).where(eq(workspaceMembers.workspaceId, workspaceId))
 		await db.delete(activityLogs).where(eq(activityLogs.workspaceId, workspaceId))
@@ -181,7 +193,9 @@ export const inviteMember = validatedActionWithUser(inviteMemberSchema, async (d
 		return { error: 'An invitation has already been sent to this email' }
 	}
 
-	await db.insert(invitations).values({ workspaceId, email, role, invitedBy: user.id, status: 'pending' })
+	await db
+		.insert(invitations)
+		.values({ workspaceId, email, role, invitedBy: user.id, status: 'pending' })
 	await logActivity(workspaceId, user.id, ActivityType.INVITE_WORKSPACE_MEMBER)
 	revalidatePath(`/workspace/${workspaceId}/members`)
 

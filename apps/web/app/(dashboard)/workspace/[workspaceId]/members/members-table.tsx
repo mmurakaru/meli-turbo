@@ -1,5 +1,13 @@
 'use client'
 
+import {
+	type ColumnDef,
+	flexRender,
+	getCoreRowModel,
+	getSortedRowModel,
+	type SortingState,
+	useReactTable,
+} from '@tanstack/react-table'
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar'
 import {
 	Table,
@@ -9,18 +17,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '@workspace/ui/components/table'
-import {
-	type ColumnDef,
-	flexRender,
-	getCoreRowModel,
-	getSortedRowModel,
-	type SortingState,
-	useReactTable,
-} from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 
 const iconProps = { strokeWidth: 1, className: 'size-3' } as const
+
 import { useState } from 'react'
 import type { User, WorkspaceMember } from '@/lib/db/schema'
 
@@ -116,9 +117,7 @@ export function MembersTable({ members }: { members: Member[] }) {
 	return (
 		<div className="border rounded-lg overflow-hidden">
 			<div className="px-6 py-4 border-b">
-				<p className="text-sm font-normal text-violet-600">
-					Members ({members.length})
-				</p>
+				<p className="text-sm font-normal text-violet-600">Members ({members.length})</p>
 			</div>
 			<Table>
 				<TableHeader>

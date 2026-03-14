@@ -1,5 +1,6 @@
 'use client'
 
+import { Badge } from '@workspace/ui/components/badge'
 import { Button } from '@workspace/ui/components/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card'
 import {
@@ -12,7 +13,6 @@ import {
 import { Input } from '@workspace/ui/components/input'
 import { Label } from '@workspace/ui/components/label'
 import { Separator } from '@workspace/ui/components/separator'
-import { Badge } from '@workspace/ui/components/badge'
 import { Loader2, Trash2 } from 'lucide-react'
 import { startTransition, useActionState, useRef, useState } from 'react'
 import { deleteAccount, updateAccount, updatePassword } from '@/app/(login)/actions'
@@ -212,9 +212,7 @@ export default function SecurityPage() {
 									maxLength={100}
 								/>
 							</div>
-							{deleteState.error && (
-								<p className="text-red-500 text-xs">{deleteState.error}</p>
-							)}
+							{deleteState.error && <p className="text-red-500 text-xs">{deleteState.error}</p>}
 						</div>
 
 						<Separator />

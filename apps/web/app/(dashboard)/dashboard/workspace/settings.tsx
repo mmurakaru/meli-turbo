@@ -14,7 +14,7 @@ import {
 import { Separator } from '@workspace/ui/components/separator'
 import { Loader2, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import { useRef, useActionState, useState } from 'react'
+import { useActionState, useRef, useState } from 'react'
 import type { ActionState } from '@/lib/auth/middleware'
 import type { WorkspaceDataWithMembers } from '@/lib/db/schema'
 import { customerPortalAction } from '@/lib/payments/actions'
@@ -85,9 +85,7 @@ export function Settings({
 							Delete Workspace
 						</Button>
 					</div>
-					{deleteState?.error && (
-						<p className="text-red-500 text-xs mt-3">{deleteState.error}</p>
-					)}
+					{deleteState?.error && <p className="text-red-500 text-xs mt-3">{deleteState.error}</p>}
 				</CardContent>
 			</Card>
 
@@ -117,8 +115,8 @@ export function Settings({
 							{documentCount} {documentCount === 1 ? 'document' : 'documents'}
 						</p>
 						<p className="text-sm text-center mt-2">
-							You and everyone else in this workspace will lose access to all content. This cannot be
-							undone.{' '}
+							You and everyone else in this workspace will lose access to all content. This cannot
+							be undone.{' '}
 							<Link href="/pricing" className="text-violet-500 hover:underline">
 								Learn more
 							</Link>
@@ -131,12 +129,7 @@ export function Settings({
 
 					<Separator />
 					<DialogFooter className="gap-2 p-3 sm:justify-end">
-						<Button
-							type="button"
-							variant="outline"
-							size="sm"
-							onClick={() => setOpen(false)}
-						>
+						<Button type="button" variant="outline" size="sm" onClick={() => setOpen(false)}>
 							Keep workspace
 						</Button>
 						<Button

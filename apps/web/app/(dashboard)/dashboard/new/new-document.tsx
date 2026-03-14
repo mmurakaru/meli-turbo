@@ -14,8 +14,8 @@ import { Input } from '@workspace/ui/components/input'
 import { Label } from '@workspace/ui/components/label'
 import { RadioGroup, RadioGroupItem } from '@workspace/ui/components/radio-group'
 import { Separator } from '@workspace/ui/components/separator'
-import { Switch } from '@workspace/ui/components/switch'
 import { toast } from '@workspace/ui/components/sonner'
+import { Switch } from '@workspace/ui/components/switch'
 import { Textarea } from '@workspace/ui/components/textarea'
 import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea'
 import { Check, Columns3, Copy, Loader2 } from 'lucide-react'
@@ -121,11 +121,11 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 											<Label htmlFor="r-private">Private</Label>
 										</div>
 										{workspace && (
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value={workspace.id} id="r-workspace" />
-											<Label htmlFor="r-workspace">Workspace</Label>
-										</div>
-									)}
+											<div className="flex items-center space-x-2">
+												<RadioGroupItem value={workspace.id} id="r-workspace" />
+												<Label htmlFor="r-workspace">Workspace</Label>
+											</div>
+										)}
 									</RadioGroup>
 									{selectedWorkspaceId !== 'private' && workspace && (
 										<input type="hidden" name="workspaceId" value={workspace.id} />
@@ -142,12 +142,7 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 												className="text-xs text-muted-foreground"
 											/>
 										</div>
-										<Button
-											type="button"
-											size="icon"
-											variant="secondary"
-											onClick={copyToClipboard}
-										>
+										<Button type="button" size="icon" variant="secondary" onClick={copyToClipboard}>
 											<span className="sr-only">{copied ? 'Copied!' : 'Copy URL'}</span>
 											{copied ? <Check strokeWidth={1} /> : <Copy strokeWidth={1} />}
 										</Button>
@@ -156,11 +151,7 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 								<Separator />
 								<DialogFooter className="gap-1 p-3 sm:justify-between">
 									<div className="flex items-center gap-2">
-										<Switch
-											id="create-more"
-											checked={createMore}
-											onCheckedChange={setCreateMore}
-										/>
+										<Switch id="create-more" checked={createMore} onCheckedChange={setCreateMore} />
 										<Label
 											htmlFor="create-more"
 											className="font-normal text-xs text-muted-foreground"

@@ -1,5 +1,4 @@
-import { count } from 'drizzle-orm'
-import { eq } from 'drizzle-orm'
+import { count, eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { Settings } from '@/app/(dashboard)/dashboard/workspace/settings'
 import { db } from '@/lib/db/drizzle'

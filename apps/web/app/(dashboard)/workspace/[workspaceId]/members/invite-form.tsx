@@ -17,13 +17,7 @@ import { useActionState, useEffect } from 'react'
 import type { ActionState } from '@/lib/auth/middleware'
 import { inviteMember } from '../../../actions'
 
-export function InviteForm({
-	workspaceId,
-	isPaid,
-}: {
-	workspaceId: string
-	isPaid: boolean
-}) {
+export function InviteForm({ workspaceId, isPaid }: { workspaceId: string; isPaid: boolean }) {
 	const [state, formAction, isPending] = useActionState<ActionState, FormData>(inviteMember, {
 		error: '',
 		success: '',
@@ -69,10 +63,7 @@ export function InviteForm({
 							<>
 								<SelectSeparator />
 								<div className="px-2 py-1.5">
-									<Link
-										href="/pricing"
-										className="text-xs text-gradient hover:underline"
-									>
+									<Link href="/pricing" className="text-xs text-gradient hover:underline">
 										Unlock all roles
 									</Link>
 								</div>
