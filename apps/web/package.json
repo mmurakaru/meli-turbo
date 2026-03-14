@@ -24,7 +24,7 @@
 		"@next/env": "^16.1.6",
 		"@t3-oss/env-nextjs": "^0.13.10",
 		"@tanstack/react-table": "^8.20.6",
-		"@tiptap/core": "^3.20.0",
+		"@tiptap/core": "^3.20.1",
 		"@tiptap/extension-placeholder": "^3.20.0",
 		"@tiptap/react": "^3.20.0",
 		"@tiptap/starter-kit": "^3.20.0",
