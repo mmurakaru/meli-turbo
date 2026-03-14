@@ -18,11 +18,11 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 	}
 
 	const userWorkspaces = await getWorkspacesForUser(user.id)
-	const firstWorkspace = userWorkspaces[0]
 
 	const hasPermission =
 		(document.ownerId === user.id && document.ownerType === 'user') ||
-		(firstWorkspace && document.ownerId === firstWorkspace.id && document.ownerType === 'workspace')
+		(document.ownerType === 'workspace' &&
+			userWorkspaces.some((workspace) => workspace.id === document.ownerId))
 
 	if (!hasPermission) {
 		redirect('/not-found')

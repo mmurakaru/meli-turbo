@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
 import { db } from '@/lib/db/drizzle'
-import { publicUsers } from '@/lib/db/schema'
+import { publicUsers, workspaceMembers, workspaces } from '@/lib/db/schema'
 import { decrypt } from './session'
 
 export const verifySession = cache(async () => {
@@ -33,4 +33,38 @@ export const getUser = cache(async () => {
 		.limit(1)
 
 	return result[0] ?? null
+})
+
+export const getActiveWorkspace = cache(async () => {
+	const session = await verifySession().catch(() => null)
+	if (!session) return null
+
+	const cookieStore = await cookies()
+	const activeWorkspaceId = cookieStore.get('active_workspace')?.value
+
+	if (activeWorkspaceId) {
+		const [result] = await db
+			.select({ workspace: workspaces })
+			.from(workspaceMembers)
+			.innerJoin(workspaces, eq(workspaceMembers.workspaceId, workspaces.id))
+			.where(
+				and(
+					eq(workspaceMembers.userId, session.userId),
+					eq(workspaceMembers.workspaceId, activeWorkspaceId),
+				),
+			)
+			.limit(1)
+
+		if (result) return result.workspace
+	}
+
+	// Fall back to first workspace the user is a member of
+	const [result] = await db
+		.select({ workspace: workspaces })
+		.from(workspaceMembers)
+		.innerJoin(workspaces, eq(workspaceMembers.workspaceId, workspaces.id))
+		.where(eq(workspaceMembers.userId, session.userId))
+		.limit(1)
+
+	return result?.workspace ?? null
 })

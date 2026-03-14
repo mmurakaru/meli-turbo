@@ -69,3 +69,13 @@ export async function deleteSession() {
 	const cookieStore = await cookies()
 	cookieStore.delete('session')
 }
+
+export async function setActiveWorkspaceId(workspaceId: string) {
+	const cookieStore = await cookies()
+	cookieStore.set('active_workspace', workspaceId, {
+		httpOnly: true,
+		secure: env.NODE_ENV === 'production',
+		sameSite: 'lax',
+		path: '/',
+	})
+}

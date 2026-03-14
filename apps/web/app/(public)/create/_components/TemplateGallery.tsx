@@ -15,6 +15,13 @@ const CATEGORY_LABELS: Record<string, string> = {
 	personal: 'Personal',
 }
 
+const CATEGORY_COLORS: Record<string, string> = {
+	business: 'bg-violet-100 text-gray-700 hover:bg-violet-100',
+	hr:       'bg-lime-100 text-gray-700 hover:bg-lime-100',
+	finance:  'bg-stone-200 text-gray-700 hover:bg-stone-200',
+	personal: 'bg-purple-100 text-gray-700 hover:bg-purple-100',
+}
+
 export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -41,7 +48,7 @@ export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
 						</div>
 						<div className="py-4">
 							<p className="font-bold text-gray-700 text-sm truncate">{template.title}</p>
-							<Badge variant="secondary" className="mt-1 text-xs font-normal">
+							<Badge variant="secondary" className={`mt-1 text-xs font-normal ${CATEGORY_COLORS[template.category] ?? ''}`}>
 								{CATEGORY_LABELS[template.category]}
 							</Badge>
 						</div>

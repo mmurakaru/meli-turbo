@@ -41,27 +41,26 @@ const staticMain = [
 ]
 
 export function AppSidebar({
-	workspaces = [],
+	activeWorkspace,
 	...props
-}: React.ComponentProps<typeof Sidebar> & { workspaces?: Workspace[] }) {
+}: React.ComponentProps<typeof Sidebar> & { activeWorkspace: Workspace | null }) {
 	const { toggleSidebar, isMobile } = useSidebar()
 	const pathname = usePathname()
 
-	const workspaceNavItems = workspaces.map((workspace) => ({
-		name: 'Workspace',
-		href: `/workspace/${workspace.id}`,
-		icon: Building2,
-	}))
+	const workspaceNavItem = activeWorkspace
+		? [{ name: 'Workspace', href: `/workspace/${activeWorkspace.id}`, icon: Building2 }]
+		: []
 
-	const mainNavItems = [...staticMain.slice(0, 1), ...workspaceNavItems, ...staticMain.slice(1)]
+	const mainNavItems = [...staticMain.slice(0, 1), ...workspaceNavItem, ...staticMain.slice(1)]
 
-	const settingsHref =
-		workspaces.length > 0 ? `/workspace/${workspaces[0].id}/settings` : '/dashboard/workspace'
+	const membersHref = activeWorkspace
+		? `/workspace/${activeWorkspace.id}/members`
+		: '/dashboard/workspace'
 
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<NavUser />
+				<NavUser activeWorkspaceId={activeWorkspace?.id ?? null} />
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
@@ -78,27 +77,22 @@ export function AppSidebar({
 				</SidebarGroup>
 
 				<NavMain main={mainNavItems} />
-				{/* <NavConfiguration items={data.configuration} /> */}
 			</SidebarContent>
 			<SidebarFooter>
 				<Separator className="my-2" />
 				<SidebarMenuButton
 					className={cn(
 						'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
-						{
-							'bg-gray-100': pathname === settingsHref,
-						},
+						{ 'bg-gray-100': pathname === membersHref },
 					)}
 					onClick={isMobile ? toggleSidebar : undefined}
 					asChild
 				>
-					<Link href={settingsHref}>
+					<Link href={membersHref}>
 						<UserPlus strokeWidth={1} className="h-4 w-4" />
 						<span className="font-light">Invite members</span>
 					</Link>
 				</SidebarMenuButton>
-				{/* TODO(MM): schema update - Allow many workspaces for one profile */}
-				{/* <TeamSwitcher teams={data.teams} /> */}
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

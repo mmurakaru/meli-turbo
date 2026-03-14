@@ -17,40 +17,43 @@ import {
 } from '@workspace/ui/components/sidebar'
 import { toast } from '@workspace/ui/components/sonner'
 import { cn } from '@workspace/ui/lib/utils'
-import { ChevronsUpDown, LogOut, Settings, Sparkles, UserCog } from 'lucide-react'
+import { Check, ChevronsUpDown, LogOut, Plus, Settings, Sparkles, UserCog } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { signOut } from '@/app/(login)/actions'
 import { useUser } from '@/lib/auth'
 import type { Workspace } from '@/lib/db/schema'
-import { getWorkspace } from '../../actions'
+import { getWorkspace, switchWorkspace } from '../../actions'
 
-export function NavUser() {
+export function NavUser({ activeWorkspaceId }: { activeWorkspaceId: string | null }) {
 	const { user, setUser } = useUser()
 	const pathname = usePathname()
 	const { toggleSidebar, isMobile } = useSidebar()
+	const [isPending, startTransition] = useTransition()
 
-	const [workspace, setWorkspace] = useState<Workspace | null>(null)
+	const [workspaces, setWorkspaces] = useState<Workspace[]>([])
 
 	useEffect(() => {
 		if (user?.id) {
-			const fetchWorkspace = async () => {
-				try {
-					const workspaces = await getWorkspace(user.id)
-					setWorkspace(workspaces[0] ?? null)
-				} catch (_error) {
-					toast.error('Error fetching workspace data')
-				}
-			}
-			fetchWorkspace()
+			getWorkspace(user.id)
+				.then((workspace) => setWorkspaces(workspace as Workspace[]))
+				.catch(() => toast.error('Error fetching workspace data'))
 		}
 	}, [user])
+
+	function handleSwitch(workspaceId: string) {
+		startTransition(async () => {
+			await switchWorkspace(workspaceId)
+		})
+	}
 
 	async function handleSignOut() {
 		setUser(null)
 		await signOut()
 	}
+
+	const activeWorkspace = workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? workspaces[0]
 
 	return (
 		<SidebarMenu>
@@ -72,7 +75,6 @@ export function NavUser() {
 									</span>
 								</AvatarFallback>
 							</Avatar>
-
 							<span className="text-sm font-medium truncate">{user?.email.split('@')[0]}</span>
 							<ChevronsUpDown strokeWidth={1} className="ml-auto size-4" />
 						</SidebarMenuButton>
@@ -86,9 +88,19 @@ export function NavUser() {
 						<DropdownMenuGroup>
 							<SidebarMenuButton
 								asChild
-								className={cn({ 'bg-gray-100': pathname === '/dashboard/workspace' })}
+								className={cn({
+									'bg-gray-100': activeWorkspace
+										? pathname.startsWith(`/workspace/${activeWorkspace.id}/settings`)
+										: false,
+								})}
 							>
-								<Link href="/dashboard/workspace">
+								<Link
+									href={
+										activeWorkspace
+											? `/workspace/${activeWorkspace.id}/settings`
+											: '/dashboard/workspace'
+									}
+								>
 									<Settings strokeWidth={1} />
 									<span className="font-light">Workspace settings</span>
 								</Link>
@@ -104,26 +116,37 @@ export function NavUser() {
 						<DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">
 							Workspaces
 						</DropdownMenuLabel>
-						<DropdownMenuGroup>
-							<div className="flex items-center gap-2 px-2 py-1.5">
-								<Avatar className="size-6">
-									<AvatarImage alt={user?.name || user?.email} />
-									<AvatarFallback className="bg-violet-500">
-										<span className="text-white text-xs font-medium">
-											{user?.email
-												.split(' ')
-												.map((n) => n[0])
-												.join('')}
-										</span>
-									</AvatarFallback>
-								</Avatar>
-								<div className="grid flex-1 text-left text-xs leading-tight">
-									<span className="font-medium truncate">{user?.email.split('@')[0]}</span>
-									<span className="text-sidebar-foreground/70 truncate">
-										{workspace?.planName ? `${workspace?.planName} plan` : 'Free plan'}
-									</span>
-								</div>
-							</div>
+						<DropdownMenuGroup className="grid gap-1">
+							{workspaces.map((workspace) => {
+								const isActive = workspace.id === (activeWorkspace?.id ?? null)
+								return (
+									<SidebarMenuButton
+										key={workspace.id}
+										disabled={isPending}
+										onClick={() => !isActive && handleSwitch(workspace.id)}
+										className={cn('cursor-pointer', { 'bg-gray-100': isActive })}
+									>
+										<Avatar className="size-6">
+											<AvatarFallback className="bg-violet-500 text-white text-xs font-medium">
+												{workspace.name[0].toUpperCase()}
+											</AvatarFallback>
+										</Avatar>
+										<div className="grid flex-1 text-left text-xs leading-tight">
+											<span className="font-medium truncate">{workspace.name}</span>
+											<span className="text-sidebar-foreground/70 truncate">
+												{workspace.planName ? `${workspace.planName} plan` : 'Free plan'}
+											</span>
+										</div>
+										{isActive && <Check strokeWidth={1} className="ml-auto size-3" />}
+									</SidebarMenuButton>
+								)
+							})}
+							<SidebarMenuButton asChild>
+								<Link href="/workspace/new">
+									<Plus strokeWidth={1} />
+									<span className="font-light">Create a new workspace</span>
+								</Link>
+							</SidebarMenuButton>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuLabel className="text-xs font-normal text-sidebar-foreground/70">
@@ -140,15 +163,6 @@ export function NavUser() {
 									<span className="font-light">Account settings</span>
 								</Link>
 							</SidebarMenuButton>
-
-							{/* <DropdownMenuItem>
-                <CreditCard strokeWidth={1} />
-                Billing
-              </DropdownMenuItem> */}
-							{/* <DropdownMenuItem>
-                <Bell strokeWidth={1} />
-                Notifications
-              </DropdownMenuItem> */}
 							<form action={handleSignOut}>
 								<SidebarMenuButton type="submit">
 									<LogOut strokeWidth={1} />

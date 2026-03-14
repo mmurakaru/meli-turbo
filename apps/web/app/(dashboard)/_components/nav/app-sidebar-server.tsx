@@ -1,10 +1,9 @@
-import { getUser, getWorkspacesForUser } from '@/lib/db/queries'
+import { getActiveWorkspace } from '@/lib/auth/dal'
 import type { Workspace } from '@/lib/db/schema'
 import { AppSidebar } from './app-sidebar'
 
 export async function AppSidebarServer() {
-	const user = await getUser()
-	const workspaces: Workspace[] = user ? ((await getWorkspacesForUser(user.id)) as Workspace[]) : []
+	const activeWorkspace = await getActiveWorkspace()
 
-	return <AppSidebar workspaces={workspaces} />
+	return <AppSidebar activeWorkspace={activeWorkspace as Workspace | null} />
 }

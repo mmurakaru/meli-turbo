@@ -1,7 +1,10 @@
+import { count } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { Settings } from '@/app/(dashboard)/dashboard/workspace/settings'
+import { db } from '@/lib/db/drizzle'
 import { getUser, getWorkspaceById } from '@/lib/db/queries'
-import type { WorkspaceDataWithMembers } from '@/lib/db/schema'
+import { documents, type WorkspaceDataWithMembers } from '@/lib/db/schema'
 
 export default async function WorkspaceSettingsPage({
 	params,
@@ -21,5 +24,15 @@ export default async function WorkspaceSettingsPage({
 		redirect('/dashboard')
 	}
 
-	return <Settings workspaceData={workspaceData as WorkspaceDataWithMembers} />
+	const [{ documentCount }] = await db
+		.select({ documentCount: count() })
+		.from(documents)
+		.where(eq(documents.ownerId, workspaceId))
+
+	return (
+		<Settings
+			workspaceData={workspaceData as WorkspaceDataWithMembers}
+			documentCount={documentCount}
+		/>
+	)
 }

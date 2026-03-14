@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import { getUser, getWorkspacesForUser } from '@/lib/db/queries'
+import { getActiveWorkspace } from '@/lib/auth/dal'
+import { getUser } from '@/lib/db/queries'
 import type { Workspace } from '@/lib/db/schema'
 import { NewDocument } from './new-document'
 
@@ -10,7 +11,7 @@ export default async function NewDocumentPage() {
 		redirect('/sign-in')
 	}
 
-	const workspaces = await getWorkspacesForUser(user.id)
+	const activeWorkspace = await getActiveWorkspace()
 
-	return <NewDocument workspaces={workspaces as Workspace[]} />
+	return <NewDocument workspace={activeWorkspace as Workspace | null} />
 }
