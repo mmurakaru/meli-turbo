@@ -7,7 +7,11 @@ import type { Document } from '@/lib/db/schema'
 import { NewDocumentLink } from '../_components/new-document-link'
 import { normalizedDocuments } from '../helper/normalize-document.helper'
 
-export function Recents({ documentData }: { documentData: { private: Document[]; all: Document[] } }) {
+export function Recents({
+	documentData,
+}: {
+	documentData: { private: Document[]; all: Document[] }
+}) {
 	return (
 		<section className="flex-1">
 			<h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>

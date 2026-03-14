@@ -9,9 +9,9 @@ import { db } from '@/lib/db/drizzle'
 import {
 	ActivityType,
 	invitations,
+	type NewUser,
 	type NewWorkspace,
 	type NewWorkspaceMember,
-	type NewUser,
 	publicUsers,
 	workspaceMembers,
 	workspaces,

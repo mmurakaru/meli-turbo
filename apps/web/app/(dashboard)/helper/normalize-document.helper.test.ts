@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeDocument, normalizedDocuments } from './normalize-document.helper'
 import type { Document } from '@/lib/db/schema'
+import { normalizeDocument, normalizedDocuments } from './normalize-document.helper'
 
 const baseDocument: Document = {
 	id: 1,

@@ -13,7 +13,10 @@ export default async function RecentsPage() {
 	const allDocumentsData = getAllDocuments(user.id)
 
 	// Initiate both requests in parallel
-	const [privateDocuments, allDocuments] = await Promise.all([privateDocumentsData, allDocumentsData])
+	const [privateDocuments, allDocuments] = await Promise.all([
+		privateDocumentsData,
+		allDocumentsData,
+	])
 
 	const documentData = {
 		private: privateDocuments,

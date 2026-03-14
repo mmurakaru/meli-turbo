@@ -16,9 +16,9 @@ import {
 	activityLogs,
 	invitations,
 	type NewActivityLog,
+	type NewUser,
 	type NewWorkspace,
 	type NewWorkspaceMember,
-	type NewUser,
 	publicUsers,
 	workspaceMembers,
 	workspaces,
@@ -112,7 +112,13 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 	if (redirectTo === 'checkout') {
 		const priceId = formData.get('priceId') as string
 		const workspace = userWithWorkspace?.workspaceId
-			? (await db.select().from(workspaces).where(eq(workspaces.id, userWithWorkspace.workspaceId)).limit(1))[0]
+			? (
+					await db
+						.select()
+						.from(workspaces)
+						.where(eq(workspaces.id, userWithWorkspace.workspaceId))
+						.limit(1)
+				)[0]
 			: null
 		return createCheckoutSession({ workspace: workspace ?? null, priceId })
 	}
@@ -182,7 +188,11 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
 			await logActivity(workspaceId, createdUser.id, ActivityType.ACCEPT_INVITATION)
 
-			;[createdWorkspace] = await db.select().from(workspaces).where(eq(workspaces.id, workspaceId)).limit(1)
+			;[createdWorkspace] = await db
+				.select()
+				.from(workspaces)
+				.where(eq(workspaces.id, workspaceId))
+				.limit(1)
 		} else {
 			return { error: 'Invalid or expired invitation.' }
 		}
@@ -314,7 +324,12 @@ export const deleteAccount = validatedActionWithUser(deleteAccountSchema, async 
 	if (userWithWorkspace?.workspaceId) {
 		await db
 			.delete(workspaceMembers)
-			.where(and(eq(workspaceMembers.userId, user.id), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
+			.where(
+				and(
+					eq(workspaceMembers.userId, user.id),
+					eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId),
+				),
+			)
 	}
 
 	await deleteSession()
@@ -354,7 +369,12 @@ export const removeWorkspaceMember = validatedActionWithUser(
 
 		await db
 			.delete(workspaceMembers)
-			.where(and(eq(workspaceMembers.id, memberId), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
+			.where(
+				and(
+					eq(workspaceMembers.id, memberId),
+					eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId),
+				),
+			)
 
 		await logActivity(userWithWorkspace.workspaceId, user.id, ActivityType.REMOVE_WORKSPACE_MEMBER)
 
@@ -381,7 +401,12 @@ export const inviteWorkspaceMember = validatedActionWithUser(
 			.select()
 			.from(publicUsers)
 			.leftJoin(workspaceMembers, eq(publicUsers.id, workspaceMembers.userId))
-			.where(and(eq(publicUsers.email, email), eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId)))
+			.where(
+				and(
+					eq(publicUsers.email, email),
+					eq(workspaceMembers.workspaceId, userWithWorkspace.workspaceId),
+				),
+			)
 			.limit(1)
 
 		if (existingMember.length > 0) {

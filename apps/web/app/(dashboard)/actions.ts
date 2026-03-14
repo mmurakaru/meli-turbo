@@ -17,35 +17,38 @@ const createDocumentSchema = z.object({
 	rows: z.string().optional(),
 })
 
-export const createDocument = validatedActionWithUser(createDocumentSchema, async (data, _, user) => {
-	const { title, description, workspaceId } = data
+export const createDocument = validatedActionWithUser(
+	createDocumentSchema,
+	async (data, _, user) => {
+		const { title, description, workspaceId } = data
 
-	const ownerId = workspaceId ? workspaceId : user.id
-	const ownerType = workspaceId ? 'workspace' : 'user'
+		const ownerId = workspaceId ? workspaceId : user.id
+		const ownerType = workspaceId ? 'workspace' : 'user'
 
-	const columns = data.columns ? JSON.parse(data.columns) : []
-	const rows = data.rows ? JSON.parse(data.rows) : []
+		const columns = data.columns ? JSON.parse(data.columns) : []
+		const rows = data.rows ? JSON.parse(data.rows) : []
 
-	const [newDocument] = await db
-		.insert(documents)
-		.values({
-			id: uuidv7(),
-			title,
-			description,
-			ownerType: ownerType,
-			ownerId: ownerId,
-			data: { columns, rows },
-		})
-		.returning()
+		const [newDocument] = await db
+			.insert(documents)
+			.values({
+				id: uuidv7(),
+				title,
+				description,
+				ownerType: ownerType,
+				ownerId: ownerId,
+				data: { columns, rows },
+			})
+			.returning()
 
-	if (!newDocument) {
-		return { error: 'Failed to create Document. Please try again.' }
-	}
+		if (!newDocument) {
+			return { error: 'Failed to create Document. Please try again.' }
+		}
 
-	await logActivity(workspaceId ?? null, user.id, ActivityType.CREATE_DOCUMENT)
+		await logActivity(workspaceId ?? null, user.id, ActivityType.CREATE_DOCUMENT)
 
-	redirect(`/document/${newDocument.id}`)
-})
+		redirect(`/document/${newDocument.id}`)
+	},
+)
 
 const updateDocumentSchema = z.object({
 	documentId: z.uuid(),

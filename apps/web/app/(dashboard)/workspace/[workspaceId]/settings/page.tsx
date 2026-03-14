@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
+import { Settings } from '@/app/(dashboard)/dashboard/workspace/settings'
 import { getUser, getWorkspaceById } from '@/lib/db/queries'
 import type { WorkspaceDataWithMembers } from '@/lib/db/schema'
-import { Settings } from '@/app/(dashboard)/dashboard/workspace/settings'
 
 export default async function WorkspaceSettingsPage({
 	params,

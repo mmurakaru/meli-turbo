@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import type { z } from 'zod'
 import { getWorkspacesForUser } from '@/lib/db/queries'
-import type { WorkspaceDataWithMembers, User } from '@/lib/db/schema'
+import type { User, WorkspaceDataWithMembers } from '@/lib/db/schema'
 import { getUser, verifySession } from './dal'
 
 export type ActionState = {
@@ -55,7 +55,10 @@ export function validatedActionWithUser<S extends z.ZodTypeAny, T>(
 	}
 }
 
-type ActionWithWorkspaceFunction<T> = (formData: FormData, workspace: WorkspaceDataWithMembers) => Promise<T>
+type ActionWithWorkspaceFunction<T> = (
+	formData: FormData,
+	workspace: WorkspaceDataWithMembers,
+) => Promise<T>
 
 export function withWorkspace<T>(action: ActionWithWorkspaceFunction<T>) {
 	return async (formData: FormData): Promise<T> => {

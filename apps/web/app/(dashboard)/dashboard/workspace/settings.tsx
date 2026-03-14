@@ -5,7 +5,7 @@ import { Button } from '@workspace/ui/components/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card'
 import { useActionState } from 'react'
 import { removeWorkspaceMember } from '@/app/(login)/actions'
-import type { WorkspaceDataWithMembers, User } from '@/lib/db/schema'
+import type { User, WorkspaceDataWithMembers } from '@/lib/db/schema'
 import { customerPortalAction } from '@/lib/payments/actions'
 import { InviteMember } from './invite-member'
 

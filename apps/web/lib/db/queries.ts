@@ -1,7 +1,14 @@
 import { and, desc, eq, or } from 'drizzle-orm'
 import { getUser as getSessionUser } from '@/lib/auth/dal'
 import { db } from './drizzle'
-import { activityLogs, documents, type OwnerType, publicUsers, workspaceMembers, workspaces } from './schema'
+import {
+	activityLogs,
+	documents,
+	type OwnerType,
+	publicUsers,
+	workspaceMembers,
+	workspaces,
+} from './schema'
 
 export { getUser } from '@/lib/auth/dal'
 
@@ -183,7 +190,10 @@ export async function getAllDocuments(userId: string) {
 		.where(
 			or(
 				and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')),
-				and(eq(documents.ownerId, userWithWorkspace.workspaceId), eq(documents.ownerType, 'workspace')),
+				and(
+					eq(documents.ownerId, userWithWorkspace.workspaceId),
+					eq(documents.ownerType, 'workspace'),
+				),
 			),
 		)
 		.orderBy(desc(documents.updatedAt))

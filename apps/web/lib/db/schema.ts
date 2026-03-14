@@ -1,14 +1,5 @@
 import { relations } from 'drizzle-orm'
-import {
-	jsonb,
-	pgEnum,
-	pgTable,
-	serial,
-	text,
-	timestamp,
-	uuid,
-	varchar,
-} from 'drizzle-orm/pg-core'
+import { jsonb, pgEnum, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 
 export const publicUsers = pgTable('profiles', {
 	id: uuid('id').primaryKey().defaultRandom(),
@@ -78,7 +69,10 @@ export const documents = pgTable('documents', {
 	ownerType: ownerTypeEnum('owner_type').notNull(),
 	title: varchar('title', { length: 100 }).notNull(),
 	description: text('description').notNull(),
-	data: jsonb('data').$type<{ columns: { id: string; label: string }[]; rows: Record<string, string>[] }>().notNull().default({ columns: [], rows: [] }),
+	data: jsonb('data')
+		.$type<{ columns: { id: string; label: string }[]; rows: Record<string, string>[] }>()
+		.notNull()
+		.default({ columns: [], rows: [] }),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 	deletedAt: timestamp('deleted_at'),
