@@ -1,7 +1,7 @@
 import { and, desc, eq, or } from 'drizzle-orm'
 import { getUser as getSessionUser } from '@/lib/auth/dal'
 import { db } from './drizzle'
-import { activityLogs, type OwnerType, publicUsers, teamMembers, teams, tours } from './schema'
+import { activityLogs, documents, type OwnerType, publicUsers, teamMembers, teams } from './schema'
 
 export { getUser } from '@/lib/auth/dal'
 
@@ -97,70 +97,70 @@ export async function getTeamForUser(userId: string) {
 	return result?.teamMembers[0]?.team || null
 }
 
-export async function getToursForOwner(userId: string, ownerType: OwnerType) {
+export async function getDocumentsForOwner(userId: string, ownerType: OwnerType) {
 	return await db
 		.select({
-			id: tours.id,
-			title: tours.title,
-			ownerId: tours.ownerId,
-			ownerType: tours.ownerType,
-			description: tours.description,
-			createdAt: tours.createdAt,
-			updatedAt: tours.updatedAt,
-			deletedAt: tours.deletedAt,
+			id: documents.id,
+			title: documents.title,
+			ownerId: documents.ownerId,
+			ownerType: documents.ownerType,
+			description: documents.description,
+			createdAt: documents.createdAt,
+			updatedAt: documents.updatedAt,
+			deletedAt: documents.deletedAt,
 		})
-		.from(tours)
-		.where(and(eq(tours.ownerId, userId), eq(tours.ownerType, ownerType)))
-		.orderBy(desc(tours.updatedAt))
+		.from(documents)
+		.where(and(eq(documents.ownerId, userId), eq(documents.ownerType, ownerType)))
+		.orderBy(desc(documents.updatedAt))
 		.limit(10)
 }
 
-export async function getAllTours(userId: string) {
+export async function getAllDocuments(userId: string) {
 	const userWithTeam = await getUserWithTeam(userId)
 
 	if (!userWithTeam || !userWithTeam.teamId) {
-		// If the user is not part of a team, only return their personal tours
+		// If the user is not part of a team, only return their personal documents
 		return await db
 			.select({
-				id: tours.id,
-				title: tours.title,
-				ownerId: tours.ownerId,
-				ownerType: tours.ownerType,
-				description: tours.description,
-				createdAt: tours.createdAt,
-				updatedAt: tours.updatedAt,
-				deletedAt: tours.deletedAt,
+				id: documents.id,
+				title: documents.title,
+				ownerId: documents.ownerId,
+				ownerType: documents.ownerType,
+				description: documents.description,
+				createdAt: documents.createdAt,
+				updatedAt: documents.updatedAt,
+				deletedAt: documents.deletedAt,
 			})
-			.from(tours)
-			.where(and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')))
-			.orderBy(desc(tours.updatedAt))
+			.from(documents)
+			.where(and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')))
+			.orderBy(desc(documents.updatedAt))
 			.limit(10)
 	}
 
-	// If the user is part of a team, return both their personal tours and their team's tours
+	// If the user is part of a team, return both their personal documents and their team's documents
 	return await db
 		.select({
-			id: tours.id,
-			title: tours.title,
-			ownerId: tours.ownerId,
-			ownerType: tours.ownerType,
-			description: tours.description,
-			createdAt: tours.createdAt,
-			updatedAt: tours.updatedAt,
-			deletedAt: tours.deletedAt,
+			id: documents.id,
+			title: documents.title,
+			ownerId: documents.ownerId,
+			ownerType: documents.ownerType,
+			description: documents.description,
+			createdAt: documents.createdAt,
+			updatedAt: documents.updatedAt,
+			deletedAt: documents.deletedAt,
 		})
-		.from(tours)
+		.from(documents)
 		.where(
 			or(
-				and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')),
-				and(eq(tours.ownerId, userWithTeam.teamId), eq(tours.ownerType, 'team')),
+				and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')),
+				and(eq(documents.ownerId, userWithTeam.teamId), eq(documents.ownerType, 'team')),
 			),
 		)
-		.orderBy(desc(tours.updatedAt))
+		.orderBy(desc(documents.updatedAt))
 		.limit(10)
 }
 
-export async function getTour(tourId: number, userId: string) {
+export async function getDocument(documentId: number, userId: string) {
 	const userWithTeam = await getUserWithTeam(userId)
 
 	if (!userWithTeam) return
@@ -168,24 +168,24 @@ export async function getTour(tourId: number, userId: string) {
 	const teamId = userWithTeam.teamId
 	const ownershipFilter = teamId
 		? or(
-				and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user')),
-				and(eq(tours.ownerId, teamId), eq(tours.ownerType, 'team')),
+				and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user')),
+				and(eq(documents.ownerId, teamId), eq(documents.ownerType, 'team')),
 			)
-		: and(eq(tours.ownerId, userId), eq(tours.ownerType, 'user'))
+		: and(eq(documents.ownerId, userId), eq(documents.ownerType, 'user'))
 
 	const query = db
 		.select({
-			id: tours.id,
-			title: tours.title,
-			ownerId: tours.ownerId,
-			ownerType: tours.ownerType,
-			description: tours.description,
-			createdAt: tours.createdAt,
-			updatedAt: tours.updatedAt,
-			deletedAt: tours.deletedAt,
+			id: documents.id,
+			title: documents.title,
+			ownerId: documents.ownerId,
+			ownerType: documents.ownerType,
+			description: documents.description,
+			createdAt: documents.createdAt,
+			updatedAt: documents.updatedAt,
+			deletedAt: documents.deletedAt,
 		})
-		.from(tours)
-		.where(and(eq(tours.id, tourId), ownershipFilter))
+		.from(documents)
+		.where(and(eq(documents.id, documentId), ownershipFilter))
 		.limit(1)
 
 	const result = await query

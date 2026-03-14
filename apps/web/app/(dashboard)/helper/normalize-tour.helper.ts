@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
-import type { OwnerType, Tour } from '@/lib/db/schema'
+import type { Document, OwnerType } from '@/lib/db/schema'
 
-export function normalizeTour(tour: Tour): NormalizedTour {
+export function normalizeTour(tour: Document): NormalizedTour {
 	function translateOwnerType(type: OwnerType) {
 		switch (type) {
 			case 'team':
@@ -23,20 +23,15 @@ export function normalizeTour(tour: Tour): NormalizedTour {
 	}
 }
 
-export function normalizedTours(tourData: Tour[]): NormalizedTour[] {
-	const tours = tourData
-
-	const normalizedTours: NormalizedTour[] = []
-	for (const tour of tours) {
-		const normalizedCard = normalizeTour(tour)
-
-		normalizedTours.push(normalizedCard)
+export function normalizedTours(tourData: Document[]): NormalizedTour[] {
+	const normalizedToursList: NormalizedTour[] = []
+	for (const tour of tourData) {
+		normalizedToursList.push(normalizeTour(tour))
 	}
-
-	return normalizedTours
+	return normalizedToursList
 }
 
-export interface NormalizedTour extends Omit<Tour, 'ownerType' | 'updatedAt'> {
+export interface NormalizedTour extends Omit<Document, 'ownerType' | 'updatedAt'> {
 	ownerType: string
 	updatedAt: string
 }

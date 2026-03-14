@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getAllTours, getToursForOwner, getUser } from '@/lib/db/queries'
+import { getAllDocuments, getDocumentsForOwner, getUser } from '@/lib/db/queries'
 import { Recents } from './recents'
 
 export default async function RecentsPage() {
@@ -9,15 +9,15 @@ export default async function RecentsPage() {
 		redirect('/sign-in')
 	}
 
-	const privateToursData = getToursForOwner(user.id, 'user')
-	const allToursData = getAllTours(user.id)
+	const privateDocumentsData = getDocumentsForOwner(user.id, 'user')
+	const allDocumentsData = getAllDocuments(user.id)
 
 	// Initiate both requests in parallel
-	const [privateTours, allTours] = await Promise.all([privateToursData, allToursData])
+	const [privateDocuments, allDocuments] = await Promise.all([privateDocumentsData, allDocumentsData])
 
 	const tourData = {
-		private: privateTours,
-		all: allTours,
+		private: privateDocuments,
+		all: allDocuments,
 	}
 
 	return <Recents tourData={tourData} />

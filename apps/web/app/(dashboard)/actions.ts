@@ -6,29 +6,29 @@ import { z } from 'zod'
 import { validatedActionWithUser } from '@/lib/auth/middleware'
 import { db } from '@/lib/db/drizzle'
 import { getTeamForUser, getUserWithTeam } from '@/lib/db/queries'
-import { ActivityType, modules, steps, tours } from '@/lib/db/schema'
+import { ActivityType, documents, modules, steps } from '@/lib/db/schema'
 import { logActivity } from '../(login)/actions'
 
-const createTourSchema = z.object({
+const createDocumentSchema = z.object({
 	title: z.string().max(100),
 	description: z.string(),
 	owner: z.string(),
 })
 
-export const createTour = validatedActionWithUser(createTourSchema, async (data, _, user) => {
+export const createDocument = validatedActionWithUser(createDocumentSchema, async (data, _, user) => {
 	const { title, description, owner } = data
 
 	const team = await getTeam(user.id)
 
 	if (!team) {
-		return { error: 'User is not authorized to create tour' }
+		return { error: 'User is not authorized to create document' }
 	}
 
 	const ownerId = owner === 'team' ? team.id : user.id
 	const ownerType = owner === 'team' ? 'team' : 'user'
 
-	const [newTour] = await db
-		.insert(tours)
+	const [newDocument] = await db
+		.insert(documents)
 		.values({
 			title,
 			description,
@@ -37,24 +37,24 @@ export const createTour = validatedActionWithUser(createTourSchema, async (data,
 		})
 		.returning()
 
-	if (!newTour) {
-		return { error: 'Failed to create Tour. Please try again.' }
+	if (!newDocument) {
+		return { error: 'Failed to create Document. Please try again.' }
 	}
 
-	await logActivity(team.id, user.id, ActivityType.CREATE_TOUR)
+	await logActivity(team.id, user.id, ActivityType.CREATE_DOCUMENT)
 
-	redirect(`/dashboard/tours/${newTour.id}`)
+	redirect(`/dashboard/documents/${newDocument.id}`)
 })
 
-const updateTourSchema = z.object({
+const updateDocumentSchema = z.object({
 	tourId: z.number(),
 	title: z.string().max(100),
 	description: z.string(),
 })
 
-export const updateTour = validatedActionWithUser(updateTourSchema, async (data, _) => {
+export const updateDocument = validatedActionWithUser(updateDocumentSchema, async (data, _) => {
 	const { title: _title, description: _description, tourId: _tourId } = data
-	// TODO: Implement tour update logic
+	// TODO: Implement document update logic
 })
 
 const createStepSchema = z.object({
@@ -78,13 +78,13 @@ export const createStep = validatedActionWithUser(createStepSchema, async (data,
 	}
 
 	const [tour] = await db
-		.select({ teamId: tours.ownerId })
-		.from(tours)
-		.where(eq(tours.id, module.tourId))
+		.select({ teamId: documents.ownerId })
+		.from(documents)
+		.where(eq(documents.id, module.tourId))
 		.limit(1)
 
 	if (!tour) {
-		return { error: 'Tour not found' }
+		return { error: 'Document not found' }
 	}
 
 	const userWithTeam = await getUserWithTeam(user.id)

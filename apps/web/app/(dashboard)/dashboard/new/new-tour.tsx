@@ -21,7 +21,7 @@ import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea'
 import { Columns3, Loader2 } from 'lucide-react'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import type { ActionState } from '@/lib/auth/middleware'
-import { createTour } from '../../actions'
+import { createDocument } from '../../actions'
 // import { cn } from '@workspace/ui/lib/utils';
 // import { MultipleContainers } from '../../components/board/multiple-containers/multiple-containers';
 // import styles from '../../_components/board/multiple-containers/multiple-containers.module.css';
@@ -39,7 +39,7 @@ export function NewTour() {
 	}
 
 	const [createState, createAction, isCreatePending] = useActionState<ActionState, FormData>(
-		createTour,
+		createDocument,
 		{
 			error: '',
 			success: '',

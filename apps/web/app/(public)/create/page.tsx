@@ -8,7 +8,8 @@ import StarterKit from '@tiptap/starter-kit'
 import Suggestion from '@tiptap/suggestion'
 import { Button } from '@workspace/ui/components/button'
 import { Input } from '@workspace/ui/components/input'
-import { Download, FileSpreadsheet, Plus, Sparkles, Upload } from 'lucide-react'
+import { Download, ExternalLink, FileSpreadsheet, Plus, Sparkles, Upload } from 'lucide-react'
+import { TemplateGallery } from './_components/TemplateGallery'
 import Papa from 'papaparse'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
@@ -204,6 +205,7 @@ export default function CreatePage() {
 	const [sitemapError, setSitemapError] = useState('')
 	const [isGenerating, setIsGenerating] = useState(false)
 	const [generationError, setGenerationError] = useState('')
+	const [isGoogleSheetsLoading, setIsGoogleSheetsLoading] = useState(false)
 
 	const updateCell = useCallback((rowIndex: number, columnId: string, value: string) => {
 		setTable((current) => {
@@ -375,6 +377,20 @@ export default function CreatePage() {
 		const workbook = XLSX.utils.book_new()
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
 		XLSX.writeFile(workbook, 'sheet.xlsx')
+	}
+
+	async function handleOpenInGoogleSheets() {
+		setIsGoogleSheetsLoading(true)
+		try {
+			const res = await fetch('/api/export/google-sheets', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ title, columns: table.columns, rows: table.rows }),
+			})
+			if (res.ok) window.location.href = '/api/export/google-sheets/init'
+		} finally {
+			setIsGoogleSheetsLoading(false)
+		}
 	}
 
 	const slashItems = useMemo<SlashCommandItem[]>(
@@ -597,6 +613,16 @@ export default function CreatePage() {
 													<Download className="h-4 w-4" strokeWidth={1} />
 													Export CSV
 												</Button>
+												<Button
+													type="button"
+													variant="ghost"
+													size="sm"
+													onClick={() => void handleOpenInGoogleSheets()}
+													disabled={isGoogleSheetsLoading}
+												>
+													<ExternalLink className="h-4 w-4" strokeWidth={1} />
+													{isGoogleSheetsLoading ? 'Opening...' : 'Open in Google Sheets'}
+												</Button>
 											</>
 										) : null}
 									</div>
@@ -657,6 +683,15 @@ export default function CreatePage() {
 												<span className="rounded bg-violet-100 px-1.5 text-violet-700">/</span> to
 												insert a spreadsheet grid and refine it in place.
 											</p>
+										<div className="mt-8">
+											<p className="text-sm font-medium text-gray-600 mb-4">Or start from a template</p>
+											<TemplateGallery
+												onSelectTemplate={(prompt, templateTitle) => {
+													setTitle(templateTitle)
+													void handleGenerate(prompt)
+												}}
+											/>
+										</div>
 										</div>
 									) : null}
 									{generationError ? (

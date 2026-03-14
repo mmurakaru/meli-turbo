@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db/drizzle'
-import { modules, steps, type TourWithModules, teams, tours } from '@/lib/db/schema'
+import { documents, modules, steps, type DocumentWithModules, teams } from '@/lib/db/schema'
 
 interface Params {
 	id: string
@@ -13,29 +13,29 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<P
 	try {
 		const tourConfig = await db
 			.select({
-				id: tours.id,
-				title: tours.title,
-				description: tours.description,
-				ownerId: tours.ownerId,
-				ownerType: tours.ownerType,
+				id: documents.id,
+				title: documents.title,
+				description: documents.description,
+				ownerId: documents.ownerId,
+				ownerType: documents.ownerType,
 				teamName: teams.name,
 				modules: modules,
 				steps: steps,
-				createdAt: tours.createdAt,
-				updatedAt: tours.updatedAt,
-				deletedAt: tours.deletedAt,
+				createdAt: documents.createdAt,
+				updatedAt: documents.updatedAt,
+				deletedAt: documents.deletedAt,
 			})
-			.from(tours)
-			.innerJoin(teams, eq(tours.ownerId, teams.id))
-			.leftJoin(modules, eq(tours.id, modules.tourId))
+			.from(documents)
+			.innerJoin(teams, eq(documents.ownerId, teams.id))
+			.leftJoin(modules, eq(documents.id, modules.tourId))
 			.leftJoin(steps, eq(modules.id, steps.moduleId))
-			.where(eq(tours.id, +id))
+			.where(eq(documents.id, +id))
 
 		if (tourConfig.length === 0) {
-			return NextResponse.json({ error: 'Tour configuration not found.' }, { status: 404 })
+			return NextResponse.json({ error: 'Document configuration not found.' }, { status: 404 })
 		}
 
-		const tour = tourConfig.reduce<TourWithModules | null>((acc, curr) => {
+		const tour = tourConfig.reduce<DocumentWithModules | null>((acc, curr) => {
 			if (!acc) {
 				acc = {
 					id: curr.id,

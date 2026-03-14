@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getTeamForUser, getToursForOwner, getUser } from '@/lib/db/queries'
+import { getDocumentsForOwner, getTeamForUser, getUser } from '@/lib/db/queries'
 import { Team } from './team'
 
 export default async function TeamPage() {
@@ -15,7 +15,7 @@ export default async function TeamPage() {
 		redirect('/sign-in')
 	}
 
-	const tourData = await getToursForOwner(team.id, 'team')
+	const tourData = await getDocumentsForOwner(team.id, 'team')
 
 	return <Team tourData={tourData} />
 }

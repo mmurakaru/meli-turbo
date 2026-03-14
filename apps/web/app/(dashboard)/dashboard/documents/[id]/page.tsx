@@ -1,19 +1,19 @@
 import { cn } from '@workspace/ui/lib/utils'
 import { redirect } from 'next/navigation'
-import { getTeamForUser, getTour, getUser } from '@/lib/db/queries'
+import { getDocument, getTeamForUser, getUser } from '@/lib/db/queries'
 import { MultipleContainers } from '../../../_components/board/multiple-containers/multiple-containers'
 import styles from '../../../_components/board/multiple-containers/multiple-containers.module.css'
 import { TourHeader } from './tour-header'
 
-export default async function TourPage({ params }: { params: Promise<{ slug: string }> }) {
-	const slug = (await params).slug
+export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
+	const id = (await params).id
 
 	const user = await getUser()
 	if (!user) {
 		redirect('/sign-in')
 	}
 
-	const tour = await getTour(Number(slug), user.id)
+	const tour = await getDocument(Number(id), user.id)
 
 	if (!tour) {
 		redirect('/not-found')

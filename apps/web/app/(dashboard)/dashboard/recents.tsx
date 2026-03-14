@@ -1,17 +1,17 @@
 'use client'
 
-import { Card } from '@workspace/ui/components/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs'
+import Image from 'next/image'
 import Link from 'next/link'
-import type { Tour } from '@/lib/db/schema'
-import { NewTourLink } from '../_components/new-tour-link'
-import { normalizedTours } from '../helper/normalize-tour.helper'
+import type { Document } from '@/lib/db/schema'
+import { NewDocumentLink } from '../_components/new-document-link'
+import { normalizedDocuments } from '../helper/normalize-document.helper'
 
-export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[] } }) {
+export function Recents({ tourData }: { tourData: { private: Document[]; all: Document[] } }) {
 	return (
 		<section className="flex-1">
 			<h1 className="text-lg lg:text-2xl font-extrabold mb-6">Recents</h1>
-			<NewTourLink />
+			<NewDocumentLink />
 
 			<Tabs defaultValue="private">
 				<TabsList className="w-[200px] grid grid-cols-2">
@@ -21,19 +21,26 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
 
 				<TabsContent value="private" className="mt-4">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-						{normalizedTours(tourData.private).map((tour) => (
-							<div key={tour.id}>
-								<Link href={`/dashboard/tours/${tour.id}`}>
-									<Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
+						{normalizedDocuments(tourData.private).map((doc) => (
+							<div key={doc.id}>
+								<Link href={`/dashboard/documents/${doc.id}`}>
+									<Image
+										src={`/api/og?title=${encodeURIComponent(doc.title)}`}
+										alt={doc.title}
+										width={1200}
+										height={700}
+										unoptimized
+										className="w-full aspect-384/224 rounded-xl border"
+									/>
 								</Link>
 								<div className="py-4">
-									<p className="font-bold text-gray-700 text-sm truncate">{tour.title}</p>
+									<p className="font-bold text-gray-700 text-sm truncate">{doc.title}</p>
 									<div className="flex items-center gap-1">
 										<p className="font-normal text-gray-500 text-xs">
-											In <b className="text-gradient font-normal">{tour.ownerType}</b>
+											In <b className="text-gradient font-normal">{doc.ownerType}</b>
 										</p>
 										<div className="text-gray-500">&middot;</div>
-										<p className="font-normal text-gray-500 text-xs">Updated {tour.updatedAt}</p>
+										<p className="font-normal text-gray-500 text-xs">Updated {doc.updatedAt}</p>
 									</div>
 								</div>
 							</div>
@@ -43,19 +50,26 @@ export function Recents({ tourData }: { tourData: { private: Tour[]; all: Tour[]
 
 				<TabsContent value="all" className="mt-4">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-						{normalizedTours(tourData.all).map((tour) => (
-							<div key={tour.id}>
-								<Link href={`/dashboard/tours/${tour.id}`}>
-									<Card className="max-h-56 aspect-[384/224] bg-gray-50"></Card>
+						{normalizedDocuments(tourData.all).map((doc) => (
+							<div key={doc.id}>
+								<Link href={`/dashboard/documents/${doc.id}`}>
+									<Image
+										src={`/api/og?title=${encodeURIComponent(doc.title)}`}
+										alt={doc.title}
+										width={1200}
+										height={700}
+										unoptimized
+										className="w-full aspect-384/224 rounded-xl border"
+									/>
 								</Link>
 								<div className="py-4">
-									<p className="font-bold text-gray-700 text-sm truncate">{tour.title}</p>
+									<p className="font-bold text-gray-700 text-sm truncate">{doc.title}</p>
 									<div className="flex items-center gap-1">
 										<p className="font-normal text-gray-500 text-xs">
-											In <b className="text-gradient font-normal">{tour.ownerType}</b>
+											In <b className="text-gradient font-normal">{doc.ownerType}</b>
 										</p>
 										<div className="text-gray-500">&middot;</div>
-										<p className="font-normal text-gray-500 text-xs">Updated {tour.updatedAt}</p>
+										<p className="font-normal text-gray-500 text-xs">Updated {doc.updatedAt}</p>
 									</div>
 								</div>
 							</div>

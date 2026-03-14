@@ -72,7 +72,7 @@ export const invitations = pgTable('invitations', {
 
 export const ownerTypeEnum = pgEnum('owner_type', ['team', 'user'])
 
-export const tours = pgTable('tours', {
+export const documents = pgTable('documents', {
 	id: serial('id').primaryKey(),
 	ownerId: uuid('owner_id').notNull(),
 	ownerType: ownerTypeEnum('owner_type').notNull(),
@@ -87,7 +87,7 @@ export const modules = pgTable('modules', {
 	id: serial('id').primaryKey(),
 	tourId: integer('tour_id')
 		.notNull()
-		.references(() => tours.id, { onDelete: 'cascade' }),
+		.references(() => documents.id, { onDelete: 'cascade' }),
 	title: varchar('title', { length: 100 }).notNull(),
 	order: integer('order').notNull(),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -151,24 +151,24 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 	}),
 }))
 
-export const toursRelations = relations(tours, ({ one, many }) => ({
+export const documentsRelations = relations(documents, ({ one, many }) => ({
 	team: one(teams, {
-		fields: [tours.ownerId],
+		fields: [documents.ownerId],
 		references: [teams.id],
-		relationName: 'teamTours',
+		relationName: 'teamDocuments',
 	}),
 	user: one(publicUsers, {
-		fields: [tours.ownerId],
+		fields: [documents.ownerId],
 		references: [publicUsers.id],
-		relationName: 'userTours',
+		relationName: 'userDocuments',
 	}),
 	steps: many(steps),
 }))
 
 export const modulesRelations = relations(modules, ({ one }) => ({
-	tour: one(tours, {
+	tour: one(documents, {
 		fields: [modules.tourId],
-		references: [tours.id],
+		references: [documents.id],
 	}),
 }))
 
@@ -194,15 +194,15 @@ export type TeamDataWithMembers = Team & {
 		user: Pick<User, 'id' | 'name' | 'email'>
 	})[]
 }
-export type Tour = typeof tours.$inferSelect
-export type NewTour = typeof tours.$inferInsert
-export type TourWithTeam = Tour & {
+export type Document = typeof documents.$inferSelect
+export type NewDocument = typeof documents.$inferInsert
+export type DocumentWithTeam = Document & {
 	team: Pick<Team, 'id' | 'name'>
 }
 export type OwnerType = 'team' | 'user'
 export type Module = typeof modules.$inferSelect
 export type NewModule = typeof steps.$inferInsert
-export type TourWithModules = Tour & {
+export type DocumentWithModules = Document & {
 	modules: (Module & {
 		steps: Step[]
 	})[]
@@ -224,7 +224,7 @@ export enum ActivityType {
 	REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
 	INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
 	ACCEPT_INVITATION = 'ACCEPT_INVITATION',
-	CREATE_TOUR = 'CREATE_TOUR',
+	CREATE_DOCUMENT = 'CREATE_DOCUMENT',
 	CREATE_MODULE = 'CREATE_MODULE',
 	CREATE_STEP = 'CREATE_STEP',
 }

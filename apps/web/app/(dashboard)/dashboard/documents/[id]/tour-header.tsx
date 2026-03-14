@@ -4,7 +4,7 @@ import { Input } from '@workspace/ui/components/input'
 import { Label } from '@workspace/ui/components/label'
 import { toast } from '@workspace/ui/components/sonner'
 import { useActionState, useEffect } from 'react'
-import { updateTour } from '@/app/(dashboard)/actions'
+import { updateDocument } from '@/app/(dashboard)/actions'
 import type { ActionState } from '@/lib/auth/middleware'
 
 export function TourHeader({
@@ -16,7 +16,7 @@ export function TourHeader({
 	title: string
 	description: string
 }) {
-	const [updateState, updateAction] = useActionState<ActionState, FormData>(updateTour, {
+	const [updateState, updateAction] = useActionState<ActionState, FormData>(updateDocument, {
 		error: '',
 		success: '',
 	})

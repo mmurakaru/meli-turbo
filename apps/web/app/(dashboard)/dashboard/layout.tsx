@@ -12,7 +12,7 @@ import { SquarePen } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AppSidebar } from '../_components/nav/app-sidebar'
-import { NEW_TOUR_PATHNAME } from '../constants/dashboard.constants'
+import { NEW_DOCUMENT_PATHNAME } from '../constants/dashboard.constants'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </BreadcrumbList>
             </Breadcrumb> */}
 
-						{pathname !== NEW_TOUR_PATHNAME ? (
+						{pathname !== NEW_DOCUMENT_PATHNAME ? (
 							<TooltipProvider>
 								<Tooltip>
 									<TooltipTrigger asChild>
@@ -59,7 +59,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 											className="h-8 w-8"
 											asChild
 										>
-											<Link href={NEW_TOUR_PATHNAME}>
+											<Link href={NEW_DOCUMENT_PATHNAME}>
 												<SquarePen strokeWidth={1} />
 												<span className="sr-only">Create new spreadsheet</span>
 											</Link>

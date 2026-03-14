@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getToursForOwner, getUser } from '@/lib/db/queries'
+import { getDocumentsForOwner, getUser } from '@/lib/db/queries'
 import { Private } from './private'
 
 export default async function PrivatePage() {
@@ -9,7 +9,7 @@ export default async function PrivatePage() {
 		redirect('/sign-in')
 	}
 
-	const tourData = await getToursForOwner(user.id, 'user')
+	const tourData = await getDocumentsForOwner(user.id, 'user')
 
 	return <Private tourData={tourData} />
 }
