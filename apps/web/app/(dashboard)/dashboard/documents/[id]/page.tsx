@@ -1,8 +1,6 @@
-import { cn } from '@workspace/ui/lib/utils'
 import { redirect } from 'next/navigation'
 import { getDocument, getTeamForUser, getUser } from '@/lib/db/queries'
-import { MultipleContainers } from '../../../_components/board/multiple-containers/multiple-containers'
-import styles from '../../../_components/board/multiple-containers/multiple-containers.module.css'
+import { SpreadsheetView } from '../../../_components/spreadsheet-view'
 import { TourHeader } from './tour-header'
 
 export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
@@ -30,15 +28,10 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 	}
 
 	return (
-		<section>
+		<section className="flex-1 p-6">
 			<TourHeader tourId={tour.id} description={tour.description} title={tour.title} />
-
-			<div className={cn(styles.scrollableWrapper)}>
-				<div className={cn(styles.scrollable)}>
-					<MultipleContainers itemCount={3} trashable handle />
-				</div>
-				<div className={styles.scrollableMaskStart}></div>
-				<div className={styles.scrollableMaskEnd}></div>
+			<div className="mt-6">
+				<SpreadsheetView columns={tour.data.columns} rows={tour.data.rows} />
 			</div>
 		</section>
 	)

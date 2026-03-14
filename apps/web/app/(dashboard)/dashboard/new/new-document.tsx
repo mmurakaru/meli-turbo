@@ -1,7 +1,6 @@
 'use client'
 
 import { Badge } from '@workspace/ui/components/badge'
-// import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { Button } from '@workspace/ui/components/button'
 import {
 	Dialog,
@@ -13,30 +12,20 @@ import {
 } from '@workspace/ui/components/dialog'
 import { Input } from '@workspace/ui/components/input'
 import { Label } from '@workspace/ui/components/label'
+import { Textarea } from '@workspace/ui/components/textarea'
+import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea'
 import { RadioGroup, RadioGroupItem } from '@workspace/ui/components/radio-group'
 import { Separator } from '@workspace/ui/components/separator'
 import { toast } from '@workspace/ui/components/sonner'
-import { Textarea } from '@workspace/ui/components/textarea'
-import useAutosizeTextArea from '@workspace/ui/hooks/use-auto-size-textarea'
 import { Columns3, Loader2 } from 'lucide-react'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import type { ActionState } from '@/lib/auth/middleware'
 import { createDocument } from '../../actions'
-// import { cn } from '@workspace/ui/lib/utils';
-// import { MultipleContainers } from '../../components/board/multiple-containers/multiple-containers';
-// import styles from '../../_components/board/multiple-containers/multiple-containers.module.css';
 
-export function NewTour() {
-	const [value, setValue] = useState('')
+export function NewDocument() {
+	const [description, setDescription] = useState('')
 	const textAreaRef = useRef<HTMLTextAreaElement>(null)
-
-	useAutosizeTextArea(textAreaRef.current, value)
-
-	const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-		const val = evt.target?.value
-
-		setValue(val)
-	}
+	useAutosizeTextArea(textAreaRef.current, description)
 
 	const [createState, createAction, isCreatePending] = useActionState<ActionState, FormData>(
 		createDocument,
@@ -63,7 +52,7 @@ export function NewTour() {
 					<p className="mb-4 text-sm">
 						Describe what you need in plain language and Meli generates an editable spreadsheet.{' '}
 						<br />
-						Get started by giving your spreadsheet a title and description.
+						Get started by giving your spreadsheet a title.
 					</p>
 					<Dialog>
 						<DialogTrigger asChild>
@@ -76,7 +65,7 @@ export function NewTour() {
 										<Columns3 className="size-3 stroke-violet-500" strokeWidth={1} />
 										Spreadsheet
 									</Badge>
-									<DialogTitle className="sr-only"></DialogTitle>
+									<DialogTitle className="sr-only" />
 								</div>
 							</DialogHeader>
 							<form action={createAction}>
@@ -92,17 +81,17 @@ export function NewTour() {
 										required
 									/>
 									<Label htmlFor="description" className="sr-only">
-										Text
+										Description
 									</Label>
 									<Textarea
 										name="description"
 										placeholder="Add description..."
 										className="max-h-[400px]"
 										variant="ghost"
-										onChange={handleChange}
+										value={description}
+										onChange={(e) => setDescription(e.target.value)}
 										ref={textAreaRef}
 										rows={1}
-										required
 									/>
 									<RadioGroup className="px-3" defaultValue="private" name="owner">
 										<div className="flex items-center space-x-2">

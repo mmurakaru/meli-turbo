@@ -6,12 +6,13 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Suggestion from '@tiptap/suggestion'
+import { createDocument } from '@/app/(dashboard)/actions'
 import { Button } from '@workspace/ui/components/button'
 import { Input } from '@workspace/ui/components/input'
-import { Download, ExternalLink, FileSpreadsheet, Plus, Sparkles, Upload } from 'lucide-react'
+import { Download, ExternalLink, FileSpreadsheet, Plus, Save, Sparkles, Upload } from 'lucide-react'
 import { TemplateGallery } from './_components/TemplateGallery'
 import Papa from 'papaparse'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
 
 type TableColumn = {
@@ -187,6 +188,7 @@ function createSlashCommandExtension(items: SlashCommandItem[]) {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: TODO reduce complexity
 export default function CreatePage() {
+	const [, createAction] = useActionState(createDocument, { error: '', success: '' })
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 	const titleInputRef = useRef<HTMLInputElement | null>(null)
 	const ignoreNextSheetEnterRef = useRef(false)
@@ -623,6 +625,16 @@ export default function CreatePage() {
 													<ExternalLink className="h-4 w-4" strokeWidth={1} />
 													{isGoogleSheetsLoading ? 'Opening...' : 'Open in Google Sheets'}
 												</Button>
+												<form action={createAction}>
+													<input type="hidden" name="title" value={title} />
+													<input type="hidden" name="description" value={title} />
+													<input type="hidden" name="owner" value="private" />
+													<input type="hidden" name="columns" value={JSON.stringify(table.columns)} />
+													<input type="hidden" name="rows" value={JSON.stringify(table.rows)} />
+													<Button type="submit" size="sm" variant="ghost">
+														<Save className="h-4 w-4" strokeWidth={1} /> Save
+													</Button>
+												</form>
 											</>
 										) : null}
 									</div>

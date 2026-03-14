@@ -180,6 +180,7 @@ export async function getDocument(documentId: number, userId: string) {
 			ownerId: documents.ownerId,
 			ownerType: documents.ownerType,
 			description: documents.description,
+			data: documents.data,
 			createdAt: documents.createdAt,
 			updatedAt: documents.updatedAt,
 			deletedAt: documents.deletedAt,

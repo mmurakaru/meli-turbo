@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm'
 import {
-	integer,
+	jsonb,
 	pgEnum,
 	pgTable,
 	serial,
@@ -78,33 +78,10 @@ export const documents = pgTable('documents', {
 	ownerType: ownerTypeEnum('owner_type').notNull(),
 	title: varchar('title', { length: 100 }).notNull(),
 	description: text('description').notNull(),
+	data: jsonb('data').$type<{ columns: { id: string; label: string }[]; rows: Record<string, string>[] }>().notNull().default({ columns: [], rows: [] }),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 	deletedAt: timestamp('deleted_at'),
-})
-
-export const modules = pgTable('modules', {
-	id: serial('id').primaryKey(),
-	tourId: integer('tour_id')
-		.notNull()
-		.references(() => documents.id, { onDelete: 'cascade' }),
-	title: varchar('title', { length: 100 }).notNull(),
-	order: integer('order').notNull(),
-	createdAt: timestamp('created_at').notNull().defaultNow(),
-	updatedAt: timestamp('updated_at').notNull().defaultNow(),
-})
-
-export const steps = pgTable('steps', {
-	id: serial('id').primaryKey(),
-	moduleId: integer('module_id')
-		.notNull()
-		.references(() => modules.id, { onDelete: 'cascade' }),
-	selector: varchar('selector', { length: 255 }).notNull(),
-	title: varchar('title', { length: 100 }).notNull(),
-	text: text('text').notNull(),
-	order: integer('order').notNull(),
-	createdAt: timestamp('created_at').notNull().defaultNow(),
-	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -151,7 +128,7 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 	}),
 }))
 
-export const documentsRelations = relations(documents, ({ one, many }) => ({
+export const documentsRelations = relations(documents, ({ one }) => ({
 	team: one(teams, {
 		fields: [documents.ownerId],
 		references: [teams.id],
@@ -161,21 +138,6 @@ export const documentsRelations = relations(documents, ({ one, many }) => ({
 		fields: [documents.ownerId],
 		references: [publicUsers.id],
 		relationName: 'userDocuments',
-	}),
-	steps: many(steps),
-}))
-
-export const modulesRelations = relations(modules, ({ one }) => ({
-	tour: one(documents, {
-		fields: [modules.tourId],
-		references: [documents.id],
-	}),
-}))
-
-export const stepsRelations = relations(steps, ({ one }) => ({
-	module: one(modules, {
-		fields: [steps.moduleId],
-		references: [modules.id],
 	}),
 }))
 
@@ -200,18 +162,6 @@ export type DocumentWithTeam = Document & {
 	team: Pick<Team, 'id' | 'name'>
 }
 export type OwnerType = 'team' | 'user'
-export type Module = typeof modules.$inferSelect
-export type NewModule = typeof steps.$inferInsert
-export type DocumentWithModules = Document & {
-	modules: (Module & {
-		steps: Step[]
-	})[]
-}
-export type Step = typeof steps.$inferSelect
-export type NewStep = typeof steps.$inferInsert
-export type ModuleWithSteps = Module & {
-	steps: Step[]
-}
 
 export enum ActivityType {
 	SIGN_UP = 'SIGN_UP',
@@ -225,6 +175,4 @@ export enum ActivityType {
 	INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
 	ACCEPT_INVITATION = 'ACCEPT_INVITATION',
 	CREATE_DOCUMENT = 'CREATE_DOCUMENT',
-	CREATE_MODULE = 'CREATE_MODULE',
-	CREATE_STEP = 'CREATE_STEP',
 }
