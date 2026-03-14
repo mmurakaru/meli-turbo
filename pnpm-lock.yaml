@@ -133,7 +133,7 @@ importers:
         specifier: ^1.2.6
         version: 1.2.7
       '@types/node':
-        specifier: ^25.3.0
+        specifier: ^25.3.2
         version: 25.3.2
       '@types/papaparse':
         specifier: ^5.3.16
@@ -482,7 +482,7 @@ importers:
         specifier: ^0.10.8
         version: 0.10.8
       '@types/node':
-        specifier: ^25.3.0
+        specifier: ^25.3.2
         version: 25.3.2
       '@vitest/coverage-v8':
         specifier: ^4.0.18
@@ -497,8 +497,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       fauxqs:
-        specifier: ^1.11.0
-        version: 1.13.0(typescript@5.9.3)
+        specifier: ^2.2.0
+        version: 2.3.1(typescript@5.9.3)
       mockttp:
         specifier: ^4.2.1
         version: 4.2.1
@@ -5171,9 +5171,9 @@ packages:
   fastseries@1.7.2:
     resolution: {integrity: sha512-dTPFrPGS8SNSzAt7u/CbMKCJ3s01N04s4JFbORHcmyvVfVKmbhMD1VtRbh5enGHxkaQDqWyLefiKOGGmohGDDQ==}
 
-  fauxqs@1.13.0:
-    resolution: {integrity: sha512-iAxX6ZqOCerua8uqD9RcD4ITeLJxADWsw5G4Fs47b7pdL/FVpED5xOT9hBYl43wA7Vf4/FIIP5svVm2ZzrNCmQ==}
-    engines: {node: '>=20'}
+  fauxqs@2.3.1:
+    resolution: {integrity: sha512-IDUCZF+/oQWX0CihVVItc+sKrasUuYo7RL99ebT47/iCLjQmI9Zi6zzWZKHaIHpgb7gK4lYdKGgGHMzeafPzZQ==}
+    engines: {node: '>=22.5.0'}
     hasBin: true
 
   fdir@6.5.0:
@@ -12726,7 +12726,7 @@ snapshots:
       reusify: 1.1.0
       xtend: 4.0.2
 
-  fauxqs@1.13.0(typescript@5.9.3):
+  fauxqs@2.3.1(typescript@5.9.3):
     dependencies:
       '@aws-sdk/client-s3': 3.1000.0
       '@aws-sdk/client-sns': 3.1000.0

@@ -3,7 +3,7 @@ name: meli-web
 services:
   postgres:
     image: postgres:18.3
-    container_name: postgres
+    # container_name: postgres
     environment:
       POSTGRES_DB: meli
       POSTGRES_USER: meliuser
