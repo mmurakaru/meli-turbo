@@ -271,8 +271,7 @@ const envSchema = {
 
 const computed = {
   aws: {
-    credentials: (raw: InferEnv<typeof envSchema>) =>
-      awsConfig.computed.credentials(raw.aws),
+    credentials: (raw: InferEnv<typeof envSchema>) => awsConfig.computed.credentials(raw.aws),
   },
 }
 
