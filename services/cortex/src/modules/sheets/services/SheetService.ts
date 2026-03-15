@@ -1,5 +1,5 @@
 import { createOpenAI } from '@ai-sdk/openai'
-import { generateObject } from 'ai'
+import { generateText, Output } from 'ai'
 import { z } from 'zod'
 import type { Config } from '../../../infrastructure/config.ts'
 import { WebFetcherService } from '../../../integrations/WebFetcherService.ts'
@@ -57,9 +57,9 @@ Rules:
 - Keep text concise and useful
 - Generate at minimum 1 column and 1 row`
 
-    const { object } = await generateObject({
+    const { output: object } = await generateText({
       model: openai(aiConfig.model),
-      schema: AI_SHEET_SCHEMA,
+      output: Output.object({ schema: AI_SHEET_SCHEMA }),
       system: systemPrompt,
       prompt: `Create a spreadsheet for: ${prompt}${contextBlock}`,
     })
