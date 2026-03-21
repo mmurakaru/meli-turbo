@@ -69,7 +69,7 @@
         "@scalar/fastify-api-reference": "^1.44.25",
         "ai": "^6.0.105",
         "amqplib": "^0.10.9",
-        "awilix": "^13.0.0",
+        "awilix": "^13.0.3",
         "awilix-manager": "^6.3.0",
         "bullmq": "^5.70.0",
         "drizzle-kit": "^0.31.9",
