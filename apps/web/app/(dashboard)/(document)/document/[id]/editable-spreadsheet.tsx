@@ -4,16 +4,20 @@ import { useCallback, useRef, useState } from 'react'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
+import {
+	addColumnToTable,
+	addRowToTable,
+	deleteColumnFromTable,
+	deleteRowFromTable,
+	renameColumnInTable,
+	type TableModel,
+} from '@/lib/table-mutations'
 import { applyRowUpdate } from './editable-spreadsheet.helpers'
-
-type Column = { id: string; label: string }
-type Row = Record<string, string>
-type Sheet = { columns: Column[]; rows: Row[] }
 
 interface EditableSpreadsheetProps {
 	documentId: string
-	initialColumns: Column[]
-	initialRows: Row[]
+	initialColumns: TableModel['columns']
+	initialRows: TableModel['rows']
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
@@ -23,15 +27,15 @@ export function EditableSpreadsheet({
 	initialColumns,
 	initialRows,
 }: EditableSpreadsheetProps) {
-	const [table, setTable] = useState<Sheet>({ columns: initialColumns, rows: initialRows })
-	const { columns, rows } = table
+	const [table, setTable] = useState<TableModel>({ columns: initialColumns, rows: initialRows })
 	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
-	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const persist = useCallback(
-		(nextTable: Sheet, debounced = true) => {
-			if (debounceRef.current) clearTimeout(debounceRef.current)
+		(nextTable: TableModel, debounced = true) => {
+			if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
 			setSaveStatus('saving')
+
 			const save = async () => {
 				const formData = new FormData()
 				formData.append('documentId', documentId)
@@ -41,8 +45,9 @@ export function EditableSpreadsheet({
 				setSaveStatus(result?.error ? 'error' : 'saved')
 				setTimeout(() => setSaveStatus('idle'), 2000)
 			}
+
 			if (debounced) {
-				debounceRef.current = setTimeout(() => void save(), 800)
+				debounceTimerRef.current = setTimeout(() => void save(), 800)
 			} else {
 				void save()
 			}
@@ -50,19 +55,58 @@ export function EditableSpreadsheet({
 		[documentId],
 	)
 
-	const handleCellChange = useCallback(
-		(rowIndex: number, columnId: string, value: string) => {
+	const applyMutation = useCallback(
+		(mutate: (current: TableModel) => TableModel, debounced = true) => {
 			setTable((current) => {
-				const next = { ...current, rows: applyRowUpdate(current.rows, rowIndex, columnId, value) }
-				persist(next)
+				const next = mutate(current)
+				persist(next, debounced)
 				return next
 			})
 		},
 		[persist],
 	)
 
+	const handleCellChange = useCallback(
+		(rowIndex: number, columnId: string, value: string) => {
+			applyMutation((current) => ({
+				...current,
+				rows: applyRowUpdate(current.rows, rowIndex, columnId, value),
+			}))
+		},
+		[applyMutation],
+	)
+
+	const handleAddRow = useCallback(() => {
+		applyMutation(addRowToTable)
+	}, [applyMutation])
+
+	const handleAddColumn = useCallback(() => {
+		applyMutation((current) => addColumnToTable(current, 'New Column'))
+	}, [applyMutation])
+
+	const handleDeleteRow = useCallback(
+		(rowIndex: number) => {
+			applyMutation((current) => deleteRowFromTable(current, rowIndex), false)
+		},
+		[applyMutation],
+	)
+
+	const handleDeleteColumn = useCallback(
+		(columnId: string) => {
+			applyMutation((current) => deleteColumnFromTable(current, columnId), false)
+		},
+		[applyMutation],
+	)
+
+	const handleRenameColumn = useCallback(
+		(columnId: string, newLabel: string) => {
+			applyMutation((current) => renameColumnInTable(current, columnId, newLabel))
+		},
+		[applyMutation],
+	)
+
 	const handleRefined = useCallback(
-		(newTable: Sheet) => {
+		(newTable: TableModel) => {
 			setTable(newTable)
 			persist(newTable, false)
 		},
@@ -72,7 +116,17 @@ export function EditableSpreadsheet({
 	return (
 		<div className="space-y-6">
 			<div className="space-y-2">
-				<SpreadsheetView columns={columns} rows={rows} editable onCellChange={handleCellChange} />
+				<SpreadsheetView
+					columns={table.columns}
+					rows={table.rows}
+					editable
+					onCellChange={handleCellChange}
+					onAddRow={handleAddRow}
+					onAddColumn={handleAddColumn}
+					onDeleteRow={handleDeleteRow}
+					onDeleteColumn={handleDeleteColumn}
+					onRenameColumn={handleRenameColumn}
+				/>
 				{saveStatus !== 'idle' && (
 					<p className="text-xs text-gray-400">
 						{saveStatus === 'saving' && 'Saving…'}
