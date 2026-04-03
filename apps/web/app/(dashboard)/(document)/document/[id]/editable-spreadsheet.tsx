@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ExportToolbar } from '@/app/(dashboard)/_components/export-toolbar'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
@@ -15,6 +15,17 @@ import {
 	renameColumnInTable,
 	type TableModel,
 } from '@/lib/table-mutations'
+import {
+	applyOperation,
+	buildUndoStack,
+	canRedo,
+	canUndo,
+	pushOperation,
+	redoOperation,
+	undoOperation,
+	type TableOperation,
+	type UndoStack,
+} from '@/lib/undo-stack'
 import { applyRowUpdate } from './editable-spreadsheet.helpers'
 
 interface EditableSpreadsheetProps {
@@ -33,6 +44,7 @@ export function EditableSpreadsheet({
 	initialRows,
 }: EditableSpreadsheetProps) {
 	const [table, setTable] = useState<TableModel>({ columns: initialColumns, rows: initialRows })
+	const [undoStack, setUndoStack] = useState<UndoStack>(buildUndoStack())
 	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
 	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -71,15 +83,67 @@ export function EditableSpreadsheet({
 		[persist],
 	)
 
-	const handleCellChange = useCallback(
+	const applyTrackedCellChange = useCallback(
 		(rowIndex: number, columnId: string, value: string) => {
-			applyMutation((current) => ({
-				...current,
-				rows: applyRowUpdate(current.rows, rowIndex, columnId, value),
-			}))
+			setTable((currentTable) => {
+				const previousValue = currentTable.rows[rowIndex]?.[columnId] ?? ''
+				const operation: TableOperation = {
+					type: 'set_cell',
+					rowIndex,
+					columnId,
+					previousValue,
+					nextValue: value,
+				}
+				setUndoStack((currentStack) => pushOperation(currentStack, operation))
+				const next = { ...currentTable, rows: applyRowUpdate(currentTable.rows, rowIndex, columnId, value) }
+				persist(next)
+				return next
+			})
 		},
-		[applyMutation],
+		[persist],
 	)
+
+	const handleUndo = useCallback(() => {
+		if (!canUndo(undoStack)) return
+		const { stack: nextStack, inverseOperation } = undoOperation(undoStack)
+		setUndoStack(nextStack)
+		setTable((currentTable) => {
+			const next = applyOperation(currentTable, inverseOperation)
+			persist(next, false)
+			return next
+		})
+	}, [undoStack, persist])
+
+	const handleRedo = useCallback(() => {
+		if (!canRedo(undoStack)) return
+		const { stack: nextStack, replayOperation } = redoOperation(undoStack)
+		setUndoStack(nextStack)
+		setTable((currentTable) => {
+			const next = applyOperation(currentTable, replayOperation)
+			persist(next, false)
+			return next
+		})
+	}, [undoStack, persist])
+
+	useEffect(() => {
+		function handleKeyDown(event: KeyboardEvent) {
+			const isMac = navigator.platform.toUpperCase().includes('MAC')
+			const modifierKeyPressed = isMac ? event.metaKey : event.ctrlKey
+
+			if (!modifierKeyPressed) return
+			if (event.key === 'z' && !event.shiftKey) {
+				event.preventDefault()
+				handleUndo()
+			}
+			if ((event.key === 'z' && event.shiftKey) || event.key === 'y') {
+				event.preventDefault()
+				handleRedo()
+			}
+		}
+
+		window.addEventListener('keydown', handleKeyDown)
+		return () => window.removeEventListener('keydown', handleKeyDown)
+	}, [handleUndo, handleRedo])
 
 	const handleAddRow = useCallback(() => {
 		applyMutation(addRowToTable)
@@ -119,6 +183,13 @@ export function EditableSpreadsheet({
 
 	const handleRefined = useCallback(
 		(newTable: TableModel) => {
+			const operation: TableOperation = {
+				type: 'replace_table',
+				previousTable: table,
+				nextTable: newTable,
+			}
+			setUndoStack((current) => pushOperation(current, operation))
+
 			const tableWithInferredTypes: TableModel = {
 				...newTable,
 				columns: newTable.columns.map((column) => ({
@@ -129,23 +200,45 @@ export function EditableSpreadsheet({
 			setTable(tableWithInferredTypes)
 			persist(tableWithInferredTypes, false)
 		},
-		[persist],
+		[table, persist],
 	)
 
 	return (
 		<div className="space-y-6">
-			<ExportToolbar
-				columns={table.columns}
-				rows={table.rows}
-				filename={documentTitle}
-				documentId={documentId}
-			/>
+			<div className="flex items-center justify-between">
+				<ExportToolbar
+					columns={table.columns}
+					rows={table.rows}
+					filename={documentTitle}
+					documentId={documentId}
+				/>
+				<div className="flex items-center gap-2 text-xs text-gray-400">
+					<button
+						type="button"
+						onClick={handleUndo}
+						disabled={!canUndo(undoStack)}
+						className="rounded px-2 py-1 hover:bg-gray-100 disabled:opacity-30"
+						aria-label="Undo"
+					>
+						↩ Undo
+					</button>
+					<button
+						type="button"
+						onClick={handleRedo}
+						disabled={!canRedo(undoStack)}
+						className="rounded px-2 py-1 hover:bg-gray-100 disabled:opacity-30"
+						aria-label="Redo"
+					>
+						↪ Redo
+					</button>
+				</div>
+			</div>
 			<div className="space-y-2">
 				<SpreadsheetView
 					columns={table.columns}
 					rows={table.rows}
 					editable
-					onCellChange={handleCellChange}
+					onCellChange={applyTrackedCellChange}
 					onAddRow={handleAddRow}
 					onAddColumn={handleAddColumn}
 					onDeleteRow={handleDeleteRow}

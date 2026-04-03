@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { jsonb, pgEnum, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+import { integer, jsonb, pgEnum, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 
 export const publicUsers = pgTable('profiles', {
 	id: uuid('id').primaryKey().defaultRandom(),
@@ -77,6 +77,33 @@ export const documents = pgTable('documents', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 	deletedAt: timestamp('deleted_at'),
 })
+
+export const documentVersions = pgTable('document_versions', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	documentId: uuid('document_id')
+		.notNull()
+		.references(() => documents.id, { onDelete: 'cascade' }),
+	version: integer('version').notNull(),
+	data: jsonb('data')
+		.$type<{ columns: { id: string; label: string }[]; rows: Record<string, string>[] }>()
+		.notNull(),
+	createdBy: uuid('created_by')
+		.notNull()
+		.references(() => publicUsers.id),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	label: text('label'),
+})
+
+export const documentVersionsRelations = relations(documentVersions, ({ one }) => ({
+	document: one(documents, {
+		fields: [documentVersions.documentId],
+		references: [documents.id],
+	}),
+	createdByUser: one(publicUsers, {
+		fields: [documentVersions.createdBy],
+		references: [publicUsers.id],
+	}),
+}))
 
 export const workspacesRelations = relations(workspaces, ({ many }) => ({
 	workspaceMembers: many(workspaceMembers),
@@ -156,6 +183,8 @@ export type DocumentWithWorkspace = Document & {
 	workspace: Pick<Workspace, 'id' | 'name'>
 }
 export type OwnerType = 'workspace' | 'user'
+export type DocumentVersion = typeof documentVersions.$inferSelect
+export type NewDocumentVersion = typeof documentVersions.$inferInsert
 
 export enum ActivityType {
 	SIGN_UP = 'SIGN_UP',

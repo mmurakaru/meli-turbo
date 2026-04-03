@@ -1,6 +1,6 @@
 'use server'
 
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import { getUserWithWorkspace } from '@/lib/db/queries'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -13,6 +13,7 @@ import { getWorkspacesForUser } from '@/lib/db/queries'
 import {
 	ActivityType,
 	activityLogs,
+	documentVersions,
 	documents,
 	invitations,
 	publicUsers,
@@ -246,3 +247,126 @@ export const inviteMember = validatedActionWithUser(inviteMemberSchema, async (d
 })
 
 export const getWorkspace = async (userId: string) => getWorkspacesForUser(userId)
+
+const MAXIMUM_VERSIONS_PER_DOCUMENT = 50
+
+const createDocumentVersionSchema = z.object({
+	documentId: z.uuid(),
+	label: z.string().optional(),
+})
+
+export const createDocumentVersion = validatedActionWithUser(
+	createDocumentVersionSchema,
+	async (data, _, user) => {
+		const { documentId, label } = data
+
+		const [existingDocument] = await db
+			.select()
+			.from(documents)
+			.where(eq(documents.id, documentId))
+			.limit(1)
+
+		if (!existingDocument) return { error: 'Document not found' }
+
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
+		const hasPermission =
+			(existingDocument.ownerId === user.id && existingDocument.ownerType === 'user') ||
+			(existingDocument.ownerType === 'workspace' &&
+				userWithWorkspace?.workspaceId === existingDocument.ownerId)
+
+		if (!hasPermission) return { error: 'Unauthorized' }
+
+		const [latestVersion] = await db
+			.select({ version: documentVersions.version })
+			.from(documentVersions)
+			.where(eq(documentVersions.documentId, documentId))
+			.orderBy(desc(documentVersions.version))
+			.limit(1)
+
+		const nextVersionNumber = (latestVersion?.version ?? 0) + 1
+
+		await db.insert(documentVersions).values({
+			documentId,
+			version: nextVersionNumber,
+			data: existingDocument.data,
+			createdBy: user.id,
+			label: label ?? `Version ${nextVersionNumber}`,
+		})
+
+		// Prune versions beyond the maximum allowed
+		const versionsToDelete = await db
+			.select({ id: documentVersions.id })
+			.from(documentVersions)
+			.where(eq(documentVersions.documentId, documentId))
+			.orderBy(desc(documentVersions.version))
+			.offset(MAXIMUM_VERSIONS_PER_DOCUMENT)
+
+		if (versionsToDelete.length > 0) {
+			for (const versionToDelete of versionsToDelete) {
+				await db.delete(documentVersions).where(eq(documentVersions.id, versionToDelete.id))
+			}
+		}
+
+		return { success: 'Version saved' }
+	},
+)
+
+const restoreDocumentVersionSchema = z.object({
+	documentId: z.uuid(),
+	versionId: z.uuid(),
+})
+
+export const restoreDocumentVersion = validatedActionWithUser(
+	restoreDocumentVersionSchema,
+	async (data, _, user) => {
+		const { documentId, versionId } = data
+
+		const [existingDocument] = await db
+			.select()
+			.from(documents)
+			.where(eq(documents.id, documentId))
+			.limit(1)
+
+		if (!existingDocument) return { error: 'Document not found' }
+
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
+		const hasPermission =
+			(existingDocument.ownerId === user.id && existingDocument.ownerType === 'user') ||
+			(existingDocument.ownerType === 'workspace' &&
+				userWithWorkspace?.workspaceId === existingDocument.ownerId)
+
+		if (!hasPermission) return { error: 'Unauthorized' }
+
+		const [versionToRestore] = await db
+			.select()
+			.from(documentVersions)
+			.where(and(eq(documentVersions.id, versionId), eq(documentVersions.documentId, documentId)))
+			.limit(1)
+
+		if (!versionToRestore) return { error: 'Version not found' }
+
+		// Snapshot current state before restoring
+		const [latestVersion] = await db
+			.select({ version: documentVersions.version })
+			.from(documentVersions)
+			.where(eq(documentVersions.documentId, documentId))
+			.orderBy(desc(documentVersions.version))
+			.limit(1)
+
+		await db.insert(documentVersions).values({
+			documentId,
+			version: (latestVersion?.version ?? 0) + 1,
+			data: existingDocument.data,
+			createdBy: user.id,
+			label: 'Before restore',
+		})
+
+		await db
+			.update(documents)
+			.set({ data: versionToRestore.data, updatedAt: new Date() })
+			.where(eq(documents.id, documentId))
+
+		revalidatePath(`/document/${documentId}`)
+		return { success: 'Document restored' }
+	},
+)
