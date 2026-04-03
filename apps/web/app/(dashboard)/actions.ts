@@ -1,7 +1,6 @@
 'use server'
 
 import { and, desc, eq } from 'drizzle-orm'
-import { getUserWithWorkspace } from '@/lib/db/queries'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { v7 as uuidv7 } from 'uuid'
@@ -9,12 +8,12 @@ import { z } from 'zod'
 import { validatedActionWithUser } from '@/lib/auth/middleware'
 import { setActiveWorkspaceId } from '@/lib/auth/session'
 import { db } from '@/lib/db/drizzle'
-import { getWorkspacesForUser } from '@/lib/db/queries'
+import { getUserWithWorkspace, getWorkspacesForUser } from '@/lib/db/queries'
 import {
 	ActivityType,
 	activityLogs,
-	documentVersions,
 	documents,
+	documentVersions,
 	invitations,
 	publicUsers,
 	workspaceMembers,
@@ -77,50 +76,52 @@ const updateDocumentSchema = z.object({
 	rows: z.string().optional(),
 })
 
-export const updateDocument = validatedActionWithUser(updateDocumentSchema, async (data, _, user) => {
-	const { documentId, title, description, columns, rows } = data
+export const updateDocument = validatedActionWithUser(
+	updateDocumentSchema,
+	async (data, _, user) => {
+		const { documentId, title, description, columns, rows } = data
 
-	const [existing] = await db
-		.select()
-		.from(documents)
-		.where(eq(documents.id, documentId))
-		.limit(1)
+		const [existing] = await db
+			.select()
+			.from(documents)
+			.where(eq(documents.id, documentId))
+			.limit(1)
 
-	if (!existing) {
-		return { error: 'Document not found' }
-	}
+		if (!existing) {
+			return { error: 'Document not found' }
+		}
 
-	const userWithWorkspace = await getUserWithWorkspace(user.id)
-	const hasPermission =
-		(existing.ownerId === user.id && existing.ownerType === 'user') ||
-		(existing.ownerType === 'workspace' &&
-			userWithWorkspace?.workspaceId === existing.ownerId)
+		const userWithWorkspace = await getUserWithWorkspace(user.id)
+		const hasPermission =
+			(existing.ownerId === user.id && existing.ownerType === 'user') ||
+			(existing.ownerType === 'workspace' && userWithWorkspace?.workspaceId === existing.ownerId)
 
-	if (!hasPermission) {
-		return { error: 'Unauthorized' }
-	}
+		if (!hasPermission) {
+			return { error: 'Unauthorized' }
+		}
 
-	const newData =
-		columns && rows
-			? {
-					columns: JSON.parse(columns) as { id: string; label: string }[],
-					rows: JSON.parse(rows) as Record<string, string>[],
-				}
-			: existing.data
+		const newData =
+			columns && rows
+				? {
+						columns: JSON.parse(columns) as { id: string; label: string }[],
+						rows: JSON.parse(rows) as Record<string, string>[],
+					}
+				: existing.data
 
-	await db
-		.update(documents)
-		.set({
-			title: title ?? existing.title,
-			description: description ?? existing.description,
-			data: newData,
-			updatedAt: new Date(),
-		})
-		.where(eq(documents.id, documentId))
+		await db
+			.update(documents)
+			.set({
+				title: title ?? existing.title,
+				description: description ?? existing.description,
+				data: newData,
+				updatedAt: new Date(),
+			})
+			.where(eq(documents.id, documentId))
 
-	revalidatePath(`/document/${documentId}`)
-	return { success: 'Saved' }
-})
+		revalidatePath(`/document/${documentId}`)
+		return { success: 'Saved' }
+	},
+)
 
 const createWorkspaceSchema = z.object({
 	name: z.string().min(1).max(100),

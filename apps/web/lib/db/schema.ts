@@ -1,5 +1,15 @@
 import { relations } from 'drizzle-orm'
-import { integer, jsonb, pgEnum, pgTable, serial, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+import {
+	integer,
+	jsonb,
+	pgEnum,
+	pgTable,
+	serial,
+	text,
+	timestamp,
+	uuid,
+	varchar,
+} from 'drizzle-orm/pg-core'
 
 export const publicUsers = pgTable('profiles', {
 	id: uuid('id').primaryKey().defaultRandom(),

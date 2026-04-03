@@ -96,7 +96,12 @@ export function applyOperation(table: TableModel, operation: TableOperation): Ta
 		case 'set_cell':
 			return {
 				...table,
-				rows: applyRowUpdate(table.rows, operation.rowIndex, operation.columnId, operation.nextValue),
+				rows: applyRowUpdate(
+					table.rows,
+					operation.rowIndex,
+					operation.columnId,
+					operation.nextValue,
+				),
 			}
 		case 'replace_table':
 			return operation.nextTable

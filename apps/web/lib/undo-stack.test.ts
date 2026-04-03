@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import type { TableModel } from './table-mutations'
+import type { TableOperation } from './undo-stack'
 import {
 	applyOperation,
 	buildUndoStack,
@@ -8,8 +10,6 @@ import {
 	redoOperation,
 	undoOperation,
 } from './undo-stack'
-import type { TableOperation } from './undo-stack'
-import type { TableModel } from './table-mutations'
 
 const baseTable: TableModel = {
 	columns: [

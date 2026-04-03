@@ -22,9 +22,9 @@ import {
 	canUndo,
 	pushOperation,
 	redoOperation,
-	undoOperation,
 	type TableOperation,
 	type UndoStack,
+	undoOperation,
 } from '@/lib/undo-stack'
 import { applyRowUpdate } from './editable-spreadsheet.helpers'
 
@@ -95,7 +95,10 @@ export function EditableSpreadsheet({
 					nextValue: value,
 				}
 				setUndoStack((currentStack) => pushOperation(currentStack, operation))
-				const next = { ...currentTable, rows: applyRowUpdate(currentTable.rows, rowIndex, columnId, value) }
+				const next = {
+					...currentTable,
+					rows: applyRowUpdate(currentTable.rows, rowIndex, columnId, value),
+				}
 				persist(next)
 				return next
 			})
