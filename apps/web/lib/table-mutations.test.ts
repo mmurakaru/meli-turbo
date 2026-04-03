@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest'
 import {
 	addColumnToTable,
 	addRowToTable,
+	changeColumnType,
 	deleteColumnFromTable,
 	deleteRowFromTable,
 	renameColumnInTable,
 } from './table-mutations'
 
-type Column = { id: string; label: string }
+type Column = { id: string; label: string; type?: string }
 type Row = Record<string, string>
 type TableModel = { columns: Column[]; rows: Row[] }
 
@@ -291,6 +292,100 @@ describe('renameColumnInTable', () => {
 
 		// Act
 		const result = renameColumnInTable(table, 'col-1', 'Full Name')
+
+		// Assert
+		expect(result.rows).toEqual(baseTable.rows)
+	})
+})
+
+describe('addColumnToTable with explicit type', () => {
+	it('stores the given type on the new column', () => {
+		// Arrange
+		const table = structuredClone(baseTable)
+
+		// Act
+		const result = addColumnToTable(table, 'Count', 'number')
+
+		// Assert
+		expect(result.columns[2].type).toBe('number')
+	})
+
+	it('defaults to text type when no type is provided', () => {
+		// Arrange
+		const table = structuredClone(baseTable)
+
+		// Act
+		const result = addColumnToTable(table, 'Notes')
+
+		// Assert
+		expect(result.columns[2].type).toBe('text')
+	})
+})
+
+describe('changeColumnType', () => {
+	it('updates the type of the specified column', () => {
+		// Arrange
+		const table = structuredClone(baseTable)
+
+		// Act
+		const result = changeColumnType(table, 'col-1', 'number')
+
+		// Assert
+		expect(result.columns[0].type).toBe('number')
+	})
+
+	it('does not change the type of other columns', () => {
+		// Arrange
+		const table: typeof baseTable = {
+			...structuredClone(baseTable),
+			columns: [
+				{ id: 'col-1', label: 'Name', type: 'text' },
+				{ id: 'col-2', label: 'Email', type: 'text' },
+			],
+		}
+
+		// Act
+		const result = changeColumnType(table, 'col-1', 'url')
+
+		// Assert
+		expect(result.columns[1].type).toBe('text')
+	})
+
+	it('preserves the column id and label when changing type', () => {
+		// Arrange
+		const table = structuredClone(baseTable)
+
+		// Act
+		const result = changeColumnType(table, 'col-1', 'boolean')
+
+		// Assert
+		expect(result.columns[0].id).toBe('col-1')
+		expect(result.columns[0].label).toBe('Name')
+	})
+
+	it('does not mutate the original table', () => {
+		// Arrange
+		const table: typeof baseTable = {
+			...structuredClone(baseTable),
+			columns: [
+				{ id: 'col-1', label: 'Name', type: 'text' },
+				{ id: 'col-2', label: 'Email', type: 'text' },
+			],
+		}
+
+		// Act
+		changeColumnType(table, 'col-1', 'number')
+
+		// Assert
+		expect(table.columns[0].type).toBe('text')
+	})
+
+	it('leaves row data unchanged', () => {
+		// Arrange
+		const table = structuredClone(baseTable)
+
+		// Act
+		const result = changeColumnType(table, 'col-1', 'date')
 
 		// Assert
 		expect(result.rows).toEqual(baseTable.rows)

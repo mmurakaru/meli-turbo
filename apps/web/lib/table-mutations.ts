@@ -1,6 +1,7 @@
 import { v7 as uuidv7 } from 'uuid'
+import { type ColumnType } from './infer-column-type'
 
-export type Column = { id: string; label: string }
+export type Column = { id: string; label: string; type?: ColumnType }
 export type Row = Record<string, string>
 export type TableModel = { columns: Column[]; rows: Row[] }
 
@@ -12,12 +13,29 @@ export function addRowToTable(table: TableModel): TableModel {
 	}
 }
 
-export function addColumnToTable(table: TableModel, label: string): TableModel {
+export function addColumnToTable(
+	table: TableModel,
+	label: string,
+	type: ColumnType = 'text',
+): TableModel {
 	const newColumnId = uuidv7()
-	const newColumn: Column = { id: newColumnId, label }
+	const newColumn: Column = { id: newColumnId, label, type }
 	return {
 		columns: [...table.columns, newColumn],
 		rows: table.rows.map((row) => ({ ...row, [newColumnId]: '' })),
+	}
+}
+
+export function changeColumnType(
+	table: TableModel,
+	columnId: string,
+	newType: ColumnType,
+): TableModel {
+	return {
+		columns: table.columns.map((column) =>
+			column.id === columnId ? { ...column, type: newType } : column,
+		),
+		rows: table.rows,
 	}
 }
 

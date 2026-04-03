@@ -5,9 +5,11 @@ import { ExportToolbar } from '@/app/(dashboard)/_components/export-toolbar'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
+import { inferColumnType, type ColumnType } from '@/lib/infer-column-type'
 import {
 	addColumnToTable,
 	addRowToTable,
+	changeColumnType,
 	deleteColumnFromTable,
 	deleteRowFromTable,
 	renameColumnInTable,
@@ -108,10 +110,24 @@ export function EditableSpreadsheet({
 		[applyMutation],
 	)
 
+	const handleChangeColumnType = useCallback(
+		(columnId: string, newType: ColumnType) => {
+			applyMutation((current) => changeColumnType(current, columnId, newType), false)
+		},
+		[applyMutation],
+	)
+
 	const handleRefined = useCallback(
 		(newTable: TableModel) => {
-			setTable(newTable)
-			persist(newTable, false)
+			const tableWithInferredTypes: TableModel = {
+				...newTable,
+				columns: newTable.columns.map((column) => ({
+					...column,
+					type: column.type ?? inferColumnType(newTable.rows.map((row) => row[column.id] ?? '')),
+				})),
+			}
+			setTable(tableWithInferredTypes)
+			persist(tableWithInferredTypes, false)
 		},
 		[persist],
 	)
@@ -135,6 +151,7 @@ export function EditableSpreadsheet({
 					onDeleteRow={handleDeleteRow}
 					onDeleteColumn={handleDeleteColumn}
 					onRenameColumn={handleRenameColumn}
+					onChangeColumnType={handleChangeColumnType}
 				/>
 				{saveStatus !== 'idle' && (
 					<p className="text-xs text-gray-400">
