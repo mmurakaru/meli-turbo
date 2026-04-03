@@ -55,9 +55,7 @@ test.describe('CUJ 2b — Spreadsheet Creation via Modal', () => {
 		await expect(page.getByText('Spreadsheet')).toBeVisible()
 
 		// Submit button inside dialog
-		await expect(
-			page.getByRole('button', { name: 'Create spreadsheet' }).last(),
-		).toBeVisible()
+		await expect(page.getByRole('button', { name: 'Create spreadsheet' }).last()).toBeVisible()
 
 		await page.screenshot({ path: screenshotPath('2b', 'dialog-open') })
 	})
@@ -117,17 +115,13 @@ test.describe('CUJ 2b — Spreadsheet Creation via Modal', () => {
 
 		// The document title should appear on the page
 		await expect(
-			page.getByText('My E2E Spreadsheet').or(
-				page.locator('input[value="My E2E Spreadsheet"]'),
-			),
+			page.getByText('My E2E Spreadsheet').or(page.locator('input[value="My E2E Spreadsheet"]')),
 		).toBeVisible({ timeout: 10_000 })
 
 		await page.screenshot({ path: screenshotPath('2b', 'document-page-title') })
 	})
 
-	test('2b.6 — description field accepts text and is included in the dialog', async ({
-		page,
-	}) => {
+	test('2b.6 — description field accepts text and is included in the dialog', async ({ page }) => {
 		await page.goto('/dashboard/new')
 		await page.getByRole('button', { name: 'Create spreadsheet' }).click()
 
