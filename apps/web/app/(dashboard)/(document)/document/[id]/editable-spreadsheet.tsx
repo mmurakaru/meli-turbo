@@ -1,8 +1,8 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
-import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
+import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
 import { applyRowUpdate } from './editable-spreadsheet.helpers'
 

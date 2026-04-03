@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { Input } from '@workspace/ui/components/input'
 import { Sparkles } from 'lucide-react'
+import { useState } from 'react'
 import { fetchJobStatus, pollForJob } from '@/lib/poll-for-job'
 
 type Sheet = { columns: { id: string; label: string }[]; rows: Record<string, string>[] }
@@ -31,7 +31,9 @@ export function RefinePanel({ table, onRefined }: RefinePanelProps) {
 			const res = await fetch('/api/generate', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ prompt: `Given this spreadsheet: ${JSON.stringify(table)}\n\n${trimmed}` }),
+				body: JSON.stringify({
+					prompt: `Given this spreadsheet: ${JSON.stringify(table)}\n\n${trimmed}`,
+				}),
 			})
 			const data = await res.json()
 			if (!res.ok || !data.jobId) {
