@@ -14,6 +14,7 @@ import { TemplateGallery } from './_components/TemplateGallery'
 import Papa from 'papaparse'
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
+import { fetchJobStatus, pollForJob } from '@/lib/poll-for-job'
 
 type TableColumn = {
 	id: string
@@ -269,25 +270,17 @@ export default function CreatePage() {
 				setGenerationError(enqueueData.error ?? 'Failed to start generation')
 				return
 			}
-			const { jobId } = enqueueData
-			const POLL_INTERVAL_MS = 1500
-			const MAX_POLLS = 60
-			for (let i = 0; i < MAX_POLLS; i++) {
-				await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
-				const pollRes = await fetch(`/api/jobs/${jobId}`)
-				const pollData = await pollRes.json()
-				if (pollData.status === 'completed' && pollData.sheet) {
-					setTable(pollData.sheet)
-					setIsSheetVisible(true)
-					setIsSheetSelected(true)
-					return
-				}
-				if (pollData.status === 'failed') {
-					setGenerationError(pollData.error ?? 'Generation failed')
-					return
-				}
+			const result = await pollForJob(enqueueData.jobId, fetchJobStatus, {
+				maxPolls: 60,
+				delayMs: 1500,
+			})
+			if ('error' in result) {
+				setGenerationError(result.error)
+			} else {
+				setTable(result.sheet)
+				setIsSheetVisible(true)
+				setIsSheetSelected(true)
 			}
-			setGenerationError('Generation timed out. Please try again.')
 		} catch {
 			setGenerationError('Something went wrong. Please try again.')
 		} finally {
