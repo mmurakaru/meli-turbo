@@ -64,11 +64,7 @@ describe('inferColumnType', () => {
 	describe('url', () => {
 		it('returns url when all values start with https', () => {
 			// Arrange
-			const values = [
-				'https://example.com',
-				'https://google.com',
-				'https://github.com/user/repo',
-			]
+			const values = ['https://example.com', 'https://google.com', 'https://github.com/user/repo']
 
 			// Act
 			const result = inferColumnType(values)
@@ -116,7 +112,18 @@ describe('inferColumnType', () => {
 	describe('select', () => {
 		it('returns select when values have low uniqueness ratio and enough samples', () => {
 			// Arrange — 3 unique values out of 10, ratio = 0.3
-			const values = ['Active', 'Inactive', 'Pending', 'Active', 'Active', 'Inactive', 'Pending', 'Active', 'Pending', 'Inactive']
+			const values = [
+				'Active',
+				'Inactive',
+				'Pending',
+				'Active',
+				'Active',
+				'Inactive',
+				'Pending',
+				'Active',
+				'Pending',
+				'Inactive',
+			]
 
 			// Act
 			const result = inferColumnType(values)
@@ -127,7 +134,20 @@ describe('inferColumnType', () => {
 
 		it('returns select when few unique values repeat across many rows', () => {
 			// Arrange — 2 unique values out of 12, ratio ≈ 0.167
-			const values = ['Open', 'Closed', 'Open', 'Open', 'Closed', 'Open', 'Closed', 'Closed', 'Open', 'Open', 'Closed', 'Open']
+			const values = [
+				'Open',
+				'Closed',
+				'Open',
+				'Open',
+				'Closed',
+				'Open',
+				'Closed',
+				'Closed',
+				'Open',
+				'Open',
+				'Closed',
+				'Open',
+			]
 
 			// Act
 			const result = inferColumnType(values)

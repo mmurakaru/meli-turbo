@@ -3,7 +3,7 @@
 import { Button } from '@workspace/ui/components/button'
 import { Download, ExternalLink, FileSpreadsheet } from 'lucide-react'
 import { useState } from 'react'
-import { downloadCsv, downloadXlsx, type Column, type Row } from '@/lib/export-table'
+import { type Column, downloadCsv, downloadXlsx, type Row } from '@/lib/export-table'
 
 interface ExportToolbarProps {
 	columns: Column[]

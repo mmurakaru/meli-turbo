@@ -3,11 +3,11 @@
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
-	type SortingState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
+	type SortingState,
 	useReactTable,
 } from '@tanstack/react-table'
 import { ArrowDown, ArrowUp, ArrowUpDown, Filter, Plus, Trash2 } from 'lucide-react'
@@ -152,7 +152,9 @@ function TypeAwareCell({
 			)
 		}
 		return (
-			<span className={columnType === 'number' ? 'block text-right tabular-nums' : ''}>{value}</span>
+			<span className={columnType === 'number' ? 'block text-right tabular-nums' : ''}>
+				{value}
+			</span>
 		)
 	}
 

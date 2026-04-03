@@ -5,7 +5,7 @@ import { ExportToolbar } from '@/app/(dashboard)/_components/export-toolbar'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
-import { inferColumnType, type ColumnType } from '@/lib/infer-column-type'
+import { type ColumnType, inferColumnType } from '@/lib/infer-column-type'
 import {
 	addColumnToTable,
 	addRowToTable,

@@ -1,5 +1,5 @@
 import { v7 as uuidv7 } from 'uuid'
-import { type ColumnType } from './infer-column-type'
+import type { ColumnType } from './infer-column-type'
 
 export type Column = { id: string; label: string; type?: ColumnType }
 export type Row = Record<string, string>
