@@ -1,9 +1,19 @@
 'use client'
 
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { Plus, Trash2 } from 'lucide-react'
+import {
+	type ColumnDef,
+	type ColumnFiltersState,
+	type SortingState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getSortedRowModel,
+	useReactTable,
+} from '@tanstack/react-table'
+import { ArrowDown, ArrowUp, ArrowUpDown, Filter, Plus, Trash2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
-import { type ColumnType } from '@/lib/infer-column-type'
+import type { ColumnType } from '@/lib/infer-column-type'
+import { buildSortComparator } from '@/lib/sort-comparator'
 
 export type Column = { id: string; label: string; type?: ColumnType }
 type Row = Record<string, string>
@@ -141,7 +151,9 @@ function TypeAwareCell({
 				</a>
 			)
 		}
-		return <span className={columnType === 'number' ? 'block text-right tabular-nums' : ''}>{value}</span>
+		return (
+			<span className={columnType === 'number' ? 'block text-right tabular-nums' : ''}>{value}</span>
+		)
 	}
 
 	if (columnType === 'boolean') {
@@ -182,10 +194,22 @@ export function SpreadsheetView({
 	onRenameColumn,
 	onChangeColumnType,
 }: SpreadsheetViewProps) {
+	const [sorting, setSorting] = useState<SortingState>([])
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [globalFilter, setGlobalFilter] = useState('')
+	const [isFilterRowVisible, setIsFilterRowVisible] = useState(false)
+
 	const columnDefinitions = useMemo<ColumnDef<Row>[]>(
 		() =>
 			columns.map((column) => ({
 				accessorKey: column.id,
+				sortingFn: (rowA, rowB) => {
+					const comparator = buildSortComparator(column.type ?? 'text')
+					return comparator(
+						(rowA.getValue(column.id) as string) ?? '',
+						(rowB.getValue(column.id) as string) ?? '',
+					)
+				},
 				header: () =>
 					editable && onRenameColumn && onDeleteColumn && onChangeColumnType ? (
 						<EditableColumnHeader
@@ -212,8 +236,16 @@ export function SpreadsheetView({
 	const tableInstance = useReactTable({
 		data: rows,
 		columns: columnDefinitions,
+		state: { sorting, columnFilters, globalFilter },
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		onGlobalFilterChange: setGlobalFilter,
 		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 	})
+
+	const visibleRowCount = tableInstance.getRowModel().rows.length
 
 	if (columns.length === 0) {
 		return (
@@ -225,6 +257,34 @@ export function SpreadsheetView({
 
 	return (
 		<div className="space-y-2">
+			<div className="flex items-center gap-2">
+				<input
+					placeholder="Search all columns…"
+					value={globalFilter}
+					onChange={(event) => setGlobalFilter(event.target.value)}
+					className="max-w-xs rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-violet-300"
+				/>
+				<button
+					type="button"
+					onClick={() => setIsFilterRowVisible((previous) => !previous)}
+					className={[
+						'flex items-center gap-1 rounded-lg border px-2 py-1.5 text-xs',
+						isFilterRowVisible
+							? 'border-violet-300 bg-violet-50 text-violet-700'
+							: 'border-gray-200 text-gray-500 hover:text-gray-700',
+					].join(' ')}
+					aria-pressed={isFilterRowVisible}
+				>
+					<Filter className="h-3 w-3" />
+					Filter
+				</button>
+				{(globalFilter || columnFilters.length > 0) && (
+					<span className="text-xs text-gray-400">
+						{visibleRowCount} of {rows.length} rows
+					</span>
+				)}
+			</div>
+
 			<div className="overflow-auto rounded-xl border border-gray-200 bg-white">
 				<table className="min-w-full border-collapse text-left text-sm">
 					<thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
@@ -232,7 +292,33 @@ export function SpreadsheetView({
 							<tr key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (
 									<th key={header.id} className="border-b px-3 py-2 font-semibold">
-										{flexRender(header.column.columnDef.header, header.getContext())}
+										<div className="flex items-center gap-1">
+											<span className="flex-1">
+												{flexRender(header.column.columnDef.header, header.getContext())}
+											</span>
+											<button
+												type="button"
+												onClick={() => header.column.toggleSorting()}
+												className="shrink-0 text-gray-400 hover:text-gray-600"
+												aria-label={`Sort by ${header.column.id}`}
+											>
+												{header.column.getIsSorted() === 'asc' ? (
+													<ArrowUp className="h-3 w-3" />
+												) : header.column.getIsSorted() === 'desc' ? (
+													<ArrowDown className="h-3 w-3" />
+												) : (
+													<ArrowUpDown className="h-3 w-3 opacity-40" />
+												)}
+											</button>
+										</div>
+										{isFilterRowVisible && (
+											<input
+												placeholder={`Filter…`}
+												value={(header.column.getFilterValue() as string) ?? ''}
+												onChange={(event) => header.column.setFilterValue(event.target.value)}
+												className="mt-1 w-full rounded border border-gray-200 px-1.5 py-0.5 text-xs font-normal normal-case tracking-normal focus:outline-none focus:ring-1 focus:ring-violet-300"
+											/>
+										)}
 									</th>
 								))}
 								{editable && onAddColumn && (
@@ -272,9 +358,20 @@ export function SpreadsheetView({
 								)}
 							</tr>
 						))}
+						{visibleRowCount === 0 && (
+							<tr>
+								<td
+									colSpan={columns.length + 1}
+									className="px-3 py-8 text-center text-sm text-gray-400"
+								>
+									No rows match the current filter.
+								</td>
+							</tr>
+						)}
 					</tbody>
 				</table>
 			</div>
+
 			{editable && onAddRow && (
 				<button
 					type="button"
