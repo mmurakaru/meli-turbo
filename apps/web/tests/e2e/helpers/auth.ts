@@ -18,6 +18,6 @@ export async function signInAsSeedUser(page: Page): Promise<void> {
 /**
  * Returns the screenshot path for a given test step.
  */
-export function screenshotPath(cujNumber: number, stepName: string): string {
+export function screenshotPath(cujNumber: number | string, stepName: string): string {
 	return `tests/e2e/screenshots/cuj-${cujNumber}-${stepName}.png`
 }
