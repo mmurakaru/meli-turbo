@@ -38,6 +38,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 			<div className="mt-6">
 				<EditableSpreadsheet
 					documentId={document.id}
+					documentTitle={document.title}
 					initialColumns={document.data.columns}
 					initialRows={document.data.rows}
 				/>

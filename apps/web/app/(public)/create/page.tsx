@@ -13,6 +13,7 @@ import Papa from 'papaparse'
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
 import { createDocument } from '@/app/(dashboard)/actions'
+import { downloadCsv, downloadXlsx } from '@/lib/export-table'
 import { fetchJobStatus, pollForJob } from '@/lib/poll-for-job'
 import { TemplateGallery } from './_components/TemplateGallery'
 
@@ -348,30 +349,11 @@ export default function CreatePage() {
 	}
 
 	function handleExportCsv() {
-		const csv = Papa.unparse(
-			[
-				table.columns.map((column) => column.label),
-				...table.rows.map((row) => table.columns.map((column) => row[column.id] ?? '')),
-			],
-			{ skipEmptyLines: true },
-		)
-		const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-		const url = URL.createObjectURL(blob)
-		const link = document.createElement('a')
-		link.href = url
-		link.download = 'sheet.csv'
-		link.click()
-		URL.revokeObjectURL(url)
+		downloadCsv(table.columns, table.rows, title || 'sheet')
 	}
 
 	function handleExportXlsx() {
-		const worksheet = XLSX.utils.aoa_to_sheet([
-			table.columns.map((column) => column.label),
-			...table.rows.map((row) => table.columns.map((column) => row[column.id] ?? '')),
-		])
-		const workbook = XLSX.utils.book_new()
-		XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
-		XLSX.writeFile(workbook, 'sheet.xlsx')
+		downloadXlsx(table.columns, table.rows, title || 'sheet')
 	}
 
 	async function handleOpenInGoogleSheets() {

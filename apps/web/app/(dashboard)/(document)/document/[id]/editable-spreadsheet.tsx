@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
+import { ExportToolbar } from '@/app/(dashboard)/_components/export-toolbar'
 import { RefinePanel } from '@/app/(dashboard)/_components/refine-panel'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
@@ -16,6 +17,7 @@ import { applyRowUpdate } from './editable-spreadsheet.helpers'
 
 interface EditableSpreadsheetProps {
 	documentId: string
+	documentTitle: string
 	initialColumns: TableModel['columns']
 	initialRows: TableModel['rows']
 }
@@ -24,6 +26,7 @@ type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
 
 export function EditableSpreadsheet({
 	documentId,
+	documentTitle,
 	initialColumns,
 	initialRows,
 }: EditableSpreadsheetProps) {
@@ -115,6 +118,12 @@ export function EditableSpreadsheet({
 
 	return (
 		<div className="space-y-6">
+			<ExportToolbar
+				columns={table.columns}
+				rows={table.rows}
+				filename={documentTitle}
+				documentId={documentId}
+			/>
 			<div className="space-y-2">
 				<SpreadsheetView
 					columns={table.columns}
