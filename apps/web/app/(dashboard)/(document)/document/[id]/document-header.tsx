@@ -38,6 +38,7 @@ export function DocumentHeader({
 					Title
 				</Label>
 				<Input
+					name="title"
 					variant="ghost"
 					className="text-lg lg:text-2xl font-extrabold"
 					required

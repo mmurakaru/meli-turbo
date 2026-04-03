@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
-import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { getDocument, getUser, getWorkspacesForUser } from '@/lib/db/queries'
 import { DocumentHeader } from './document-header'
+import { EditableSpreadsheet } from './editable-spreadsheet'
 
 export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
 	const id = (await params).id
@@ -36,7 +36,11 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
 				title={document.title}
 			/>
 			<div className="mt-6">
-				<SpreadsheetView columns={document.data.columns} rows={document.data.rows} />
+				<EditableSpreadsheet
+					documentId={document.id}
+					initialColumns={document.data.columns}
+					initialRows={document.data.rows}
+				/>
 			</div>
 		</section>
 	)

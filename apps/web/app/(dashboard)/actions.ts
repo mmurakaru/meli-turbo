@@ -1,6 +1,7 @@
 'use server'
 
 import { and, eq } from 'drizzle-orm'
+import { getUserWithWorkspace } from '@/lib/db/queries'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { v7 as uuidv7 } from 'uuid'
@@ -69,13 +70,55 @@ export const createDocument = validatedActionWithUser(
 
 const updateDocumentSchema = z.object({
 	documentId: z.uuid(),
-	title: z.string().max(100),
-	description: z.string(),
+	title: z.string().max(100).optional(),
+	description: z.string().optional(),
+	columns: z.string().optional(),
+	rows: z.string().optional(),
 })
 
-export const updateDocument = validatedActionWithUser(updateDocumentSchema, async (data, _) => {
-	const { title: _title, description: _description, documentId: _documentId } = data
-	// TODO: Implement document update logic
+export const updateDocument = validatedActionWithUser(updateDocumentSchema, async (data, _, user) => {
+	const { documentId, title, description, columns, rows } = data
+
+	const [existing] = await db
+		.select()
+		.from(documents)
+		.where(eq(documents.id, documentId))
+		.limit(1)
+
+	if (!existing) {
+		return { error: 'Document not found' }
+	}
+
+	const userWithWorkspace = await getUserWithWorkspace(user.id)
+	const hasPermission =
+		(existing.ownerId === user.id && existing.ownerType === 'user') ||
+		(existing.ownerType === 'workspace' &&
+			userWithWorkspace?.workspaceId === existing.ownerId)
+
+	if (!hasPermission) {
+		return { error: 'Unauthorized' }
+	}
+
+	const newData =
+		columns && rows
+			? {
+					columns: JSON.parse(columns) as { id: string; label: string }[],
+					rows: JSON.parse(rows) as Record<string, string>[],
+				}
+			: existing.data
+
+	await db
+		.update(documents)
+		.set({
+			title: title ?? existing.title,
+			description: description ?? existing.description,
+			data: newData,
+			updatedAt: new Date(),
+		})
+		.where(eq(documents.id, documentId))
+
+	revalidatePath(`/document/${documentId}`)
+	return { success: 'Saved' }
 })
 
 const createWorkspaceSchema = z.object({

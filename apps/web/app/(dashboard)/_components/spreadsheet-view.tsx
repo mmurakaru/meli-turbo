@@ -5,14 +5,30 @@ import { useMemo } from 'react'
 type Column = { id: string; label: string }
 type Row = Record<string, string>
 
-export function SpreadsheetView({ columns, rows }: { columns: Column[]; rows: Row[] }) {
+interface SpreadsheetViewProps {
+  columns: Column[]
+  rows: Row[]
+  editable?: boolean
+  onCellChange?: (rowIndex: number, columnId: string, value: string) => void
+}
+
+export function SpreadsheetView({ columns, rows, editable, onCellChange }: SpreadsheetViewProps) {
   const colDefs = useMemo<ColumnDef<Row>[]>(
     () => columns.map((col) => ({
       accessorKey: col.id,
       header: col.label,
-      cell: ({ getValue }) => <span>{getValue() as string}</span>,
+      cell: ({ getValue, row }) =>
+        editable ? (
+          <input
+            defaultValue={getValue() as string}
+            onBlur={(e) => onCellChange?.(row.index, col.id, e.target.value)}
+            className="w-full bg-transparent text-sm focus:outline-none focus:ring-1 focus:ring-violet-300 rounded px-1 -mx-1"
+          />
+        ) : (
+          <span>{getValue() as string}</span>
+        ),
     })),
-    [columns]
+    [columns, editable, onCellChange]
   )
 
   const table = useReactTable({
