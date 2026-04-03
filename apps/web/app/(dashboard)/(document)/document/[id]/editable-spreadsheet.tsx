@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { SpreadsheetView } from '@/app/(dashboard)/_components/spreadsheet-view'
 import { updateDocument } from '@/app/(dashboard)/actions'
+import { applyRowUpdate } from './editable-spreadsheet.helpers'
 
 type Column = { id: string; label: string }
 type Row = Record<string, string>
@@ -45,8 +46,7 @@ export function EditableSpreadsheet({
   const handleCellChange = useCallback(
     (rowIndex: number, columnId: string, value: string) => {
       setRows((current) => {
-        const next = [...current]
-        next[rowIndex] = { ...next[rowIndex], [columnId]: value }
+        const next = applyRowUpdate(current, rowIndex, columnId, value)
         persistRows(next)
         return next
       })
