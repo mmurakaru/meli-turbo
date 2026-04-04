@@ -33,7 +33,7 @@
         "cmd:getUserImportJobs": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts"
     },
     "dependencies": {
-        "@ai-sdk/openai": "^3.0.37",
+        "@ai-sdk/openai": "^3.0.45",
         "@aws-sdk/client-sns": "^3.995.0",
         "@aws-sdk/client-sqs": "^3.995.0",
         "@aws-sdk/client-sts": "^3.995.0",
@@ -67,7 +67,7 @@
         "@opentelemetry/auto-instrumentations-node": "^0.70.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.212.0",
         "@scalar/fastify-api-reference": "^1.44.25",
-        "ai": "^6.0.105",
+        "ai": "^6.0.127",
         "amqplib": "^0.10.9",
         "awilix": "^13.0.0",
         "awilix-manager": "^6.3.0",
