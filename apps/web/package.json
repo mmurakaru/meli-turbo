@@ -57,7 +57,7 @@
 		"@tailwindcss/postcss": "^4.2.1",
 		"@types/bcryptjs": "^3.0.0",
 		"@types/google-one-tap": "^1.2.6",
-		"@types/node": "^25.5.0",
+		"@types/node": "^25.5.2",
 		"@types/papaparse": "^5.3.16",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
