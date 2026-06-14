@@ -281,7 +281,7 @@ importers:
   services/cortex:
     dependencies:
       '@ai-sdk/openai':
-        specifier: ^3.0.45
+        specifier: ^3.0.50
         version: 3.0.71(zod@4.3.6)
       '@aws-sdk/client-sns':
         specifier: ^3.995.0
@@ -383,7 +383,7 @@ importers:
         specifier: ^1.49.6
         version: 1.59.3
       ai:
-        specifier: ^6.0.127
+        specifier: ^6.0.146
         version: 6.0.205(zod@4.3.6)
       amqplib:
         specifier: ^0.10.9
