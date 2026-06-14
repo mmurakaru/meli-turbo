@@ -13,6 +13,8 @@ import Papa from 'papaparse'
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
 import { createDocument } from '@/app/(dashboard)/actions'
+import { downloadCsv, downloadXlsx } from '@/lib/export-table'
+import { fetchJobStatus, pollForJob } from '@/lib/poll-for-job'
 import { TemplateGallery } from './_components/TemplateGallery'
 
 type TableColumn = {
@@ -269,25 +271,17 @@ export default function CreatePage() {
 				setGenerationError(enqueueData.error ?? 'Failed to start generation')
 				return
 			}
-			const { jobId } = enqueueData
-			const POLL_INTERVAL_MS = 1500
-			const MAX_POLLS = 60
-			for (let i = 0; i < MAX_POLLS; i++) {
-				await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
-				const pollRes = await fetch(`/api/jobs/${jobId}`)
-				const pollData = await pollRes.json()
-				if (pollData.status === 'completed' && pollData.sheet) {
-					setTable(pollData.sheet)
-					setIsSheetVisible(true)
-					setIsSheetSelected(true)
-					return
-				}
-				if (pollData.status === 'failed') {
-					setGenerationError(pollData.error ?? 'Generation failed')
-					return
-				}
+			const result = await pollForJob(enqueueData.jobId, fetchJobStatus, {
+				maxPolls: 60,
+				delayMs: 1500,
+			})
+			if ('error' in result) {
+				setGenerationError(result.error)
+			} else {
+				setTable(result.sheet)
+				setIsSheetVisible(true)
+				setIsSheetSelected(true)
 			}
-			setGenerationError('Generation timed out. Please try again.')
 		} catch {
 			setGenerationError('Something went wrong. Please try again.')
 		} finally {
@@ -355,30 +349,11 @@ export default function CreatePage() {
 	}
 
 	function handleExportCsv() {
-		const csv = Papa.unparse(
-			[
-				table.columns.map((column) => column.label),
-				...table.rows.map((row) => table.columns.map((column) => row[column.id] ?? '')),
-			],
-			{ skipEmptyLines: true },
-		)
-		const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-		const url = URL.createObjectURL(blob)
-		const link = document.createElement('a')
-		link.href = url
-		link.download = 'sheet.csv'
-		link.click()
-		URL.revokeObjectURL(url)
+		downloadCsv(table.columns, table.rows, title || 'sheet')
 	}
 
 	function handleExportXlsx() {
-		const worksheet = XLSX.utils.aoa_to_sheet([
-			table.columns.map((column) => column.label),
-			...table.rows.map((row) => table.columns.map((column) => row[column.id] ?? '')),
-		])
-		const workbook = XLSX.utils.book_new()
-		XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
-		XLSX.writeFile(workbook, 'sheet.xlsx')
+		downloadXlsx(table.columns, table.rows, title || 'sheet')
 	}
 
 	async function handleOpenInGoogleSheets() {
