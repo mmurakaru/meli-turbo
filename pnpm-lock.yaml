@@ -55,8 +55,8 @@ importers:
         specifier: ^3.20.1
         version: 3.26.1
       '@tiptap/suggestion':
-        specifier: ^3.20.0
-        version: 3.20.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)
+        specifier: ^3.22.1
+        version: 3.26.1(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -4209,11 +4209,11 @@ packages:
   '@tiptap/starter-kit@3.26.1':
     resolution: {integrity: sha512-A0zsvwGU9exLND34F8e8KqUXFSfs835tNN+VC+ZT3yNeaO/WXnlh/Cgal1F6pHHbcxy7RV2CRwJU5S3cWLPxrA==}
 
-  '@tiptap/suggestion@3.20.0':
-    resolution: {integrity: sha512-OA9Fe+1Q/Ex0ivTcpRcVFiLnNsVdIBmiEoctt/gu4H2ayCYmZ906veioXNdc1m/3MtVVUIuEnvwwsrOZXlfDEw==}
+  '@tiptap/suggestion@3.26.1':
+    resolution: {integrity: sha512-Bg8IyuDC92InSPzcHvCT3+ZDCJSMJIEINdFg513RPQzwZTw1dsrU0K00XYcDT6lOhZwLM2IVTiE6sZl2GY25Rg==}
     peerDependencies:
-      '@tiptap/core': ^3.20.0
-      '@tiptap/pm': ^3.20.0
+      '@tiptap/core': 3.26.1
+      '@tiptap/pm': 3.26.1
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
@@ -11809,7 +11809,7 @@ snapshots:
       '@tiptap/extensions': 3.26.1(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)
       '@tiptap/pm': 3.26.1
 
-  '@tiptap/suggestion@3.20.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)':
+  '@tiptap/suggestion@3.26.1(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)':
     dependencies:
       '@tiptap/core': 3.26.1(@tiptap/pm@3.26.1)
       '@tiptap/pm': 3.26.1
