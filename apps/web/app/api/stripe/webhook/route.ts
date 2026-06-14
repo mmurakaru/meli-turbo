@@ -5,6 +5,9 @@ import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe'
 
 export async function POST(request: NextRequest) {
 	const webhookSecret = env.STRIPE_WEBHOOK_SECRET
+	if (!webhookSecret) {
+		return NextResponse.json({ error: 'Webhook secret is not configured.' }, { status: 500 })
+	}
 
 	const payload = await request.text()
 	const signature = request.headers.get('stripe-signature') as string

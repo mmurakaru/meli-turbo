@@ -6,14 +6,14 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Suggestion from '@tiptap/suggestion'
-import { createDocument } from '@/app/(dashboard)/actions'
 import { Button } from '@workspace/ui/components/button'
 import { Input } from '@workspace/ui/components/input'
 import { Download, ExternalLink, FileSpreadsheet, Plus, Save, Sparkles, Upload } from 'lucide-react'
-import { TemplateGallery } from './_components/TemplateGallery'
 import Papa from 'papaparse'
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as XLSX from 'xlsx'
+import { createDocument } from '@/app/(dashboard)/actions'
+import { TemplateGallery } from './_components/TemplateGallery'
 
 type TableColumn = {
 	id: string
@@ -188,7 +188,7 @@ function createSlashCommandExtension(items: SlashCommandItem[]) {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: TODO reduce complexity
 export default function CreatePage() {
-	const [, createAction] = useActionState(createDocument, { error: '', success: '' })
+	const [, createAction] = useActionState(createDocument, { error: '' })
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 	const titleInputRef = useRef<HTMLInputElement | null>(null)
 	const ignoreNextSheetEnterRef = useRef(false)
@@ -629,7 +629,11 @@ export default function CreatePage() {
 													<input type="hidden" name="title" value={title} />
 													<input type="hidden" name="description" value={title} />
 													<input type="hidden" name="owner" value="private" />
-													<input type="hidden" name="columns" value={JSON.stringify(table.columns)} />
+													<input
+														type="hidden"
+														name="columns"
+														value={JSON.stringify(table.columns)}
+													/>
 													<input type="hidden" name="rows" value={JSON.stringify(table.rows)} />
 													<Button type="submit" size="sm" variant="ghost">
 														<Save className="h-4 w-4" strokeWidth={1} /> Save
@@ -695,15 +699,17 @@ export default function CreatePage() {
 												<span className="rounded bg-violet-100 px-1.5 text-violet-700">/</span> to
 												insert a spreadsheet grid and refine it in place.
 											</p>
-										<div className="mt-8">
-											<p className="text-sm font-medium text-gray-600 mb-4">Or start from a template</p>
-											<TemplateGallery
-												onSelectTemplate={(prompt, templateTitle) => {
-													setTitle(templateTitle)
-													void handleGenerate(prompt)
-												}}
-											/>
-										</div>
+											<div className="mt-8">
+												<p className="text-sm font-medium text-gray-600 mb-4">
+													Or start from a template
+												</p>
+												<TemplateGallery
+													onSelectTemplate={(prompt, templateTitle) => {
+														setTitle(templateTitle)
+														void handleGenerate(prompt)
+													}}
+												/>
+											</div>
 										</div>
 									) : null}
 									{generationError ? (

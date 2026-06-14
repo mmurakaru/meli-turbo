@@ -3,14 +3,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Document } from '@/lib/db/schema'
+import type { DocumentListItem } from '@/lib/db/schema'
 import { NewDocumentLink } from '../_components/new-document-link'
 import { normalizedDocuments } from '../helper/normalize-document.helper'
 
 export function Recents({
 	documentData,
 }: {
-	documentData: { private: Document[]; all: Document[] }
+	documentData: { private: DocumentListItem[]; all: DocumentListItem[] }
 }) {
 	return (
 		<section className="flex-1">

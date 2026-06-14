@@ -47,6 +47,10 @@ export async function signInWithOAuth(inviteId?: string | null) {
 	const { Google } = await import('arctic')
 	const origin = (await headers()).get('origin')
 
+	if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+		throw new Error('Google OAuth is not configured')
+	}
+
 	const google = new Google(
 		env.GOOGLE_CLIENT_ID,
 		env.GOOGLE_CLIENT_SECRET,

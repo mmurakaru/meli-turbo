@@ -152,6 +152,9 @@ export type WorkspaceDataWithMembers = Workspace & {
 }
 export type Document = typeof documents.$inferSelect
 export type NewDocument = typeof documents.$inferInsert
+// List views omit the heavy `data` jsonb column
+export type DocumentListItem = Omit<Document, 'data'>
+
 export type DocumentWithWorkspace = Document & {
 	workspace: Pick<Workspace, 'id' | 'name'>
 }

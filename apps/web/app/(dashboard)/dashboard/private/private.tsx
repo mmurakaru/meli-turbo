@@ -2,11 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Document } from '@/lib/db/schema'
+import type { DocumentListItem } from '@/lib/db/schema'
 import { NewDocumentLink } from '../../_components/new-document-link'
 import { normalizedDocuments } from '../../helper/normalize-document.helper'
 
-export function Private({ documentData }: { documentData: Document[] }) {
+export function Private({ documentData }: { documentData: DocumentListItem[] }) {
 	return (
 		<section className="flex-1">
 			<h1 className="text-lg lg:text-2xl font-extrabold mb-6">Private</h1>

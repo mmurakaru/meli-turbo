@@ -11,6 +11,7 @@ import {
 } from '../job-queue-processors/SheetGenerationJob.ts'
 import type { SheetsInjectableDependencies } from '../SheetModule.ts'
 import { getSheetJobContract, postGenerateSheetContract } from '../schemas/sheetApiContracts.ts'
+import type { SheetJobResult } from '../schemas/sheetSchemas.ts'
 import type { SheetJobRepository } from '../services/SheetJobRepository.ts'
 
 type SheetControllerContractsType = typeof SheetController.contracts
@@ -67,7 +68,8 @@ export class SheetController extends AbstractController<SheetControllerContracts
 
     const result = {
       jobId: job.id,
-      status: job.status,
+      // DB column is a plain string; repository only ever writes the contract's enum values
+      status: job.status as SheetJobResult['status'],
       ...(job.result ? { sheet: job.result } : {}),
       ...(job.error ? { error: job.error } : {}),
     }

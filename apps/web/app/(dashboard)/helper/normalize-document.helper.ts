@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
-import type { Document, OwnerType } from '@/lib/db/schema'
+import type { DocumentListItem, OwnerType } from '@/lib/db/schema'
 
-export function normalizeDocument(document: Document): NormalizedDocument {
+export function normalizeDocument(document: DocumentListItem): NormalizedDocument {
 	function translateOwnerType(type: OwnerType) {
 		switch (type) {
 			case 'workspace':
@@ -23,7 +23,7 @@ export function normalizeDocument(document: Document): NormalizedDocument {
 	}
 }
 
-export function normalizedDocuments(documentData: Document[]): NormalizedDocument[] {
+export function normalizedDocuments(documentData: DocumentListItem[]): NormalizedDocument[] {
 	const normalizedDocs: NormalizedDocument[] = []
 	for (const document of documentData) {
 		normalizedDocs.push(normalizeDocument(document))
@@ -31,7 +31,7 @@ export function normalizedDocuments(documentData: Document[]): NormalizedDocumen
 	return normalizedDocs
 }
 
-export interface NormalizedDocument extends Omit<Document, 'ownerType' | 'updatedAt'> {
+export interface NormalizedDocument extends Omit<DocumentListItem, 'ownerType' | 'updatedAt'> {
 	ownerType: string
 	updatedAt: string
 }
