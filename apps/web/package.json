@@ -39,7 +39,7 @@
 		"fast-jwt": "^6.1.0",
 		"google-one-tap": "^1.0.6",
 		"jose": "^6.2.2",
-		"lucide-react": "^0.577.0",
+		"lucide-react": "^1.7.0",
 		"meli.js": "1.0.10-alpha",
 		"next": "16.2.2",
 		"papaparse": "^5.5.3",
