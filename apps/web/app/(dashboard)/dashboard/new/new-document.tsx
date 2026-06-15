@@ -29,7 +29,7 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 	const [formKey, setFormKey] = useState(0)
 	const [documentId, setDocumentId] = useState(() => uuidv7())
 	const [description, setDescription] = useState('')
-	const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>('private')
+	const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>(workspace?.id ?? 'private')
 	const [createMore, setCreateMore] = useState(false)
 	const [copied, setCopied] = useState(false)
 	const textAreaRef = useRef<HTMLTextAreaElement>(null)
@@ -48,10 +48,10 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 			toast.success(createState.success)
 			setDocumentId(uuidv7())
 			setDescription('')
-			setSelectedWorkspaceId('private')
+			setSelectedWorkspaceId(workspace?.id ?? 'private')
 			setFormKey((k) => k + 1)
 		}
-	}, [createState])
+	}, [createState, workspace?.id])
 
 	function copyToClipboard() {
 		navigator.clipboard.writeText(`${window.location.origin}/document/${documentId}`)
@@ -112,7 +112,7 @@ export function NewDocument({ workspace }: { workspace: Workspace | null }) {
 									/>
 									<RadioGroup
 										className="px-3"
-										defaultValue="private"
+										defaultValue={workspace?.id ?? 'private'}
 										name="owner"
 										onValueChange={setSelectedWorkspaceId}
 									>
