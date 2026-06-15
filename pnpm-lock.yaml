@@ -478,7 +478,7 @@ importers:
         version: 3.1.0
       '@lokalise/universal-testing-utils':
         specifier: ^3.5.0
-        version: 3.8.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(mockttp@4.4.2)(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(zod@4.3.6)
+        version: 3.8.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(mockttp@4.4.2)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(zod@4.3.6)
       '@readme/openapi-parser':
         specifier: ^5.5.0
         version: 5.5.0(openapi-types@12.1.3)
@@ -502,16 +502,16 @@ importers:
         version: 6.1.0
       fauxqs:
         specifier: ^2.2.0
-        version: 2.3.1(typescript@5.9.3)
+        version: 2.3.1(typescript@6.0.2)
       mockttp:
         specifier: ^4.2.3
         version: 4.4.2
       typescript:
-        specifier: 5.9.3
-        version: 5.9.3
+        specifier: 6.0.2
+        version: 6.0.2
       vitest:
         specifier: ^4.1.2
-        version: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
+        version: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
       yaml:
         specifier: ^2.8.2
         version: 2.8.2
@@ -7558,6 +7558,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
@@ -7865,18 +7870,6 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  ws@8.19.0:
-    resolution: {integrity: sha512-blAT2mjOEIi0ZzruJfIhb3nps74PRWTCz1IjglWEEpQl5XS/UNama6u2/rjFkDDouqr4L67ry+1aGIALViWjDg==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
 
   ws@8.21.0:
     resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
@@ -9791,11 +9784,11 @@ snapshots:
 
   '@lokalise/tsconfig@3.1.0': {}
 
-  '@lokalise/universal-testing-utils@3.8.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(mockttp@4.4.2)(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(zod@4.3.6)':
+  '@lokalise/universal-testing-utils@3.8.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(mockttp@4.4.2)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(zod@4.3.6)':
     dependencies:
       '@lokalise/api-contracts': 6.13.0(zod@4.3.6)
       mockttp: 4.4.2
-      msw: 2.12.10(@types/node@25.9.3)(typescript@5.9.3)
+      msw: 2.12.10(@types/node@25.9.3)(typescript@6.0.2)
       zod: 4.3.6
 
   '@lokalise/universal-ts-utils@4.10.0': {}
@@ -9941,7 +9934,7 @@ snapshots:
       unescape: 1.0.1
       unescape-js: 1.1.4
       uuid: 9.0.1
-      ws: 8.19.0
+      ws: 8.21.0
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -12536,7 +12529,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
+      vitest: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
 
   '@vitest/expect@4.0.18':
     dependencies:
@@ -12565,13 +12558,13 @@ snapshots:
       msw: 2.12.10(@types/node@25.9.3)(typescript@6.0.3)
       vite: 7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.9.0)
 
-  '@vitest/mocker@4.1.8(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))':
+  '@vitest/mocker@4.1.8(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 4.1.8
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      msw: 2.12.10(@types/node@25.9.3)(typescript@5.9.3)
+      msw: 2.12.10(@types/node@25.9.3)(typescript@6.0.2)
       vite: 7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2)
 
   '@vitest/pretty-format@4.0.18':
@@ -13084,7 +13077,7 @@ snapshots:
       '@datadog/pprof': 5.13.3
       '@datadog/wasm-js-rewriter': 5.0.1
       '@opentelemetry/api': 1.9.0
-      '@opentelemetry/api-logs': 0.212.0
+      '@opentelemetry/api-logs': 0.214.0
     transitivePeerDependencies:
       - '@openfeature/server-sdk'
 
@@ -13557,7 +13550,7 @@ snapshots:
       reusify: 1.1.0
       xtend: 4.0.2
 
-  fauxqs@2.3.1(typescript@5.9.3):
+  fauxqs@2.3.1(typescript@6.0.2):
     dependencies:
       '@aws-sdk/client-s3': 3.1000.0
       '@aws-sdk/client-sns': 3.1068.0
@@ -13565,7 +13558,7 @@ snapshots:
       '@smithy/node-http-handler': 4.4.12
       fastify: 5.8.5
       toad-cache: 3.7.0
-      valibot: 1.2.0(typescript@5.9.3)
+      valibot: 1.2.0(typescript@6.0.2)
     transitivePeerDependencies:
       - aws-crt
       - typescript
@@ -14394,7 +14387,7 @@ snapshots:
     optionalDependencies:
       msgpackr-extract: 3.0.3
 
-  msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3):
+  msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2):
     dependencies:
       '@inquirer/confirm': 5.1.21(@types/node@25.9.3)
       '@mswjs/interceptors': 0.41.3
@@ -14415,7 +14408,7 @@ snapshots:
       until-async: 3.0.2
       yargs: 17.7.2
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - '@types/node'
 
@@ -15644,6 +15637,8 @@ snapshots:
 
   typescript@5.9.3: {}
 
+  typescript@6.0.2: {}
+
   typescript@6.0.3: {}
 
   ulid-uuid-converter@1.0.4: {}
@@ -15730,9 +15725,9 @@ snapshots:
 
   uuidv7@1.1.0: {}
 
-  valibot@1.2.0(typescript@5.9.3):
+  valibot@1.2.0(typescript@6.0.2):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   valibot@1.2.0(typescript@6.0.3):
     optionalDependencies:
@@ -15839,10 +15834,10 @@ snapshots:
       - tsx
       - yaml
 
-  vitest@4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2)):
+  vitest@4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2)):
     dependencies:
       '@vitest/expect': 4.1.8
-      '@vitest/mocker': 4.1.8(msw@2.12.10(@types/node@25.9.3)(typescript@5.9.3))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
+      '@vitest/mocker': 4.1.8(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
       '@vitest/pretty-format': 4.1.8
       '@vitest/runner': 4.1.8
       '@vitest/snapshot': 4.1.8
@@ -15922,8 +15917,6 @@ snapshots:
       strip-ansi: 7.2.0
 
   wrappy@1.0.2: {}
-
-  ws@8.19.0: {}
 
   ws@8.21.0: {}
 
