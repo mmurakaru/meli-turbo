@@ -510,7 +510,7 @@ importers:
         specifier: 6.0.2
         version: 6.0.2
       vitest:
-        specifier: ^4.1.2
+        specifier: ^4.1.8
         version: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.12.10(@types/node@25.9.3)(typescript@6.0.2))(vite@7.3.1(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.2)(tsx@4.22.4)(yaml@2.8.2))
       yaml:
         specifier: ^2.8.2
@@ -12114,7 +12114,7 @@ snapshots:
       '@vitest/spy': 4.0.18
       '@vitest/utils': 4.0.18
       chai: 6.2.2
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/expect@4.1.8':
     dependencies:
@@ -12145,7 +12145,7 @@ snapshots:
 
   '@vitest/pretty-format@4.0.18':
     dependencies:
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/pretty-format@4.1.8':
     dependencies:
@@ -12181,7 +12181,7 @@ snapshots:
   '@vitest/utils@4.0.18':
     dependencies:
       '@vitest/pretty-format': 4.0.18
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/utils@4.1.8':
     dependencies:
