@@ -137,7 +137,7 @@ importers:
         specifier: ^1.2.6
         version: 1.2.7
       '@types/node':
-        specifier: ^25.5.2
+        specifier: ^25.9.3
         version: 25.9.3
       '@types/papaparse':
         specifier: ^5.3.16
