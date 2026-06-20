@@ -486,7 +486,7 @@ importers:
         specifier: ^0.10.8
         version: 0.10.8
       '@types/node':
-        specifier: ^25.5.2
+        specifier: ^25.9.3
         version: 25.9.3
       '@vitest/coverage-v8':
         specifier: ^4.1.2
