@@ -35,7 +35,7 @@
 		"@workspace/ui": "workspace:*",
 		"arctic": "^3.7.0",
 		"bcryptjs": "^3.0.2",
-		"date-fns": "^4.1.0",
+		"date-fns": "^4.4.0",
 		"drizzle-kit": "^0.31.10",
 		"drizzle-orm": "^0.45.2",
 		"fast-jwt": "^6.1.0",
