@@ -38,7 +38,7 @@ importers:
         version: 16.1.6
       '@t3-oss/env-nextjs':
         specifier: ^0.13.10
-        version: 0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
+        version: 0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.4.3)
       '@tanstack/react-table':
         specifier: ^8.20.6
         version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -121,8 +121,8 @@ importers:
         specifier: ^0.18.5
         version: 0.18.5
       zod:
-        specifier: ^4.3.6
-        version: 4.3.6
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@playwright/test':
         specifier: ^1.59.1
@@ -7661,6 +7661,9 @@ packages:
   zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
   zstd-codec@0.1.5:
     resolution: {integrity: sha512-v3fyjpK8S/dpY/X5WxqTK3IoCnp/ZOLxn144GZVlNUjtwAchzrVo03h+oMATFhCIiJ5KTr4V3vDQQYz4RU684g==}
 
@@ -11219,7 +11222,7 @@ snapshots:
       '@scalar/helpers': 0.8.2
       nanoid: 5.1.6
       type-fest: 5.4.4
-      zod: 4.3.6
+      zod: 4.4.3
 
   '@scalar/validation@0.6.0': {}
 
@@ -11625,19 +11628,19 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)':
+  '@t3-oss/env-core@0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.4.3)':
     optionalDependencies:
       typescript: 6.0.2
       valibot: 1.2.0(typescript@6.0.2)
-      zod: 4.3.6
+      zod: 4.4.3
 
-  '@t3-oss/env-nextjs@0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)':
+  '@t3-oss/env-nextjs@0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.4.3)':
     dependencies:
-      '@t3-oss/env-core': 0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
+      '@t3-oss/env-core': 0.13.10(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.4.3)
     optionalDependencies:
       typescript: 6.0.2
       valibot: 1.2.0(typescript@6.0.2)
-      zod: 4.3.6
+      zod: 4.4.3
 
   '@tailwindcss/node@4.1.18':
     dependencies:
@@ -15279,5 +15282,7 @@ snapshots:
   zen-observable@0.8.15: {}
 
   zod@4.3.6: {}
+
+  zod@4.4.3: {}
 
   zstd-codec@0.1.5: {}
