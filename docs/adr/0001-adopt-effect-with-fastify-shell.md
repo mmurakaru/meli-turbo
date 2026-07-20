@@ -56,6 +56,10 @@ RS256 verification, `@fastify/helmet`, and CORS.
   not part of the decoupling. They are vendor-neutral and stable.
 - The migration can proceed incrementally: business logic moves into Effect behind
   handlers without a big-bang HTTP rewrite.
+- Error-to-HTTP mapping is not left to individual handlers: it is concentrated in a
+  single seam ([ADR 0009](0009-error-handling-seam.md)) so error reporting and the
+  response contract stay consistent, replacing `createErrorHandler` from
+  `@lokalise/fastify-extras`.
 
 ## Revisit when
 

@@ -46,6 +46,27 @@ JSON logs with trace correlation to stdout; a Prometheus `/metrics` endpoint; OT
 tracing available by config; database and redis healthchecks wired to the health
 endpoint; a PostHog error-capture layer (no-op without an API key).
 
+## Trace coverage trade-off
+
+`@lokalise/opentelemetry-fastify-bootstrap` today provides broad
+auto-instrumentation (HTTP, pg, redis, per-request Fastify spans) via
+`@opentelemetry/auto-instrumentations-node`. `@effect/opentelemetry`'s
+`NodeSdk.layer` wires only the Effect tracer and exporters: spans exist where code
+calls `Effect.withSpan`, plus `@effect/sql` query spans. ioredis calls (wrapped in
+`Effect.tryPromise`) and per-request Fastify spans are not auto-captured. The
+migration keeps `@opentelemetry/auto-instrumentations-node` (or the specific
+http/pg/redis instrumentations) alongside the Effect SDK so coverage does not
+silently narrow; `Effect.withSpan` adds domain-level spans on top.
+
+## Request-id correlation
+
+The "trace correlation" bar means inbound request id reaches the logs. The Fastify
+handler adapter must bridge the request id (`request.id` / `x-request-id`) into the
+Effect fiber - `Effect.annotateLogs`/`Effect.annotateCurrentSpan` in the adapter -
+and background jobs must carry a `correlationId` in their payload (as cortex does
+today via `payload.metadata.correlationId`) and annotate it when processing. The
+skeleton demonstrates both.
+
 ## Consequences
 
 - `@lokalise/fastify-extras`, `@lokalise/opentelemetry-fastify-bootstrap`,
@@ -54,3 +75,8 @@ endpoint; a PostHog error-capture layer (no-op without an API key).
   than a `cortex.log` file.
 - `@effect/opentelemetry` is 0.x - pin exact. The exact `posthog-node` capture API
   should be confirmed at implementation.
+- Error reporting to PostHog is anchored at the central error seam ([ADR 0009](0009-error-handling-seam.md)),
+  not only per-handler `reportFailures`.
+- The two message-processing Prometheus histograms from `@message-queue-toolkit/metrics`
+  disappear with Phase 0; if that dashboard matters, re-add BullMQ processing time as
+  an `Effect.Metric`.

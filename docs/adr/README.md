@@ -17,6 +17,7 @@ the linked ticket on each ADR holds the original discussion and evidence.
 | [0006](0006-configuration.md) | Central Effect.Config with generated env docs | [#162](https://github.com/mmurakaru/meli-turbo/issues/162) |
 | [0007](0007-testing-strategy.md) | @effect/vitest units + real-infrastructure integration | [#161](https://github.com/mmurakaru/meli-turbo/issues/161) |
 | [0008](0008-template-distribution.md) | GitHub template repo; cortex retrofitted to match | [#163](https://github.com/mmurakaru/meli-turbo/issues/163) |
+| [0009](0009-error-handling-seam.md) | Central error-handling seam (setErrorHandler + typed mapper -> PostHog) | review of [#164](https://github.com/mmurakaru/meli-turbo/pull/164) |
 
 The executable migration plan built on these decisions is
 [`../effect-migration-spec.md`](../effect-migration-spec.md).
