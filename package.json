@@ -16,14 +16,16 @@
 		"@biomejs/biome": "^2.4.4",
 		"@changesets/cli": "^2.29.8",
 		"husky": "^9.1.7",
-		"turbo": "^2.5.0",
+		"turbo": "^2.10.5",
 		"typescript": "5.9.3"
 	},
 	"packageManager": "pnpm@10.32.1",
 	"pnpm": {
 		"overrides": {
 			"@types/react": "19.2.14",
-			"@types/react-dom": "19.2.3"
+			"@types/react-dom": "19.2.3",
+			"protobufjs": ">=8.6.0",
+			"postcss@<8.5.10": ">=8.5.10"
 		}
 	},
 	"engines": {
