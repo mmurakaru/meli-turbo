@@ -1,230 +1,65 @@
 # Environment variables
 
-## App
+Generated from `src/runtime/config.ts` by `node --run docs:generate` - do not edit by hand.
 
-- `NODE_ENV` (required)  
-  Type: `string`  
-  Description: Application execution environment  
-  Supported values: `production` | `test` | `development`
+## app
 
-- `APP_ENV` (required)  
-  Type: `string`  
-  Description: Deployment environment for the application  
-  Supported values: `production` | `staging` | `development`
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `NODE_ENV` | development |  | Runtime environment; selects pretty vs JSON logging. |
+| `APP_ENV` | development |  | Deployment environment reported to observability vendors. |
+| `APP_VERSION` | VERSION_NOT_SET |  | Application version reported by the health endpoint and traces. |
+| `GIT_COMMIT_SHA` | COMMIT_SHA_NOT_SET |  | Git commit SHA of the deployed build, reported by the health endpoint. |
+| `APP_PORT` | 3000 |  | HTTP server listening port. |
+| `APP_BIND_ADDRESS` | 0.0.0.0 |  | HTTP server bind address (0.0.0.0 exposes on all interfaces). |
+| `BASE_URL` |  |  | Public URL where the service is reachable, used in the OpenAPI spec. |
+| `LOG_LEVEL` | Info |  | Minimum log level emitted by the Effect logger. |
+| `JWT_PUBLIC_KEY` | **required** |  | RS256 public key (PEM) used to verify request JWTs; use || as a newline separator on a single line. |
 
-- `APP_VERSION` (optional)  
-  Type: `string`  
-  Description: Application version exposed via healthcheck endpoint  
-  Default: `VERSION_NOT_SET`
+## database
 
-- `GIT_COMMIT_SHA` (optional)  
-  Type: `string`  
-  Description: Git commit SHA of the deployed version  
-  Default: `COMMIT_SHA_NOT_SET`
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `DATABASE_URL` | **required** | yes | PostgreSQL connection URL including credentials and database name. |
+| `DATABASE_MAX_CONNECTIONS` | 10 |  | Maximum size of the PostgreSQL connection pool. |
 
-- `APP_PORT` (optional)  
-  Type: `integer`  
-  Description: HTTP server listening port  
-  Min value: `0`  
-  Max value: `65535`  
-  Default: `3000`
+## redis
 
-- `APP_BIND_ADDRESS` (required)  
-  Type: `string`  
-  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `REDIS_HOST` | localhost |  | Redis hostname used for the result cache and the BullMQ connection. |
+| `REDIS_PORT` | 6379 |  | Redis port. |
+| `REDIS_USERNAME` | *(unset)* |  | Redis authentication username; omit for an unauthenticated Redis. |
+| `REDIS_PASSWORD` | *(unset)* | yes | Redis authentication password; omit for an unauthenticated Redis. |
+| `REDIS_KEY_PREFIX` | cortex |  | Prefix applied to every Redis key. |
+| `REDIS_USE_TLS` | true |  | Whether to use TLS for the Redis connection. |
 
-- `JWT_PUBLIC_KEY` (required)  
-  Type: `string`  
-  Description: JWT validation public key (multi-line PEM in double quotes, or use || as newline separator)
+## queue
 
-- `LOG_LEVEL` (required)  
-  Type: `string`  
-  Description: Minimum log level for emitted logs  
-  Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `QUEUE_CONCURRENCY` | 5 |  | Number of jobs a BullMQ worker processes concurrently. |
 
-- `BASE_URL` (optional)  
-  Type: `string`  
-  Description: Public URL where the application is accessible, used in OpenAPI spec  
-  Default: ``
+## ai
 
-## App Metrics
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `AI_BASE_URL` | http://localhost:11434/v1 |  | Base URL for the OpenAI-compatible AI provider. |
+| `AI_MODEL` | qwen2.5:7b |  | Model identifier used for sheet generation. |
+| `AI_API_KEY` | ollama | yes | API key for the AI provider (use "ollama" for a local Ollama). |
 
-- `METRICS_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to enable Prometheus metrics collection  
-  Default: `true`
+## posthog
 
-## Db
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `POSTHOG_API_KEY` | *(unset)* | yes | PostHog project API key; when unset, error and event capture are no-ops. |
+| `POSTHOG_HOST` | https://eu.i.posthog.com |  | PostHog ingestion host. |
 
-- `DATABASE_URL` (required)  
-  Type: `string`  
-  Description: PostgreSQL connection URL including credentials and database name
+## observability
 
-## Redis
-
-- `REDIS_HOST` (required)  
-  Type: `string`  
-  Description: Redis server hostname
-
-- `REDIS_KEY_PREFIX` (required)  
-  Type: `string`  
-  Description: Prefix for all Redis keys
-
-- `REDIS_PORT` (required)  
-  Type: `integer`  
-  Description: Redis server port  
-  Min value: `0`  
-  Max value: `65535`
-
-- `REDIS_USERNAME` (optional)  
-  Type: `string`  
-  Description: Redis authentication username
-
-- `REDIS_PASSWORD` (optional)  
-  Type: `string`  
-  Description: Redis authentication password
-
-- `REDIS_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for Redis connection  
-  Default: `true`
-
-- `REDIS_COMMAND_TIMEOUT` (optional)  
-  Type: `integer`  
-  Description: Command execution timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-- `REDIS_CONNECT_TIMEOUT` (optional)  
-  Type: `integer`  
-  Description: Initial connection timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-## Scheduler
-
-- `SCHEDULER_REDIS_HOST` (required)  
-  Type: `string`  
-  Description: Scheduler Redis server hostname
-
-- `SCHEDULER_REDIS_KEY_PREFIX` (required)  
-  Type: `string`  
-  Description: Prefix for all scheduler Redis keys
-
-- `SCHEDULER_REDIS_PORT` (required)  
-  Type: `integer`  
-  Description: Scheduler Redis server port  
-  Min value: `0`  
-  Max value: `65535`
-
-- `SCHEDULER_REDIS_USERNAME` (optional)  
-  Type: `string`  
-  Description: Scheduler Redis authentication username
-
-- `SCHEDULER_REDIS_PASSWORD` (optional)  
-  Type: `string`  
-  Description: Scheduler Redis authentication password
-
-- `SCHEDULER_REDIS_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for scheduler Redis connection  
-  Default: `true`
-
-- `SCHEDULER_REDIS_COMMAND_TIMEOUT` (optional)  
-  Type: `integer`  
-  Description: Scheduler command execution timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-- `SCHEDULER_REDIS_CONNECT_TIMEOUT` (optional)  
-  Type: `integer`  
-  Description: Scheduler initial connection timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-## Ai
-
-- `AI_BASE_URL` (optional)  
-  Type: `string`  
-  Description: Base URL for the AI provider API  
-  Default: `http://localhost:11434/v1`
-
-- `AI_MODEL` (optional)  
-  Type: `string`  
-  Description: AI model identifier to use for generation  
-  Default: `qwen2.5:7b`
-
-- `AI_API_KEY` (optional)  
-  Type: `string`  
-  Description: API key for the AI provider (use "ollama" for local)  
-  Default: `ollama`
-
-## Vendors Opentelemetry
-
-- `OTEL_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to enable OpenTelemetry instrumentation    
-  Default: `true`
-
-- `OTEL_RESOURCE_ATTRIBUTES` (optional)  
-  Type: `string`  
-  Description: OpenTelemetry resource attributes in format service.name={serviceName}  
-  Pattern: `^service\.name=[^,]+$`
-
-- `OTEL_EXPORTER_URL` (optional)  
-  Type: `string`  
-  Description: OpenTelemetry exporter endpoint URL  
-  Format: `uri`
-
-## Vendors Bugsnag
-
-- `BUGSNAG_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to send errors to Bugsnag  
-  Default: `true`
-
-- `BUGSNAG_KEY` (optional)  
-  Type: `string`  
-  Description: Bugsnag API key for error submission
-
-- `BUGSNAG_APP_TYPE` (optional)  
-  Type: `string`  
-  Description: Application process type identifier for Bugsnag
-
-## Vendors Amplitude
-
-- `AMPLITUDE_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to track analytics with Amplitude  
-  Default: `false`
-
-- `AMPLITUDE_KEY` (optional)  
-  Type: `string`  
-  Description: Amplitude API key for event submission
-
-- `AMPLITUDE_SERVER_ZONE` (optional)  
-  Type: `string`  
-  Description: Amplitude data residency region  
-  Supported values: `EU` | `US`  
-  Default: `EU`
-
-- `AMPLITUDE_FLUSH_INTERVAL_MILLIS` (optional)  
-  Type: `integer`  
-  Description: Event batch upload interval in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`  
-  Default: `10000`
-
-- `AMPLITUDE_FLUSH_QUEUE_SIZE` (optional)  
-  Type: `integer`  
-  Description: Maximum events per batch upload  
-  Min value: `0`  
-  Max value: `9007199254740991`  
-  Default: `300`
-
-- `AMPLITUDE_FLUSH_MAX_RETRIES` (optional)  
-  Type: `integer`  
-  Description: Maximum retry attempts for failed uploads  
-  Min value: `0`  
-  Max value: `9007199254740991`  
-  Default: `12`
+| Variable | Default | Secret | Description |
+|---|---|---|---|
+| `OTEL_SERVICE_NAME` | cortex |  | Resource service.name attached to traces and metrics. |
+| `OTEL_TRACING_ENABLED` | false |  | Whether to export OpenTelemetry traces via OTLP. |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | http://localhost:4318/v1/traces |  | OTLP HTTP traces endpoint used when tracing is enabled. |
+| `METRICS_PROMETHEUS_PORT` | 9080 |  | Port on which the Prometheus exporter serves /metrics. |

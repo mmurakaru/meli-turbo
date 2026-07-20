@@ -1,38 +1,122 @@
+import { fastifyCors } from '@fastify/cors'
+import fastifyHelmet from '@fastify/helmet'
+import fastifyJWT from '@fastify/jwt'
+import fastifySwagger from '@fastify/swagger'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
+import { Effect } from 'effect'
+import fastify, { type FastifyInstance } from 'fastify'
 import {
-  executeAndHandleGlobalErrors,
-  globalLogger,
-  resolveGlobalErrorLogObject,
-} from '@lokalise/node-core'
+  createJsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
+import { registerSheetRoutes } from './modules/sheets/index.ts'
+import { type AppRuntime, makeAppRuntime } from './runtime/AppRuntime.ts'
+import { AppConfig, SERVICE_NAME } from './runtime/config.ts'
+import { registerErrorHandler } from './runtime/ErrorHandler.ts'
+import { Healthcheck } from './runtime/Healthcheck.ts'
 
-import { ENABLE_ALL } from 'opinionated-machine'
-import { getApp } from './app.ts'
-import { getConfig } from './infrastructure/config.ts'
+const JWT_SKIP_LIST = new Set(['/', '/health', '/documentation', '/documentation/openapi.json'])
 
-export async function startServer() {
-  globalLogger.info('Starting application...')
-  const config = executeAndHandleGlobalErrors(getConfig)
-  const app = await getApp({
-    monitoringEnabled: config.app.metrics.isEnabled,
-    healthchecksEnabled: true,
-    jobQueuesEnabled: ENABLE_ALL,
-    enqueuedJobWorkersEnabled: ENABLE_ALL,
-    // Cortex has no AMQP consumers (amqpSupportedMessages is empty), so disabling
-    // this prevents the AmqpConnectionManager from attempting to connect to RabbitMQ.
-    // Note: [] is truthy in JS so we must use false explicitly here.
-    messageQueueConsumersEnabled: false,
-    periodicJobsEnabled: ENABLE_ALL,
+export type BuiltServer = { readonly app: FastifyInstance; readonly runtime: AppRuntime }
+
+/** Builds the Fastify shell around the Effect runtime, without listening. */
+export async function buildServer(runtime: AppRuntime = makeAppRuntime()): Promise<BuiltServer> {
+  const config = await runtime.runPromise(AppConfig)
+  const isDevelopment = config.app.nodeEnv === 'development'
+
+  const app = fastify({ logger: false })
+  app.setValidatorCompiler(validatorCompiler)
+  app.setSerializerCompiler(serializerCompiler)
+
+  await app.register(fastifyHelmet, isDevelopment ? { contentSecurityPolicy: false } : {})
+  if (isDevelopment) {
+    await app.register(fastifyCors, {
+      origin: '*',
+      credentials: true,
+      methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+    })
+  }
+
+  await app.register(fastifySwagger, {
+    transform: createJsonSchemaTransform({ skipList: ['/documentation', '/documentation/*'] }),
+    openapi: {
+      info: {
+        title: SERVICE_NAME,
+        description: 'Cortex sheet-generation service',
+        version: config.app.appVersion,
+      },
+      servers: [
+        {
+          url:
+            config.app.baseUrl ||
+            `http://${config.app.bindAddress === '0.0.0.0' ? 'localhost' : config.app.bindAddress}:${config.app.port}`,
+        },
+      ],
+      components: {
+        securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } },
+      },
+    },
+  })
+  await app.register(scalarFastifyApiReference, { routePrefix: '/documentation' })
+
+  await app.register(fastifyJWT, { secret: { public: config.app.jwtPublicKey } })
+  app.addHook('onRequest', async (request, reply) => {
+    const path = request.url.split('?')[0] ?? request.url
+    if (JWT_SKIP_LIST.has(path) || path.startsWith('/documentation/')) {
+      return
+    }
+    try {
+      await request.jwtVerify()
+    } catch {
+      return reply.status(401).send({ message: 'Unauthorized', code: 'UNAUTHORIZED' })
+    }
   })
 
-  try {
-    await app.listen({
-      host: config.app.bindAddress,
-      port: config.app.port,
-      listenTextResolver: (address) => {
-        return `node-service-template app listening at ${address}`
-      },
+  registerErrorHandler(app, runtime)
+
+  app.get('/health', async (_request, reply) => {
+    const report = await runtime.runPromise(
+      Effect.flatMap(Healthcheck, (healthcheck) => healthcheck.report),
+    )
+    return reply.status(report.healthy ? 200 : 503).send({
+      ...report,
+      version: config.app.appVersion,
+      gitCommitSha: config.app.gitCommitSha,
     })
-  } catch (err) {
-    app.log.error(resolveGlobalErrorLogObject(err))
-    process.exit(1)
+  })
+
+  registerSheetRoutes(app, runtime)
+
+  await app.ready()
+  return { app, runtime }
+}
+
+export async function startServer(): Promise<void> {
+  const runtime = makeAppRuntime()
+  const config = await runtime.runPromise(AppConfig)
+  const { app } = await buildServer(runtime)
+
+  let shuttingDown = false
+  const shutdown = async (signal: string): Promise<void> => {
+    if (shuttingDown) {
+      return
+    }
+    shuttingDown = true
+    await runtime.runPromise(Effect.logInfo(`Received ${signal}, shutting down`))
+    await app.close()
+    await runtime.dispose()
+    process.exit(0)
   }
+  process.on('SIGTERM', () => void shutdown('SIGTERM'))
+  process.on('SIGINT', () => void shutdown('SIGINT'))
+
+  await app.listen({ port: config.app.port, host: config.app.bindAddress })
+  await runtime.runPromise(
+    Effect.logInfo('Cortex started').pipe(
+      Effect.annotateLogs('port', config.app.port),
+      Effect.annotateLogs('environment', config.app.nodeEnv),
+    ),
+  )
 }

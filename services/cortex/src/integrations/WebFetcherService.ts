@@ -1,51 +1,62 @@
+import { Data, Effect } from 'effect'
+
 export type FetchedContent = {
-  url: string
-  contentType: 'html' | 'xml' | 'json' | 'text'
-  body: string
+  readonly url: string
+  readonly contentType: 'html' | 'xml' | 'json' | 'text'
+  readonly body: string
 }
 
-export class WebFetcherService {
-  private static readonly TIMEOUT_MS = 15_000
-  private static readonly USER_AGENT = 'Meli/cortex (url-fetcher)'
+export class SourceFetchError extends Data.TaggedError('SourceFetchError')<{
+  readonly url: string
+  readonly reason: string
+}> {}
 
-  async fetch(url: string): Promise<FetchedContent> {
-    let parsed: URL
-    try {
-      parsed = new URL(url)
-    } catch {
-      throw new Error(`Invalid URL: ${url}`)
-    }
+const TIMEOUT_MS = 15_000
+const USER_AGENT = 'Meli/cortex (url-fetcher)'
 
-    const res = await globalThis.fetch(parsed.toString(), {
-      headers: { 'User-Agent': WebFetcherService.USER_AGENT },
-      signal: AbortSignal.timeout(WebFetcherService.TIMEOUT_MS),
+/** Fetches a URL (HTML/XML/JSON/text) as context for generation, as an Effect. */
+export function fetchSource(url: string): Effect.Effect<FetchedContent, SourceFetchError> {
+  return Effect.gen(function* () {
+    const parsed = yield* Effect.try({
+      try: () => new URL(url),
+      catch: () => new SourceFetchError({ url, reason: `Invalid URL: ${url}` }),
     })
 
-    if (!res.ok) {
-      throw new Error(`Fetch failed for ${url}: HTTP ${res.status}`)
+    const response = yield* Effect.tryPromise({
+      try: (signal) =>
+        globalThis.fetch(parsed.toString(), {
+          headers: { 'User-Agent': USER_AGENT },
+          signal,
+        }),
+      catch: (cause) => new SourceFetchError({ url, reason: `Fetch failed: ${String(cause)}` }),
+    }).pipe(Effect.timeout(TIMEOUT_MS))
+
+    if (!response.ok) {
+      return yield* new SourceFetchError({ url, reason: `HTTP ${response.status}` })
     }
 
-    const rawContentType = res.headers.get('content-type') ?? ''
-    const body = await res.text()
-    const contentType = this.resolveContentType(rawContentType, body)
+    const rawContentType = response.headers.get('content-type') ?? ''
+    const body = yield* Effect.tryPromise({
+      try: () => response.text(),
+      catch: (cause) => new SourceFetchError({ url, reason: `Body read failed: ${String(cause)}` }),
+    })
 
-    return { url, contentType, body }
-  }
+    return { url, contentType: resolveContentType(rawContentType, body), body }
+  }).pipe(
+    Effect.catchTag('TimeoutException', () =>
+      Effect.fail(new SourceFetchError({ url, reason: `Timed out after ${TIMEOUT_MS}ms` })),
+    ),
+  )
+}
 
-  private resolveContentType(header: string, body: string): FetchedContent['contentType'] {
-    if (header.includes('application/json') || header.includes('+json')) return 'json'
-    if (
-      header.includes('xml') ||
-      header.includes('text/xml') ||
-      body.trimStart().startsWith('<?xml')
-    )
-      return 'xml'
-    if (
-      header.includes('text/html') ||
-      body.trimStart().startsWith('<!DOCTYPE') ||
-      body.trimStart().startsWith('<html')
-    )
-      return 'html'
-    return 'text'
-  }
+function resolveContentType(header: string, body: string): FetchedContent['contentType'] {
+  if (header.includes('application/json') || header.includes('+json')) return 'json'
+  if (header.includes('xml') || body.trimStart().startsWith('<?xml')) return 'xml'
+  if (
+    header.includes('text/html') ||
+    body.trimStart().startsWith('<!DOCTYPE') ||
+    body.trimStart().startsWith('<html')
+  )
+    return 'html'
+  return 'text'
 }

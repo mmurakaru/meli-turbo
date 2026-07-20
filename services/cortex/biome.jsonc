@@ -6,7 +6,18 @@
         "./node_modules/@lokalise/biome-config/configs/biome-esm.jsonc"
     ],
     "linter": {
-        // add overrides here if necessary
         "rules": {}
-    }
+    },
+    "overrides": [
+        {
+            // Module index files are the intended public boundary (see docs/adr/0002).
+            "includes": ["src/modules/*/index.ts"],
+            "linter": { "rules": { "performance": { "noBarrelFile": "off" } } }
+        },
+        {
+            // CLI scripts print to stdout.
+            "includes": ["scripts/**"],
+            "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+        }
+    ]
 }
