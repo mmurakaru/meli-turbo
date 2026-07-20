@@ -288,18 +288,6 @@ importers:
       '@ai-sdk/openai':
         specifier: ^3.0.50
         version: 3.0.71(zod@4.3.6)
-      '@aws-sdk/client-sns':
-        specifier: ^3.1024.0
-        version: 3.1068.0
-      '@aws-sdk/client-sqs':
-        specifier: ^3.1024.0
-        version: 3.1068.0
-      '@aws-sdk/client-sts':
-        specifier: ^3.1024.0
-        version: 3.1068.0
-      '@aws-sdk/credential-providers':
-        specifier: ^3.1024.0
-        version: 3.1068.0
       '@fastify/auth':
         specifier: ^5.0.4
         version: 5.0.4
@@ -327,9 +315,6 @@ importers:
       '@lokalise/api-contracts':
         specifier: ^6.7.0
         version: 6.13.0(zod@4.3.6)
-      '@lokalise/aws-config':
-        specifier: ^9.0.0
-        version: 9.0.0(131370ace169d7928fb7ae056683d0bb)
       '@lokalise/backend-http-client':
         specifier: ^11.2.0
         version: 11.2.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(@lokalise/node-core@14.8.1(zod@4.3.6))(zod@4.3.6)
@@ -354,30 +339,6 @@ importers:
       '@lokalise/opentelemetry-fastify-bootstrap':
         specifier: ^3.0.0
         version: 3.0.0(@fastify/otel@0.18.1(@opentelemetry/api@1.9.0))(@opentelemetry/auto-instrumentations-node@0.70.1(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0)))(@opentelemetry/exporter-trace-otlp-grpc@0.212.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-node@0.212.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.1(@opentelemetry/api@1.9.0))(fastify@5.8.5)
-      '@lokalise/universal-ts-utils':
-        specifier: ^4.10.0
-        version: 4.10.0
-      '@lokalise/zod-extras':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@message-queue-toolkit/amqp':
-        specifier: ^24.1.0
-        version: 24.1.0(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(amqplib@0.10.9)(zod@4.3.6)
-      '@message-queue-toolkit/core':
-        specifier: ^26.0.0
-        version: 26.1.1(zod@4.3.6)
-      '@message-queue-toolkit/metrics':
-        specifier: ^4.4.2
-        version: 4.4.2(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(prom-client@15.1.3)(zod@4.3.6)
-      '@message-queue-toolkit/schemas':
-        specifier: ^7.1.0
-        version: 7.1.0(zod@4.3.6)
-      '@message-queue-toolkit/sns':
-        specifier: ^25.0.0
-        version: 25.0.1(@aws-sdk/client-sns@3.1068.0)(@aws-sdk/client-sqs@3.1068.0)(@aws-sdk/client-sts@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6))(zod@4.3.6)
-      '@message-queue-toolkit/sqs':
-        specifier: ^25.0.0
-        version: 25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6)
       '@opentelemetry/auto-instrumentations-node':
         specifier: ^0.70.0
         version: 0.70.1(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))
@@ -390,9 +351,6 @@ importers:
       ai:
         specifier: ^6.0.146
         version: 6.0.205(zod@4.3.6)
-      amqplib:
-        specifier: ^0.10.9
-        version: 0.10.9
       awilix:
         specifier: ^13.0.3
         version: 13.0.4
@@ -435,9 +393,6 @@ importers:
       ioredis:
         specifier: ^5.9.3
         version: 5.10.0
-      layered-loader:
-        specifier: ^14.2.3
-        version: 14.2.3
       opinionated-machine:
         specifier: ^6.12.1
         version: 6.20.1(@lokalise/api-contracts@6.13.0(zod@4.3.6))(@lokalise/fastify-api-contracts@5.4.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(@lokalise/node-core@14.8.1(zod@4.3.6))(fastify@5.8.5)(zod@4.3.6))(@lokalise/node-core@14.8.1(zod@4.3.6))(awilix-manager@6.4.0(awilix@13.0.4))(awilix@13.0.4)(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(zod@4.3.6)
@@ -453,15 +408,9 @@ importers:
       prom-client:
         specifier: ^15.1.3
         version: 15.1.3
-      redis-semaphore:
-        specifier: ^5.6.2
-        version: 5.7.0(ioredis@5.10.0)
       toad-scheduler:
         specifier: ^3.1.0
         version: 3.1.0
-      undici:
-        specifier: ^7.22.0
-        version: 7.22.0
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -484,9 +433,6 @@ importers:
       '@readme/openapi-parser':
         specifier: ^5.5.0
         version: 5.5.0(openapi-types@12.1.3)
-      '@types/amqplib':
-        specifier: ^0.10.8
-        version: 0.10.8
       '@types/node':
         specifier: ^25.5.2
         version: 25.9.3
@@ -624,10 +570,6 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-cognito-identity@3.1068.0':
-    resolution: {integrity: sha512-by2Qj3f9BI9X4cY0n160R3uzkMpI6k9PmGA8QLAuzr8HzkiNrYFygMEPhIEdqBFHQPD/8AXNUs45HYjEDsQ33g==}
-    engines: {node: '>=20.0.0'}
-
   '@aws-sdk/client-s3@3.1000.0':
     resolution: {integrity: sha512-7kPy33qNGq3NfwHC0412T6LDK1bp4+eiPzetX0sVd9cpTSXuQDKpoOFnB0Njj6uZjJDcLS3n2OeyarwwgkQ0Ow==}
     engines: {node: '>=20.0.0'}
@@ -640,10 +582,6 @@ packages:
     resolution: {integrity: sha512-hatCfVf61RsSO5Qjrf7JKln4KiPDprXNJhpx9DNOmyeW1v+i7KNhbawk4d1wAnQ72YciOfhAhyRFec6UZqcnzQ==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-sts@3.1068.0':
-    resolution: {integrity: sha512-WCUEpfdsSSO7zsXi7GUwHR+A5HZDQNsGktFJxOm73ZU+WLlBKRDzKdWZdYOpNkgBpXxy5KCeVMvXuaq2s1zn7w==}
-    engines: {node: '>=20.0.0'}
-
   '@aws-sdk/core@3.973.15':
     resolution: {integrity: sha512-AlC0oQ1/mdJ8vCIqu524j5RB7M8i8E24bbkZmya1CuiQxkY7SdIZAyw7NDNMGaNINQFq/8oGRMX0HeOfCVsl/A==}
     engines: {node: '>=20.0.0'}
@@ -654,10 +592,6 @@ packages:
 
   '@aws-sdk/crc64-nvme@3.972.3':
     resolution: {integrity: sha512-UExeK+EFiq5LAcbHm96CQLSia+5pvpUVSAsVApscBzayb7/6dJBJKwV4/onsk4VbWSmqxDMcfuTD+pC4RxgZHg==}
-    engines: {node: '>=20.0.0'}
-
-  '@aws-sdk/credential-provider-cognito-identity@3.972.45':
-    resolution: {integrity: sha512-4L/REssieLON1hVsTzZucP1p2u5jmPNejyh/9BCGZXr93IalBbhRPCrtKIKwMTu9yRGr/bcKzhrQocByKLSzLQ==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/credential-provider-env@3.972.13':
@@ -722,10 +656,6 @@ packages:
 
   '@aws-sdk/credential-provider-web-identity@3.972.52':
     resolution: {integrity: sha512-lKj6aRSGbqLmpYmM24bY7a1Xmfcq2vkE3hv8CSPYfc1yCu0BPu/XEJ1L4Fm61MsU6ULLNSG8UGsffNoFUBjESA==}
-    engines: {node: '>=20.0.0'}
-
-  '@aws-sdk/credential-providers@3.1068.0':
-    resolution: {integrity: sha512-DN7UewD/XKGfNGWXZsTECWRj3IsULkE7aG+fPwqPf13CnX4UmNvj80g1xieJ0lVdMQ2h0L3gZpn2ClIY06+/vQ==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/middleware-bucket-endpoint@3.972.6':
@@ -2093,21 +2023,6 @@ packages:
     peerDependencies:
       zod: '>=3.25.56'
 
-  '@lokalise/aws-config@9.0.0':
-    resolution: {integrity: sha512-+SDt/yZVPrpjjPtdpbpmUcN6gD+So+g/WTjekyISICbRtaMTU3D4fQogudZTH066ZlGULONOKZRFx22LG1wzag==}
-    peerDependencies:
-      '@aws-sdk/client-sns': ^3.1053.0
-      '@aws-sdk/client-sqs': ^3.1053.0
-      '@aws-sdk/credential-providers': ^3.1053.0
-      '@lokalise/fastify-extras': '>=30.0.0'
-      '@lokalise/node-core': '>=13.0.0'
-      '@lokalise/universal-ts-utils': '>=4.0.0'
-      '@message-queue-toolkit/core': '>=26.0.0'
-      '@message-queue-toolkit/sns': '>=26.1.0'
-      '@message-queue-toolkit/sqs': '>=26.0.0'
-      envase: '>=1.3.0'
-      zod: '>=4.0.0'
-
   '@lokalise/backend-http-client@11.2.0':
     resolution: {integrity: sha512-1YffP7OIdea7ipVVgAzO1CV0mPaUUpIoeAaKVY+75Vmx+NHp0ogwOLtv4JguuY4r1JWfqQ++kSaZFcyiT1Xriw==}
     peerDependencies:
@@ -2194,12 +2109,6 @@ packages:
       msw: '>=2.7.0'
       zod: '>=3.25.56'
 
-  '@lokalise/universal-ts-utils@4.10.0':
-    resolution: {integrity: sha512-+k99TEjNikAqIEZCZZ6ltQ9lJveeHMNYzJmSClS4iBz+RLf67+8m2HDrPZ3J7MMWCGync2UGx7m8tjCNPJP3Aw==}
-
-  '@lokalise/zod-extras@3.0.2':
-    resolution: {integrity: sha512-ldy0L9wqzCnIPiM0kwC20wYHxBs0Eyd/2LjpaoLIFUJt14gQRHfJzf7AZxF7KAQGXWibDfwVzxJ01LZegUzdVQ==}
-
   '@lukeed/ms@2.0.2':
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
@@ -2209,56 +2118,6 @@ packages:
 
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
-
-  '@message-queue-toolkit/amqp@24.1.0':
-    resolution: {integrity: sha512-S6bQotTefi28bMlWvH78JHf6gPHv7FQDTHsvJ1JQRoa/9lzNlbwFjIGLeWCW1VKQwpGY3UrWqzcaFPDOKvXknA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@message-queue-toolkit/core': '>=25.0.0'
-      '@message-queue-toolkit/schemas': '>=7.0.0'
-      amqplib: ^2.0.1
-      zod: '>=3.25.76 <5.0.0'
-
-  '@message-queue-toolkit/core@26.1.1':
-    resolution: {integrity: sha512-RZ/417POWQAOoF2zgl7gMAmY81ZMZ+BHqg/PCwXB8Gb3YmAv2pUypnnCnXkgk+aokWvnI0VkscJKSDzcqpVNnQ==}
-    peerDependencies:
-      zod: '>=3.25.76 <5.0.0'
-
-  '@message-queue-toolkit/metrics@4.4.2':
-    resolution: {integrity: sha512-UOwXRa0+N/2ZqYOygL6Q10mPxMcyYHlbFgnyFMT4j4yt9WcZS5lV0kPDUky3AGg3D3D0qQmA2jxvUbY/2inOAg==}
-    peerDependencies:
-      '@message-queue-toolkit/core': '>=21.0.0'
-      prom-client: '>=15.0.0'
-
-  '@message-queue-toolkit/schemas@7.1.0':
-    resolution: {integrity: sha512-JAzSQAHouympK/cEDBxsfEuS2Ifu1pv0a/NRvhNWfFlgW0TmsWT7SkYNERA7x89OK7PGk9PyDN88cV9l0gZ22Q==}
-    peerDependencies:
-      zod: '>=3.25.76 <5.0.0'
-
-  '@message-queue-toolkit/schemas@7.2.0':
-    resolution: {integrity: sha512-iuPbSeO1wm26tHPd5jIAmtllxVPRoMHHQbrqhsF5TpOfvDegXQ14lw/L5W2U7dWIYE+ErOvMWKTQAxdFZmza3A==}
-    peerDependencies:
-      zod: '>=3.25.67'
-
-  '@message-queue-toolkit/sns@25.0.1':
-    resolution: {integrity: sha512-agX8KtG/o4Tr2gLmzExeR6FE8C6ngz8WBJsviRmdEnaksAnuXBhCdVKoiMGsZm43zkrUG6W/bDTRwDDYBrQbTA==}
-    engines: {node: '>=22.0.0'}
-    peerDependencies:
-      '@aws-sdk/client-sns': ^3.632.0
-      '@aws-sdk/client-sqs': ^3.1034.0
-      '@aws-sdk/client-sts': ^3.632.0
-      '@message-queue-toolkit/core': '>=26.0.0'
-      '@message-queue-toolkit/schemas': '>=7.0.0'
-      '@message-queue-toolkit/sqs': '>=23.0.0 <26.0.0'
-      zod: '>=3.25.76 <5.0.0'
-
-  '@message-queue-toolkit/sqs@25.0.0':
-    resolution: {integrity: sha512-9bq2iKi7lrh7KHaj6QQDQx2wXKAmSCRfTmksZpc+4onay6G8diwAg3/xjaN/01m/oyH3U2+iiHlwVfhKR0G95Q==}
-    engines: {node: '>=22.0.0'}
-    peerDependencies:
-      '@aws-sdk/client-sqs': ^3.1034.0
-      '@message-queue-toolkit/core': '>=26.0.0'
-      zod: '>=3.25.76 <5.0.0'
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     resolution: {integrity: sha512-QZHtlVgbAdy2zAqNA9Gu1UpIuI8Xvsd1v8ic6B2pZmeFnFcMWiPLfWXh7TVw4eGEZ/C9TH281KwhVoeQUKbyjw==}
@@ -4389,9 +4248,6 @@ packages:
     cpu: [arm64]
     os: [win32]
 
-  '@types/amqplib@0.10.8':
-    resolution: {integrity: sha512-vtDp8Pk1wsE/AuQ8/Rgtm6KUZYqcnTgNvEHwzCkX8rL7AGsC6zqAfKAAJhUZXFhM/Pp++tbnUHiam/8vVpPztA==}
-
   '@types/aws-lambda@8.10.161':
     resolution: {integrity: sha512-rUYdp+MQwSFocxIOcSsYSF3YYYC/uUpMbCY/mbO21vGqfrEYvNSoPyKYDj6RhXXpPfS0KstW9RwG3qXh9sL7FQ==}
 
@@ -4631,10 +4487,6 @@ packages:
   ajv@8.18.0:
     resolution: {integrity: sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==}
 
-  amqplib@0.10.9:
-    resolution: {integrity: sha512-jwSftI4QjS3mizvnSnOrPGYiUnm1vI2OP1iXeOUz5pb74Ua0nbf6nPyyTzuiCLEE3fMpaJORXh2K/TQ08H5xGA==}
-    engines: {node: '>=10'}
-
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
     engines: {node: '>=6'}
@@ -4804,9 +4656,6 @@ packages:
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-
-  buffer-more-ints@1.0.0:
-    resolution: {integrity: sha512-EMetuGFz5SLsT0QTnXzINh4Ksr+oo4i+UGTXEshiGCQWnsgSs7ZhJ8fzlwQ+OzEMs0MpDAMr1hxnblp5a4vcHg==}
 
   bullmq@5.70.1:
     resolution: {integrity: sha512-HjfGHfICkAClrFL0Y07qNbWcmiOCv1l+nusupXUjrvTPuDEyPEJ23MP0lUwUs/QEy1a3pWt/P/sCsSZ1RjRK+w==}
@@ -5115,10 +4964,6 @@ packages:
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
 
-  dot-prop@10.1.0:
-    resolution: {integrity: sha512-MVUtAugQMOff5RnBy2d9N31iG0lNwg1qAoAOn7pOK5wf94WIaE3My2p3uwTQuvS2AcqchkcR3bHByjaM0mmi7Q==}
-    engines: {node: '>=20'}
-
   dot-prop@6.0.1:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
@@ -5389,10 +5234,6 @@ packages:
 
   fast-equals@5.4.0:
     resolution: {integrity: sha512-jt2DW/aNFNwke7AUd+Z+e6pz39KO5rzdbbFCg2sGafS4mk13MI7Z8O5z9cADNn5lhGODIgLwug6TZO2ctf7kcw==}
-    engines: {node: '>=6.0.0'}
-
-  fast-equals@6.0.0:
-    resolution: {integrity: sha512-PFhhIGgdM79r5Uztdj9Zb6Tt1zKafqVfdMGwVca1z5z6fbX7DmsySSuJd8HiP6I1j505DCS83cLxo5rmSNeVEA==}
     engines: {node: '>=6.0.0'}
 
   fast-glob@3.3.3:
@@ -5898,10 +5739,6 @@ packages:
   json-schema@0.4.0:
     resolution: {integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==}
 
-  json-stream-stringify@3.1.6:
-    resolution: {integrity: sha512-x7fpwxOkbhFCaJDJ8vb1fBY3DdSa4AlITaz+HHILQJzdPMnHEFjxPwVUi1ALIbcIxDE0PNe/0i7frnY8QnBQog==}
-    engines: {node: '>=7.10.1'}
-
   jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
 
@@ -5918,10 +5755,6 @@ packages:
 
   jws@4.0.1:
     resolution: {integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==}
-
-  layered-loader@14.2.3:
-    resolution: {integrity: sha512-FazXanNbIaVZsqARxXsguE6Um2Q3WxVKpp662fz4JU7vcxcQfcc8jyi3zg8AvyO1MH5YIxAGPRfE4mowo8E6ow==}
-    engines: {node: '>=18'}
 
   layerr@3.0.0:
     resolution: {integrity: sha512-tv754Ki2dXpPVApOrjTyRo4/QegVb9eVFq4mjqp4+NM5NaX7syQvN5BBNfV/ZpAHCEHV24XdUVrBAoka4jt3pA==}
@@ -6657,9 +6490,6 @@ packages:
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
 
-  querystringify@2.2.0:
-    resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
-
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -6807,9 +6637,6 @@ packages:
   require-in-the-middle@8.0.1:
     resolution: {integrity: sha512-QT7FVMXfWOYFbeRBF6nu+I6tr2Tf3u0q8RIEjNob/heKY/nh7drD/k7eeMFmSQgnTtCzLDcCu/XEnpW2wk4xCQ==}
     engines: {node: '>=9.3.0 || >=8.10.0 <9.0.0'}
-
-  requires-port@1.0.0:
-    resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
 
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
@@ -7014,12 +6841,6 @@ packages:
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
-  sqs-consumer@15.0.2:
-    resolution: {integrity: sha512-ZNfzgtGBM4Wo3tepI/A54OEd7upnnK5DMWmdzgU33mKEPYSOyykOfQWGH+d8xBPE6lXsW/rM+ClhgfwjKL9LVg==}
-    engines: {node: '>=22.0.0'}
-    peerDependencies:
-      '@aws-sdk/client-sqs': ^3.1036.0
-
   ssf@0.11.2:
     resolution: {integrity: sha512-+idbmIXoYET47hH+d7dfm2epdOMUDjqcB4648sTZ+t2JwoyBFL/insLfB/racrDmsKB3diwsDA696pZMieAC5g==}
     engines: {node: '>=0.8'}
@@ -7186,10 +7007,6 @@ packages:
     resolution: {integrity: sha512-ASdhgQIBSay0R/eXggAkQ53G4nTJqTXqC2kbaBbdDwM7SkjyZyO0OaaN1/FH7U/yCeqOHDwFO5j8+Os/IS1dXw==}
     hasBin: true
 
-  tmp@0.2.7:
-    resolution: {integrity: sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw==}
-    engines: {node: '>=14.14'}
-
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
@@ -7277,10 +7094,6 @@ packages:
   undici-types@7.24.6:
     resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
 
-  undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
-    engines: {node: '>=20.18.1'}
-
   undici@8.4.1:
     resolution: {integrity: sha512-RNHlB4fxZK0IrkhBsxhlbx7s8kFWwr7rzzOqj5nvZugw3ig3RsB7KW3zVlV0eu8POl+rx5d1hmL7rRg0z1owow==}
     engines: {node: '>=22.19.0'}
@@ -7308,9 +7121,6 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
-
-  url-parse@1.5.10:
-    resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
   url-template@2.0.8:
     resolution: {integrity: sha512-XdVKMF4SJ0nP/O7XIPB0JwAEuT9lDIYnNsK8yGVe43y0AWoKeJNdv3ZNWh7ksJ6KqQFjOO6ox/VEitLnaVNufw==}
@@ -7715,19 +7525,6 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-cognito-identity@3.1068.0':
-    dependencies:
-      '@aws-crypto/sha256-browser': 5.2.0
-      '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/core': 3.974.20
-      '@aws-sdk/credential-provider-node': 3.972.55
-      '@aws-sdk/types': 3.973.12
-      '@smithy/core': 3.24.7
-      '@smithy/fetch-http-handler': 5.4.7
-      '@smithy/node-http-handler': 4.7.8
-      '@smithy/types': 4.14.4
-      tslib: 2.8.1
-
   '@aws-sdk/client-s3@3.1000.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
@@ -7815,20 +7612,6 @@ snapshots:
       '@smithy/types': 4.14.4
       tslib: 2.8.1
 
-  '@aws-sdk/client-sts@3.1068.0':
-    dependencies:
-      '@aws-crypto/sha256-browser': 5.2.0
-      '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/core': 3.974.20
-      '@aws-sdk/credential-provider-node': 3.972.55
-      '@aws-sdk/signature-v4-multi-region': 3.996.34
-      '@aws-sdk/types': 3.973.12
-      '@smithy/core': 3.24.7
-      '@smithy/fetch-http-handler': 5.4.7
-      '@smithy/node-http-handler': 4.7.8
-      '@smithy/types': 4.14.4
-      tslib: 2.8.1
-
   '@aws-sdk/core@3.973.15':
     dependencies:
       '@aws-sdk/types': 3.973.4
@@ -7859,14 +7642,6 @@ snapshots:
   '@aws-sdk/crc64-nvme@3.972.3':
     dependencies:
       '@smithy/types': 4.13.0
-      tslib: 2.8.1
-
-  '@aws-sdk/credential-provider-cognito-identity@3.972.45':
-    dependencies:
-      '@aws-sdk/nested-clients': 3.997.20
-      '@aws-sdk/types': 3.973.12
-      '@smithy/core': 3.24.7
-      '@smithy/types': 4.14.4
       tslib: 2.8.1
 
   '@aws-sdk/credential-provider-env@3.972.13':
@@ -8054,26 +7829,6 @@ snapshots:
       '@aws-sdk/nested-clients': 3.997.20
       '@aws-sdk/types': 3.973.12
       '@smithy/core': 3.24.7
-      '@smithy/types': 4.14.4
-      tslib: 2.8.1
-
-  '@aws-sdk/credential-providers@3.1068.0':
-    dependencies:
-      '@aws-sdk/client-cognito-identity': 3.1068.0
-      '@aws-sdk/core': 3.974.20
-      '@aws-sdk/credential-provider-cognito-identity': 3.972.45
-      '@aws-sdk/credential-provider-env': 3.972.46
-      '@aws-sdk/credential-provider-http': 3.972.48
-      '@aws-sdk/credential-provider-ini': 3.972.53
-      '@aws-sdk/credential-provider-login': 3.972.52
-      '@aws-sdk/credential-provider-node': 3.972.55
-      '@aws-sdk/credential-provider-process': 3.972.46
-      '@aws-sdk/credential-provider-sso': 3.972.52
-      '@aws-sdk/credential-provider-web-identity': 3.972.52
-      '@aws-sdk/nested-clients': 3.997.20
-      '@aws-sdk/types': 3.973.12
-      '@smithy/core': 3.24.7
-      '@smithy/credential-provider-imds': 4.3.9
       '@smithy/types': 4.14.4
       tslib: 2.8.1
 
@@ -9325,20 +9080,6 @@ snapshots:
     dependencies:
       zod: 4.3.6
 
-  '@lokalise/aws-config@9.0.0(131370ace169d7928fb7ae056683d0bb)':
-    dependencies:
-      '@aws-sdk/client-sns': 3.1068.0
-      '@aws-sdk/client-sqs': 3.1068.0
-      '@aws-sdk/credential-providers': 3.1068.0
-      '@lokalise/fastify-extras': 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.3.6))(@lokalise/background-jobs-common@14.4.1(bullmq@5.70.1)(ioredis@5.10.0)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.8.1(zod@4.3.6))(@opentelemetry/api@1.9.0)(bullmq@5.70.1)(dd-trace@5.87.0)(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.0)(pino@10.3.1)(zod@4.3.6)
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 26.1.1(zod@4.3.6)
-      '@message-queue-toolkit/sns': 25.0.1(@aws-sdk/client-sns@3.1068.0)(@aws-sdk/client-sqs@3.1068.0)(@aws-sdk/client-sts@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6))(zod@4.3.6)
-      '@message-queue-toolkit/sqs': 25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6)
-      envase: 1.3.0
-      zod: 4.3.6
-
   '@lokalise/backend-http-client@11.2.0(@lokalise/api-contracts@6.13.0(zod@4.3.6))(@lokalise/node-core@14.8.1(zod@4.3.6))(zod@4.3.6)':
     dependencies:
       '@lokalise/api-contracts': 6.13.0(zod@4.3.6)
@@ -9450,10 +9191,6 @@ snapshots:
       msw: 2.12.10(@types/node@25.9.3)(typescript@6.0.2)
       zod: 4.3.6
 
-  '@lokalise/universal-ts-utils@4.10.0': {}
-
-  '@lokalise/zod-extras@3.0.2': {}
-
   '@lukeed/ms@2.0.2': {}
 
   '@manypkg/find-root@1.1.0':
@@ -9471,67 +9208,6 @@ snapshots:
       fs-extra: 8.1.0
       globby: 11.1.0
       read-yaml-file: 1.1.0
-
-  '@message-queue-toolkit/amqp@24.1.0(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(amqplib@0.10.9)(zod@4.3.6)':
-    dependencies:
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@message-queue-toolkit/core': 26.1.1(zod@4.3.6)
-      '@message-queue-toolkit/schemas': 7.1.0(zod@4.3.6)
-      amqplib: 0.10.9
-      zod: 4.3.6
-
-  '@message-queue-toolkit/core@26.1.1(zod@4.3.6)':
-    dependencies:
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/schemas': 7.2.0(zod@4.3.6)
-      dot-prop: 10.1.0
-      fast-equals: 6.0.0
-      json-stream-stringify: 3.1.6
-      tmp: 0.2.7
-      toad-cache: 3.7.1
-      zod: 4.3.6
-
-  '@message-queue-toolkit/metrics@4.4.2(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(prom-client@15.1.3)(zod@4.3.6)':
-    dependencies:
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 26.1.1(zod@4.3.6)
-      prom-client: 15.1.3
-    transitivePeerDependencies:
-      - zod
-
-  '@message-queue-toolkit/schemas@7.1.0(zod@4.3.6)':
-    dependencies:
-      zod: 4.3.6
-
-  '@message-queue-toolkit/schemas@7.2.0(zod@4.3.6)':
-    dependencies:
-      zod: 4.3.6
-
-  '@message-queue-toolkit/sns@25.0.1(@aws-sdk/client-sns@3.1068.0)(@aws-sdk/client-sqs@3.1068.0)(@aws-sdk/client-sts@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6))(zod@4.3.6)':
-    dependencies:
-      '@aws-sdk/client-sns': 3.1068.0
-      '@aws-sdk/client-sqs': 3.1068.0
-      '@aws-sdk/client-sts': 3.1068.0
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@message-queue-toolkit/core': 26.1.1(zod@4.3.6)
-      '@message-queue-toolkit/schemas': 7.1.0(zod@4.3.6)
-      '@message-queue-toolkit/sqs': 25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6)
-      sqs-consumer: 15.0.2(@aws-sdk/client-sqs@3.1068.0)
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - supports-color
-
-  '@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1068.0)(@message-queue-toolkit/core@26.1.1(zod@4.3.6))(zod@4.3.6)':
-    dependencies:
-      '@aws-sdk/client-sqs': 3.1068.0
-      '@lokalise/node-core': 14.8.1(zod@4.3.6)
-      '@message-queue-toolkit/core': 26.1.1(zod@4.3.6)
-      sqs-consumer: 15.0.2(@aws-sdk/client-sqs@3.1068.0)
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - supports-color
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     optional: true
@@ -11918,10 +11594,6 @@ snapshots:
   '@turbo/windows-arm64@2.10.5':
     optional: true
 
-  '@types/amqplib@0.10.8':
-    dependencies:
-      '@types/node': 25.9.3
-
   '@types/aws-lambda@8.10.161': {}
 
   '@types/bcryptjs@3.0.0':
@@ -12183,11 +11855,6 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  amqplib@0.10.9:
-    dependencies:
-      buffer-more-ints: 1.0.0
-      url-parse: 1.5.10
-
   ansi-colors@4.1.3: {}
 
   ansi-regex@5.0.1: {}
@@ -12353,8 +12020,6 @@ snapshots:
   buffer-equal-constant-time@1.0.1: {}
 
   buffer-from@1.1.2: {}
-
-  buffer-more-ints@1.0.0: {}
 
   bullmq@5.70.1:
     dependencies:
@@ -12623,10 +12288,6 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.6
       csstype: 3.2.3
-
-  dot-prop@10.1.0:
-    dependencies:
-      type-fest: 5.4.4
 
   dot-prop@6.0.1:
     dependencies:
@@ -12914,8 +12575,6 @@ snapshots:
   fast-deep-equal@3.1.3: {}
 
   fast-equals@5.4.0: {}
-
-  fast-equals@6.0.0: {}
 
   fast-glob@3.3.3:
     dependencies:
@@ -13504,8 +13163,6 @@ snapshots:
 
   json-schema@0.4.0: {}
 
-  json-stream-stringify@3.1.6: {}
-
   jsonfile@4.0.0:
     optionalDependencies:
       graceful-fs: 4.2.11
@@ -13524,13 +13181,6 @@ snapshots:
     dependencies:
       jwa: 2.0.1
       safe-buffer: 5.2.1
-
-  layered-loader@14.2.3:
-    dependencies:
-      ioredis: 5.10.0
-      toad-cache: 3.7.0
-    transitivePeerDependencies:
-      - supports-color
 
   layerr@3.0.0: {}
 
@@ -14255,8 +13905,6 @@ snapshots:
 
   quansync@0.2.11: {}
 
-  querystringify@2.2.0: {}
-
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
@@ -14405,8 +14053,6 @@ snapshots:
       module-details-from-path: 1.0.4
     transitivePeerDependencies:
       - supports-color
-
-  requires-port@1.0.0: {}
 
   resolve-alpn@1.2.1: {}
 
@@ -14666,13 +14312,6 @@ snapshots:
 
   sprintf-js@1.0.3: {}
 
-  sqs-consumer@15.0.2(@aws-sdk/client-sqs@3.1068.0):
-    dependencies:
-      '@aws-sdk/client-sqs': 3.1068.0
-      debug: 4.4.3
-    transitivePeerDependencies:
-      - supports-color
-
   ssf@0.11.2:
     dependencies:
       frac: 1.1.2
@@ -14801,8 +14440,6 @@ snapshots:
     dependencies:
       tldts-core: 7.0.23
 
-  tmp@0.2.7: {}
-
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
@@ -14876,8 +14513,6 @@ snapshots:
 
   undici-types@7.24.6: {}
 
-  undici@7.22.0: {}
-
   undici@8.4.1: {}
 
   unfetch@4.2.0: {}
@@ -14895,11 +14530,6 @@ snapshots:
       browserslist: 4.28.1
       escalade: 3.2.0
       picocolors: 1.1.1
-
-  url-parse@1.5.10:
-    dependencies:
-      querystringify: 2.2.0
-      requires-port: 1.0.0
 
   url-template@2.0.8: {}
 
