@@ -1,4 +1,3 @@
-import { getEnvaseAwsConfig } from '@lokalise/aws-config'
 import { createConfig, detectNodeEnv, envvar, type InferConfig, type InferEnv } from 'envase'
 import { z } from 'zod'
 
@@ -9,8 +8,6 @@ function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
 export const nodeEnv = detectNodeEnv(process.env)
 
 export const SERVICE_NAME = 'cortex'
-
-const awsConfig = getEnvaseAwsConfig()
 
 export function decodeJwtConfig(jwtPublicKey: string) {
   return jwtPublicKey.replaceAll('||', '\n')
@@ -168,21 +165,6 @@ const envSchema = {
         .describe('Scheduler initial connection timeout in milliseconds'),
     ),
   },
-  amqp: {
-    hostname: envvar('AMQP_HOSTNAME', z.string().describe('AMQP broker hostname')),
-    port: envvar(
-      'AMQP_PORT',
-      z.coerce.number().apply(setZodPortChecks).describe('AMQP broker port'),
-    ),
-    username: envvar('AMQP_USERNAME', z.string().describe('AMQP broker username')),
-    password: envvar('AMQP_PASSWORD', z.string().describe('AMQP broker password')),
-    vhost: envvar('AMQP_VHOST', z.string().default('').describe('AMQP broker virtual host')),
-    useTls: envvar(
-      'AMQP_USE_TLS',
-      z.stringbool().default(true).describe('Whether to use TLS/SSL for AMQP connection'),
-    ),
-  },
-  aws: awsConfig.schema,
   ai: {
     baseUrl: envvar(
       'AI_BASE_URL',
@@ -269,11 +251,7 @@ const envSchema = {
   },
 }
 
-const computed = {
-  aws: {
-    credentials: (raw: InferEnv<typeof envSchema>) => awsConfig.computed.credentials(raw.aws),
-  },
-}
+const computed = {}
 
 // biome-ignore lint/style/noDefaultExport: envase uses default export to generate docs
 export default envSchema

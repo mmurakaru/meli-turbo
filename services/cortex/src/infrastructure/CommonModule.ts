@@ -1,6 +1,3 @@
-import { SNSClient } from '@aws-sdk/client-sns'
-import { SQSClient } from '@aws-sdk/client-sqs'
-import { STSClient } from '@aws-sdk/client-sts'
 import {
   CommonBullmqFactoryNew,
   type ModuleAwareQueueConfiguration,
@@ -13,17 +10,7 @@ import {
   HealthcheckResultsStore,
 } from '@lokalise/healthcheck-utils'
 import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
-import {
-  type AmqpAwareEventDefinition,
-  AmqpConnectionManager,
-  AmqpConsumerErrorResolver,
-  type AmqpTopicPublisherManager,
-  type CommonAmqpTopicPublisher,
-} from '@message-queue-toolkit/amqp'
-import { EventRegistry } from '@message-queue-toolkit/core'
-import { SnsConsumerErrorResolver } from '@message-queue-toolkit/sns'
-import type { Connection } from 'amqplib'
-import { Lifetime, type NameAndRegistrationPair, type Resolver } from 'awilix'
+import type { NameAndRegistrationPair, Resolver } from 'awilix'
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { Redis } from 'ioredis'
 import {
@@ -33,24 +20,19 @@ import {
   type DependencyInjectionOptions,
   type InferModuleDependencies,
   type InferPublicModuleDependencies,
-  isAnyMessageQueueConsumerEnabled,
   isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
 import { ToadScheduler } from 'toad-scheduler'
-import type { z } from 'zod/v4'
 import type { AppInstance } from '../app.ts'
 import { type SheetsModuleDependencies, sheetBullmqQueues } from '../modules/sheets/SheetModule.ts'
-import { type Config, getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
+import { getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.ts'
-import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
-import { PublisherManagerAdapter } from './PublisherManagerAdapter.ts'
 
 export type ExternalDependencies = {
   app?: AppInstance
   logger: CommonLogger
-  amqpConnection?: Connection
 }
 export type DependencyOverrides = Partial<DiConfig>
 export type Dependencies = CommonDependencies & SheetsModuleDependencies
@@ -60,16 +42,6 @@ declare module '@fastify/awilix' {
   interface Cradle extends Dependencies {}
   interface RequestCradle extends Dependencies {}
 }
-
-const amqpSupportedMessages = [] as const satisfies AmqpAwareEventDefinition[]
-export type AmqpSupportedMessages = typeof amqpSupportedMessages
-
-export type MessagesPublishPayloadsType = z.infer<AmqpSupportedMessages[number]['publisherSchema']>
-
-export type PublisherManager = AmqpTopicPublisherManager<
-  CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-  AmqpSupportedMessages
->
 
 const bullmqSupportedQueues = [
   ...sheetBullmqQueues,
@@ -222,98 +194,6 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
         },
       ),
 
-      amqpConnectionManager: asSingletonFunction(
-        ({ config }: { config: CommonDependencies['config'] }): AmqpConnectionManager => {
-          return new AmqpConnectionManager(config.amqp, externalDependencies.logger)
-        },
-        {
-          public: true,
-          lifetime: Lifetime.SINGLETON,
-          asyncInit: 'init',
-          asyncDispose: 'close',
-          asyncInitPriority: 1,
-          asyncDisposePriority: 1,
-          enabled: isAnyMessageQueueConsumerEnabled(diOptions),
-        },
-      ),
-
-      consumerErrorResolver: asSingletonFunction(
-        () => {
-          return new AmqpConsumerErrorResolver()
-        },
-        { public: true },
-      ),
-
-      sqsClient: asSingletonFunction(
-        ({ config }: { config: Config }) => {
-          return new SQSClient({
-            region: config.aws.region,
-            endpoint: config.aws.endpoint,
-            credentials: config.aws.credentials,
-          })
-        },
-        {
-          public: true,
-          dispose: (client) => {
-            client.destroy()
-          },
-        },
-      ),
-
-      snsClient: asSingletonFunction(
-        ({ config }: { config: Config }) => {
-          return new SNSClient({
-            region: config.aws.region,
-            endpoint: config.aws.endpoint,
-            credentials: config.aws.credentials,
-          })
-        },
-        {
-          public: true,
-          dispose: (client) => {
-            client.destroy()
-          },
-        },
-      ),
-
-      stsClient: asSingletonFunction(
-        ({ config }: { config: Config }) => {
-          return new STSClient({
-            region: config.aws.region,
-            endpoint: config.aws.endpoint,
-            credentials: config.aws.credentials,
-          })
-        },
-        {
-          public: true,
-          dispose: (client) => {
-            client.destroy()
-          },
-        },
-      ),
-
-      snsConsumerErrorResolver: asSingletonFunction(
-        () => {
-          return new SnsConsumerErrorResolver()
-        },
-        { public: true },
-      ),
-
-      eventRegistry: asSingletonFunction(
-        () => {
-          return new EventRegistry(amqpSupportedMessages)
-        },
-        { public: true },
-      ),
-
-      // Only init the AMQP publisher when there are consumers/messages configured.
-      // With an empty amqpSupportedMessages array this stays disabled so no broker
-      // connection is attempted at startup.
-      publisherManager: asSingletonClass(PublisherManagerAdapter, {
-        public: true,
-        enabled: isAnyMessageQueueConsumerEnabled(diOptions),
-      }),
-
       config: asSingletonFunction(() => getConfig(), { public: true }),
 
       transactionObservabilityManager: asSingletonFunction(
@@ -371,14 +251,6 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
         }): Healthcheck[] => {
           return [redisHealthcheck, dbHealthcheck]
         },
-      ),
-
-      messageProcessingMetricsManager: asSingletonFunction(
-        () =>
-          externalDependencies.app?.metrics
-            ? new MessageProcessingMetricsManager(externalDependencies.app.metrics)
-            : undefined,
-        { public: true },
       ),
     } satisfies Record<string, Resolver<unknown>>
   }

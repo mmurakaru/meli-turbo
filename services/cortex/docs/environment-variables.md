@@ -35,7 +35,7 @@
 
 - `JWT_PUBLIC_KEY` (required)  
   Type: `string`  
-  Description: JWT validation public key (use '||' as newline separator)
+  Description: JWT validation public key (multi-line PEM in double quotes, or use || as newline separator)
 
 - `LOG_LEVEL` (required)  
   Type: `string`  
@@ -142,101 +142,22 @@
   Min value: `0`  
   Max value: `9007199254740991`
 
-## Amqp
+## Ai
 
-- `AMQP_HOSTNAME` (required)  
+- `AI_BASE_URL` (optional)  
   Type: `string`  
-  Description: AMQP broker hostname
+  Description: Base URL for the AI provider API  
+  Default: `http://localhost:11434/v1`
 
-- `AMQP_PORT` (required)  
-  Type: `integer`  
-  Description: AMQP broker port  
-  Min value: `0`  
-  Max value: `65535`
-
-- `AMQP_USERNAME` (required)  
+- `AI_MODEL` (optional)  
   Type: `string`  
-  Description: AMQP broker username
+  Description: AI model identifier to use for generation  
+  Default: `qwen2.5:7b`
 
-- `AMQP_PASSWORD` (required)  
+- `AI_API_KEY` (optional)  
   Type: `string`  
-  Description: AMQP broker password
-
-- `AMQP_VHOST` (optional)  
-  Type: `string`  
-  Description: AMQP broker virtual host  
-  Default: ``
-
-- `AMQP_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for AMQP connection  
-  Default: `true`
-
-## Aws
-
-- `AWS_REGION` (required)  
-  Type: `string`  
-  Description: AWS region for resource management  
-  Min length: `1`
-
-- `AWS_KMS_KEY_ID` (optional)  
-  Type: `string`  
-  Description: KMS key ID for encryption/decryption  
-  Default: ``
-
-- `AWS_ALLOWED_SOURCE_OWNER` (optional)  
-  Type: `string`  
-  Description: AWS account ID for permitted request source
-
-- `AWS_ENDPOINT` (optional)  
-  Type: `string`  
-  Description: Custom AWS service endpoint URL  
-  Format: `uri`
-
-- `AWS_RESOURCE_PREFIX` (optional)  
-  Type: `string`  
-  Description: Prefix for AWS resource names (max 10 chars)  
-  Max length: `10`
-
-- `AWS_ACCESS_KEY_ID` (optional)  
-  Type: `string`  
-  Description: AWS access key ID for programmatic access
-
-- `AWS_SECRET_ACCESS_KEY` (optional)  
-  Type: `string`  
-  Description: AWS secret access key for programmatic access
-
-- `_AWS_CREDENTIALS_RESOLVED` (optional)  
-  Type: `undefined`  
-  Description: Auto-resolved from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Do not configure directly.
-
-## Integrations FakeStore
-
-- `SAMPLE_FAKE_STORE_BASE_URL` (required)  
-  Type: `string`  
-  Description: Base URL for the fake store API integration
-
-## Jobs DeleteOldUsersJob
-
-- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` (required)  
-  Type: `integer`  
-  Description: Period in seconds for deleting old users job  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-## Jobs ProcessLogFilesJob
-
-- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` (required)  
-  Type: `integer`  
-  Description: Period in seconds for processing log files job  
-  Min value: `0`  
-  Max value: `9007199254740991`
-
-## Jobs SendEmailsJob
-
-- `SEND_EMAILS_JOB_CRON` (required)  
-  Type: `string`  
-  Description: Cron expression for scheduling the send emails job
+  Description: API key for the AI provider (use "ollama" for local)  
+  Default: `ollama`
 
 ## Vendors Opentelemetry
 
