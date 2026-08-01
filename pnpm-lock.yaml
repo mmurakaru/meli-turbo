@@ -392,8 +392,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       '@lokalise/tsconfig':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.0
+        version: 5.0.0
       '@types/node':
         specifier: ^25.5.2
         version: 25.9.3
@@ -1656,8 +1656,8 @@ packages:
   '@lokalise/biome-config@3.1.1':
     resolution: {integrity: sha512-B0VeqoX/PeVOIEgZhmnOIAFo9w8MV+MRdDue6lO7LnIjNB92vz+0onRV0v4RY2oACXoxVS3B2CfIzLbBpmbpQQ==}
 
-  '@lokalise/tsconfig@4.0.0':
-    resolution: {integrity: sha512-rWFqZPUa+odx1zdrEYmk4Sgmy1mnNnX6EYfV+Yn9NvonFfmUcWBoehqka9qxIIrDWwvnsEVSZGEpbdGfnWmPpw==}
+  '@lokalise/tsconfig@5.0.0':
+    resolution: {integrity: sha512-nAE106uzG1+6ldEdmbFVIwkFTszkOFIxzCPaZhwqoChcXizvcCPuPGTE+PrlPiE6GhfAzlspLvmVwvzdaNimdw==}
 
   '@lukeed/ms@2.0.2':
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
@@ -6440,7 +6440,7 @@ snapshots:
 
   '@lokalise/biome-config@3.1.1': {}
 
-  '@lokalise/tsconfig@4.0.0': {}
+  '@lokalise/tsconfig@5.0.0': {}
 
   '@lukeed/ms@2.0.2': {}
 
