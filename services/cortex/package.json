@@ -66,7 +66,7 @@
         "@biomejs/biome": "2.4.7",
         "@effect/vitest": "0.30.0",
         "@lokalise/biome-config": "^3.1.1",
-        "@lokalise/tsconfig": "^4.0.0",
+        "@lokalise/tsconfig": "^5.0.0",
         "@types/node": "^25.5.2",
         "@types/pg": "8.20.0",
         "@vitest/coverage-v8": "^4.1.2",
