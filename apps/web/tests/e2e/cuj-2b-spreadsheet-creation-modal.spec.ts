@@ -29,7 +29,7 @@ test.describe('CUJ 2b — Spreadsheet Creation via Modal', () => {
 		await page.goto('/dashboard/new')
 
 		await expect(page.getByRole('button', { name: 'Create spreadsheet' })).toBeVisible()
-		await expect(page.getByText('Create new spreadsheet')).toBeVisible()
+		await expect(page.getByRole('heading', { name: 'Create new spreadsheet' })).toBeVisible()
 
 		await page.screenshot({ path: screenshotPath('2b', 'new-page') })
 	})
@@ -52,7 +52,7 @@ test.describe('CUJ 2b — Spreadsheet Creation via Modal', () => {
 		await expect(page.getByLabel('Private')).toBeVisible()
 
 		// The "Spreadsheet" badge in the dialog header should be visible
-		await expect(page.getByText('Spreadsheet')).toBeVisible()
+		await expect(page.getByRole('dialog').getByText('Spreadsheet', { exact: true })).toBeVisible()
 
 		// Submit button inside dialog
 		await expect(page.getByRole('button', { name: 'Create spreadsheet' }).last()).toBeVisible()

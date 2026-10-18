@@ -16,6 +16,18 @@ export async function signInAsSeedUser(page: Page): Promise<void> {
 }
 
 /**
+ * Resolves the signed-in user's first workspace id. `/dashboard/workspace`
+ * redirects to `/workspace/<id>/settings`, so the id is read from the URL.
+ */
+export async function getSeedWorkspaceId(page: Page): Promise<string> {
+	await page.goto('/dashboard/workspace')
+	await page.waitForURL(/\/workspace\/[^/]+\/settings/, { timeout: 15_000 })
+	const workspaceId = new URL(page.url()).pathname.split('/')[2]
+	if (!workspaceId) throw new Error(`Could not read workspace id from ${page.url()}`)
+	return workspaceId
+}
+
+/**
  * Returns the screenshot path for a given test step.
  */
 export function screenshotPath(cujNumber: number | string, stepName: string): string {

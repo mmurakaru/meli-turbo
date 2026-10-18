@@ -133,6 +133,32 @@ docker compose down
 
 See [Drizzle migration docs](https://orm.drizzle.team/docs/migrations) for more options.
 
+## End-to-end tests (Playwright)
+
+The specs in `tests/e2e` drive the real app in Chromium. Cortex is mocked inside the
+specs, so only Postgres is needed.
+
+```bash
+# one-time: browser
+pnpm exec playwright install --with-deps chromium
+
+# database with the seed user (test@test.com / admin123)
+pnpm db:migrate && pnpm db:seed
+
+# runs `pnpm dev` automatically (or reuses a server already on :3000)
+pnpm test:e2e
+```
+
+Notes:
+
+- `/pricing` calls the live Stripe API, so its snapshot is skipped unless you set
+  `E2E_STRIPE=1` with a real test-mode `STRIPE_SECRET_KEY` in `.env.local`.
+- Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to use a different Chromium build, and
+  `PLAYWRIGHT_BASE_URL` to test an already-running deployment.
+- Specs write screenshots to `tests/e2e/screenshots/`; don't commit those from routine runs.
+- `pnpm test` (Vitest) excludes `tests/e2e`; CI runs the Playwright suite in
+  `.github/workflows/e2e.yml` against a Postgres service container.
+
 ## Testing Payments
 
 Use the following Stripe test card:
