@@ -169,7 +169,7 @@ export const deleteWorkspace = validatedActionWithUser(
 			)
 			.limit(1)
 
-		if (!membership || membership.role !== 'owner') {
+		if (membership?.role !== 'owner') {
 			return { error: 'Only the workspace owner can delete this workspace' }
 		}
 

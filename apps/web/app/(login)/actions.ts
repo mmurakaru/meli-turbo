@@ -97,7 +97,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 		.where(and(eq(publicUsers.email, email), eq(sql`${publicUsers.deletedAt} IS NULL`, sql`TRUE`)))
 		.limit(1)
 
-	if (!user || !user.passwordHash) {
+	if (!user?.passwordHash) {
 		return { error: 'Invalid email or password. Please try again.' }
 	}
 

@@ -2,7 +2,7 @@ import Script from 'next/script'
 
 export default function ScriptLoader() {
 	return (
-		<Script>
+		<Script id="meli-tour-loader">
 			{`
         window.meli = window.meli || {};
         window.meli.url = 'https://meli-tour.vercel.app/bundle.min.js';
