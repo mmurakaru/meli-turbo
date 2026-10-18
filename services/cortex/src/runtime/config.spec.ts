@@ -2,14 +2,14 @@ import { describe, expect, it } from '@effect/vitest'
 import { ConfigProvider, Effect, Layer, Option } from 'effect'
 import { AppConfig, AppConfigLive } from './config.ts'
 
-const testProvider = ConfigProvider.fromMap(
-  new Map([
-    ['JWT_PUBLIC_KEY', 'line-one||line-two'],
-    ['DATABASE_URL', 'postgres://user:pass@localhost:5432/db'],
-  ]),
-)
+const testProvider = ConfigProvider.fromEnv({
+  env: {
+    JWT_PUBLIC_KEY: 'line-one||line-two',
+    DATABASE_URL: 'postgres://user:pass@localhost:5432/db',
+  },
+})
 
-const TestConfigLayer = AppConfigLive.pipe(Layer.provide(Layer.setConfigProvider(testProvider)))
+const TestConfigLayer = AppConfigLive.pipe(Layer.provide(ConfigProvider.layer(testProvider)))
 
 describe('AppConfig', () => {
   it.effect('applies defaults for unset variables', () =>
@@ -36,5 +36,68 @@ describe('AppConfig', () => {
       expect(Option.isNone(config.posthog.apiKey)).toBe(true)
       expect(Option.isNone(config.redis.password)).toBe(true)
     }).pipe(Effect.provide(TestConfigLayer)),
+  )
+})
+
+const layerFor = (env: Record<string, string>) =>
+  AppConfigLive.pipe(
+    Layer.provide(
+      ConfigProvider.layer(
+        ConfigProvider.fromEnv({
+          env: {
+            JWT_PUBLIC_KEY: 'key',
+            DATABASE_URL: 'postgres://user:pass@localhost:5432/db',
+            ...env,
+          },
+        }),
+      ),
+    ),
+  )
+
+describe('AppConfig parsing', () => {
+  it.effect('accepts LOG_LEVEL case-insensitively', () =>
+    Effect.gen(function* () {
+      const lower = yield* Effect.provide(
+        Effect.service(AppConfig),
+        layerFor({ LOG_LEVEL: 'debug' }),
+      )
+      const upper = yield* Effect.provide(
+        Effect.service(AppConfig),
+        layerFor({ LOG_LEVEL: 'WARN' }),
+      )
+      expect(lower.app.logLevel).toBe('Debug')
+      expect(upper.app.logLevel).toBe('Warn')
+    }),
+  )
+
+  it.effect('rejects an unknown LOG_LEVEL', () =>
+    Effect.gen(function* () {
+      const result = yield* Effect.exit(
+        Effect.provide(Effect.service(AppConfig), layerFor({ LOG_LEVEL: 'bogus' })),
+      )
+      expect(result._tag).toBe('Failure')
+    }),
+  )
+
+  it.effect('parses boolean flags with the Effect 3 vocabulary', () =>
+    Effect.gen(function* () {
+      for (const [raw, expected] of [
+        ['true', true],
+        ['yes', true],
+        ['on', true],
+        ['1', true],
+        ['false', false],
+        ['no', false],
+        ['off', false],
+        ['0', false],
+      ] as const) {
+        const config = yield* Effect.provide(
+          Effect.service(AppConfig),
+          layerFor({ OTEL_TRACING_ENABLED: raw, REDIS_USE_TLS: raw }),
+        )
+        expect(config.observability.tracingEnabled).toBe(expected)
+        expect(config.redis.useTls).toBe(expected)
+      }
+    }),
   )
 })

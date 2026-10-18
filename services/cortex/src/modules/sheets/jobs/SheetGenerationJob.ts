@@ -1,5 +1,5 @@
 import { type Job, Queue, Worker } from 'bullmq'
-import { Context, Effect, Layer, Runtime } from 'effect'
+import { Context, Effect, Layer } from 'effect'
 import type { Redis } from 'ioredis'
 import { type ErrorReporter, reportFailures } from '../../../runtime/PostHog.ts'
 import { BullConnection } from '../../../runtime/Queue.ts'
@@ -18,13 +18,13 @@ export type SheetGenerationJobPayload = {
   readonly correlationId: string
 }
 
-export class SheetJobQueue extends Context.Tag('SheetJobQueue')<
+export class SheetJobQueue extends Context.Service<
   SheetJobQueue,
   Queue<SheetGenerationJobPayload>
->() {}
+>()('SheetJobQueue') {}
 
 /** BullMQ queue producer, closed with the runtime scope. */
-export const SheetJobQueueLive = Layer.scoped(
+export const SheetJobQueueLive = Layer.effect(
   SheetJobQueue,
   Effect.gen(function* () {
     const bull = yield* BullConnection
@@ -55,7 +55,7 @@ const writeCache = (redis: Redis, jobId: string, value: unknown) =>
     redis.set(cacheKey(jobId), JSON.stringify(value), 'EX', RESULT_CACHE_TTL_SECONDS),
   ).pipe(
     Effect.asVoid,
-    Effect.catchAll(() => Effect.void),
+    Effect.catch(() => Effect.void),
   )
 
 /**
@@ -67,10 +67,10 @@ export const SheetWorkerLive: Layer.Layer<
   never,
   never,
   BullConnection | SheetService | SheetJobRepository | RedisConnection | ErrorReporter
-> = Layer.scopedDiscard(
+> = Layer.effectDiscard(
   Effect.gen(function* () {
     const bull = yield* BullConnection
-    const runtime = yield* Effect.runtime<
+    const services = yield* Effect.context<
       SheetService | SheetJobRepository | RedisConnection | ErrorReporter
     >()
 
@@ -86,26 +86,26 @@ export const SheetWorkerLive: Layer.Layer<
         yield* service.generateSheet(payload.prompt, payload.sourceUrl).pipe(
           Effect.flatMap((sheet: Sheet) =>
             repository.setCompleted(payload.jobId, sheet).pipe(
-              Effect.zipRight(
+              Effect.andThen(
                 writeCache(redis, payload.jobId, {
                   jobId: payload.jobId,
                   status: 'completed',
                   sheet,
                 }),
               ),
-              Effect.zipRight(Effect.logInfo('Sheet generation completed')),
+              Effect.andThen(Effect.logInfo('Sheet generation completed')),
             ),
           ),
           Effect.catchTag('AiGenerationError', (error) =>
             repository.setFailed(payload.jobId, error.reason).pipe(
-              Effect.zipRight(
+              Effect.andThen(
                 writeCache(redis, payload.jobId, {
                   jobId: payload.jobId,
                   status: 'failed',
                   error: error.reason,
                 }),
               ),
-              Effect.zipRight(
+              Effect.andThen(
                 Effect.logError('Sheet generation failed').pipe(
                   Effect.annotateLogs('reason', error.reason),
                 ),
@@ -128,7 +128,7 @@ export const SheetWorkerLive: Layer.Layer<
           new Worker<SheetGenerationJobPayload>(
             SHEET_QUEUE_NAME,
             (job: Job<SheetGenerationJobPayload>) =>
-              Runtime.runPromise(runtime)(processJob(job.data)),
+              Effect.runPromiseWith(services)(processJob(job.data)),
             { connection: bull.connection, prefix: bull.prefix, concurrency: bull.concurrency },
           ),
       ),

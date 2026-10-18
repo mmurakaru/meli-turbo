@@ -81,7 +81,7 @@ export function registerSheetRoutes(app: FastifyInstance, runtime: AppRuntime): 
           const repository = yield* SheetJobRepository
 
           const cached = yield* Effect.tryPromise(() => redis.get(cacheKey(jobId))).pipe(
-            Effect.catchAll(() => Effect.succeed(null)),
+            Effect.catch(() => Effect.succeed(null)),
           )
           if (cached) {
             return JSON.parse(cached) as SheetJobResult
@@ -101,7 +101,7 @@ export function registerSheetRoutes(app: FastifyInstance, runtime: AppRuntime): 
           }
           yield* Effect.tryPromise(() =>
             redis.set(cacheKey(jobId), JSON.stringify(built), 'EX', 3600),
-          ).pipe(Effect.catchAll(() => Effect.void))
+          ).pipe(Effect.catch(() => Effect.void))
           return built
         }).pipe(Effect.withSpan('GET /sheets/jobs/:jobId')),
       )

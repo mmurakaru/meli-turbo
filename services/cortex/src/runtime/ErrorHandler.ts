@@ -61,17 +61,21 @@ export function runHandler<A, E>(
 export function registerErrorHandler(app: FastifyInstance, runtime: AppRuntime): void {
   app.setErrorHandler((error: unknown, request: FastifyRequest, reply: FastifyReply) => {
     const { status, body } = toResponse(error)
-    void runtime.runPromise(
-      Effect.gen(function* () {
-        if (status >= 500) {
-          yield* Effect.logError('Unhandled request error', error).pipe(
-            Effect.annotateLogs('requestId', request.id),
-          )
-          const reporter = yield* ErrorReporter
-          yield* reporter.captureException(error)
-        }
-      }).pipe(Effect.catchAllCause(() => Effect.void)),
-    )
+    // Effect 4 rejects runs on a disposed ManagedRuntime (e.g. a request still in flight
+    // during shutdown); error reporting must never surface as an unhandled rejection.
+    void runtime
+      .runPromise(
+        Effect.gen(function* () {
+          if (status >= 500) {
+            yield* Effect.logError('Unhandled request error', error).pipe(
+              Effect.annotateLogs('requestId', request.id),
+            )
+            const reporter = yield* ErrorReporter
+            yield* reporter.captureException(error)
+          }
+        }).pipe(Effect.catchCause(() => Effect.void)),
+      )
+      .catch(() => undefined)
     return reply.status(status).send(body)
   })
 

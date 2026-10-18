@@ -11,16 +11,15 @@ export type ErrorReporterService = {
   ) => Effect.Effect<void>
 }
 
-export class ErrorReporter extends Context.Tag('ErrorReporter')<
-  ErrorReporter,
-  ErrorReporterService
->() {}
+export class ErrorReporter extends Context.Service<ErrorReporter, ErrorReporterService>()(
+  'ErrorReporter',
+) {}
 
 /**
  * PostHog-backed error and event capture. Without POSTHOG_API_KEY every capture is a
  * no-op, so local development needs no vendor account.
  */
-export const ErrorReporterLive = Layer.scoped(
+export const ErrorReporterLive = Layer.effect(
   ErrorReporter,
   Effect.gen(function* () {
     const config = yield* AppConfig
@@ -59,8 +58,8 @@ export const reportFailures = <A, E, R>(
   effect: Effect.Effect<A, E, R>,
 ): Effect.Effect<A, E, R | ErrorReporter> =>
   effect.pipe(
-    Effect.tapErrorCause((cause) =>
-      Effect.flatMap(ErrorReporter, (reporter) => reporter.captureException(Cause.squash(cause))),
+    Effect.tapCause((cause) =>
+      ErrorReporter.use((reporter) => reporter.captureException(Cause.squash(cause))),
     ),
   )
 

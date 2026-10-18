@@ -13,10 +13,9 @@ export type BullConnectionSettings = {
  * Connection settings shared by every BullMQ Queue and Worker. Uses the unprefixed
  * base Redis options plus BullMQ's own key prefix.
  */
-export class BullConnection extends Context.Tag('BullConnection')<
-  BullConnection,
-  BullConnectionSettings
->() {}
+export class BullConnection extends Context.Service<BullConnection, BullConnectionSettings>()(
+  'BullConnection',
+) {}
 
 export const BullConnectionLive = Layer.effect(
   BullConnection,
