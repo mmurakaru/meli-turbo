@@ -2,14 +2,14 @@ import { Context, Effect, Layer, Option, Redacted } from 'effect'
 import { Redis, type RedisOptions } from 'ioredis'
 import { AppConfig, type AppConfigValues } from './config.ts'
 
-export class RedisConnection extends Context.Tag('RedisConnection')<RedisConnection, Redis>() {}
+export class RedisConnection extends Context.Service<RedisConnection, Redis>()('RedisConnection') {}
 
 /**
  * ioredis client for the result cache and healthchecks, closed with the runtime
  * scope. It carries the configured keyPrefix; BullMQ gets the unprefixed base
  * options plus its own prefix, so cache keys and queue keys never collide.
  */
-export const RedisLive = Layer.scoped(
+export const RedisLive = Layer.effect(
   RedisConnection,
   Effect.gen(function* () {
     const config = yield* AppConfig

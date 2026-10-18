@@ -1,4 +1,13 @@
-import { Config, Context, Layer, LogLevel, Redacted } from 'effect'
+import {
+  Config,
+  Context,
+  Effect,
+  Layer,
+  type LogLevel,
+  Redacted,
+  Schema,
+  SchemaIssue,
+} from 'effect'
 
 export const SERVICE_NAME = 'cortex'
 
@@ -12,6 +21,49 @@ export type EnvironmentVariableSpec = {
 }
 
 const registry: Array<EnvironmentVariableSpec> = []
+
+// Effect 4's built-in Config.Boolean / Config.LogLevel accept a different set of inputs
+// than Effect 3 did (e.g. LogLevel is now case-sensitive, so LOG_LEVEL=info would be
+// rejected). These keep the Effect 3 parsing rules so existing env files keep working.
+const TRUE_VALUES = ['true', 'yes', 'on', '1'] as const
+const FALSE_VALUES = ['false', 'no', 'off', '0'] as const
+
+function booleanConfig(name: string): Config.Config<boolean> {
+  return Config.Literals([...TRUE_VALUES, ...FALSE_VALUES], name).pipe(
+    Config.map((value) => (TRUE_VALUES as ReadonlyArray<string>).includes(value)),
+  )
+}
+
+const LOG_LEVEL_LABELS: Record<string, LogLevel.LogLevel> = {
+  ALL: 'All',
+  FATAL: 'Fatal',
+  ERROR: 'Error',
+  WARN: 'Warn',
+  INFO: 'Info',
+  DEBUG: 'Debug',
+  TRACE: 'Trace',
+  OFF: 'None',
+}
+
+/** Case-insensitive log level (ALL, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, OFF). */
+function logLevelConfig(name: string): Config.Config<LogLevel.LogLevel> {
+  return Config.String(name).pipe(
+    Config.mapEffect((value) => {
+      const level = LOG_LEVEL_LABELS[value.toUpperCase()]
+      return level === undefined
+        ? Effect.fail(
+            new Config.ConfigError(
+              new Schema.SchemaError(
+                new SchemaIssue.InvalidValue({
+                  message: `Expected a log level but received ${JSON.stringify(value)}`,
+                }),
+              ),
+            ),
+          )
+        : Effect.succeed(level)
+    }),
+  )
+}
 
 /**
  * Registers a variable's documentation metadata while constructing its Config, so
@@ -34,11 +86,9 @@ const appConfig = Config.all({
       defaultValue: 'development',
     },
     (name) =>
-      Config.literal(
-        'development',
-        'production',
-        'test',
-      )(name).pipe(Config.withDefault('development' as const)),
+      Config.Literals(['development', 'production', 'test'], name).pipe(
+        Config.withDefault('development' as const),
+      ),
   ),
   appEnv: documented(
     {
@@ -48,11 +98,9 @@ const appConfig = Config.all({
       defaultValue: 'development',
     },
     (name) =>
-      Config.literal(
-        'development',
-        'staging',
-        'production',
-      )(name).pipe(Config.withDefault('development' as const)),
+      Config.Literals(['development', 'staging', 'production'], name).pipe(
+        Config.withDefault('development' as const),
+      ),
   ),
   appVersion: documented(
     {
@@ -61,7 +109,7 @@ const appConfig = Config.all({
       description: 'Application version reported by the health endpoint and traces.',
       defaultValue: 'VERSION_NOT_SET',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('VERSION_NOT_SET')),
+    (name) => Config.String(name).pipe(Config.withDefault('VERSION_NOT_SET')),
   ),
   gitCommitSha: documented(
     {
@@ -70,7 +118,7 @@ const appConfig = Config.all({
       description: 'Git commit SHA of the deployed build, reported by the health endpoint.',
       defaultValue: 'COMMIT_SHA_NOT_SET',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('COMMIT_SHA_NOT_SET')),
+    (name) => Config.String(name).pipe(Config.withDefault('COMMIT_SHA_NOT_SET')),
   ),
   port: documented(
     {
@@ -79,7 +127,7 @@ const appConfig = Config.all({
       description: 'HTTP server listening port.',
       defaultValue: '3000',
     },
-    (name) => Config.integer(name).pipe(Config.withDefault(3000)),
+    (name) => Config.Int(name).pipe(Config.withDefault(3000)),
   ),
   bindAddress: documented(
     {
@@ -88,7 +136,7 @@ const appConfig = Config.all({
       description: 'HTTP server bind address (0.0.0.0 exposes on all interfaces).',
       defaultValue: '0.0.0.0',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('0.0.0.0')),
+    (name) => Config.String(name).pipe(Config.withDefault('0.0.0.0')),
   ),
   baseUrl: documented(
     {
@@ -97,7 +145,7 @@ const appConfig = Config.all({
       description: 'Public URL where the service is reachable, used in the OpenAPI spec.',
       defaultValue: '',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('')),
+    (name) => Config.String(name).pipe(Config.withDefault('')),
   ),
   logLevel: documented(
     {
@@ -106,7 +154,7 @@ const appConfig = Config.all({
       description: 'Minimum log level emitted by the Effect logger.',
       defaultValue: 'Info',
     },
-    (name) => Config.logLevel(name).pipe(Config.withDefault(LogLevel.Info)),
+    (name) => logLevelConfig(name).pipe(Config.withDefault<LogLevel.LogLevel>('Info')),
   ),
   jwtPublicKey: documented(
     {
@@ -115,7 +163,7 @@ const appConfig = Config.all({
       description:
         'RS256 public key (PEM) used to verify request JWTs; use || as a newline separator on a single line.',
     },
-    (name) => Config.string(name).pipe(Config.map((value) => value.replaceAll('||', '\n'))),
+    (name) => Config.String(name).pipe(Config.map((value) => value.replaceAll('||', '\n'))),
   ),
 })
 
@@ -127,7 +175,7 @@ const databaseConfig = Config.all({
       description: 'PostgreSQL connection URL including credentials and database name.',
       secret: true,
     },
-    (name) => Config.redacted(name),
+    (name) => Config.Redacted(name),
   ),
   maxConnections: documented(
     {
@@ -136,7 +184,7 @@ const databaseConfig = Config.all({
       description: 'Maximum size of the PostgreSQL connection pool.',
       defaultValue: '10',
     },
-    (name) => Config.integer(name).pipe(Config.withDefault(10)),
+    (name) => Config.Int(name).pipe(Config.withDefault(10)),
   ),
 })
 
@@ -148,7 +196,7 @@ const redisConfig = Config.all({
       description: 'Redis hostname used for the result cache and the BullMQ connection.',
       defaultValue: 'localhost',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('localhost')),
+    (name) => Config.String(name).pipe(Config.withDefault('localhost')),
   ),
   port: documented(
     {
@@ -157,7 +205,7 @@ const redisConfig = Config.all({
       description: 'Redis port.',
       defaultValue: '6379',
     },
-    (name) => Config.integer(name).pipe(Config.withDefault(6379)),
+    (name) => Config.Int(name).pipe(Config.withDefault(6379)),
   ),
   username: documented(
     {
@@ -166,7 +214,7 @@ const redisConfig = Config.all({
       description: 'Redis authentication username; omit for an unauthenticated Redis.',
       optional: true,
     },
-    (name) => Config.string(name).pipe(Config.option),
+    (name) => Config.String(name).pipe(Config.option),
   ),
   password: documented(
     {
@@ -176,7 +224,7 @@ const redisConfig = Config.all({
       secret: true,
       optional: true,
     },
-    (name) => Config.redacted(name).pipe(Config.option),
+    (name) => Config.Redacted(name).pipe(Config.option),
   ),
   keyPrefix: documented(
     {
@@ -185,7 +233,7 @@ const redisConfig = Config.all({
       description: 'Prefix applied to every Redis key.',
       defaultValue: 'cortex',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('cortex')),
+    (name) => Config.String(name).pipe(Config.withDefault('cortex')),
   ),
   useTls: documented(
     {
@@ -194,7 +242,7 @@ const redisConfig = Config.all({
       description: 'Whether to use TLS for the Redis connection.',
       defaultValue: 'true',
     },
-    (name) => Config.boolean(name).pipe(Config.withDefault(true)),
+    (name) => booleanConfig(name).pipe(Config.withDefault(true)),
   ),
 })
 
@@ -206,7 +254,7 @@ const queueConfig = Config.all({
       description: 'Number of jobs a BullMQ worker processes concurrently.',
       defaultValue: '5',
     },
-    (name) => Config.integer(name).pipe(Config.withDefault(5)),
+    (name) => Config.Int(name).pipe(Config.withDefault(5)),
   ),
 })
 
@@ -218,7 +266,7 @@ const aiConfig = Config.all({
       description: 'Base URL for the OpenAI-compatible AI provider.',
       defaultValue: 'http://localhost:11434/v1',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('http://localhost:11434/v1')),
+    (name) => Config.String(name).pipe(Config.withDefault('http://localhost:11434/v1')),
   ),
   model: documented(
     {
@@ -227,7 +275,7 @@ const aiConfig = Config.all({
       description: 'Model identifier used for sheet generation.',
       defaultValue: 'qwen2.5:7b',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('qwen2.5:7b')),
+    (name) => Config.String(name).pipe(Config.withDefault('qwen2.5:7b')),
   ),
   apiKey: documented(
     {
@@ -237,7 +285,7 @@ const aiConfig = Config.all({
       secret: true,
       defaultValue: 'ollama',
     },
-    (name) => Config.redacted(name).pipe(Config.withDefault(Redacted.make('ollama'))),
+    (name) => Config.Redacted(name).pipe(Config.withDefault(Redacted.make('ollama'))),
   ),
 })
 
@@ -250,7 +298,7 @@ const posthogConfig = Config.all({
       secret: true,
       optional: true,
     },
-    (name) => Config.redacted(name).pipe(Config.option),
+    (name) => Config.Redacted(name).pipe(Config.option),
   ),
   host: documented(
     {
@@ -259,7 +307,7 @@ const posthogConfig = Config.all({
       description: 'PostHog ingestion host.',
       defaultValue: 'https://eu.i.posthog.com',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('https://eu.i.posthog.com')),
+    (name) => Config.String(name).pipe(Config.withDefault('https://eu.i.posthog.com')),
   ),
 })
 
@@ -271,7 +319,7 @@ const observabilityConfig = Config.all({
       description: 'Resource service.name attached to traces and metrics.',
       defaultValue: SERVICE_NAME,
     },
-    (name) => Config.string(name).pipe(Config.withDefault(SERVICE_NAME)),
+    (name) => Config.String(name).pipe(Config.withDefault(SERVICE_NAME)),
   ),
   tracingEnabled: documented(
     {
@@ -280,7 +328,7 @@ const observabilityConfig = Config.all({
       description: 'Whether to export OpenTelemetry traces via OTLP.',
       defaultValue: 'false',
     },
-    (name) => Config.boolean(name).pipe(Config.withDefault(false)),
+    (name) => booleanConfig(name).pipe(Config.withDefault(false)),
   ),
   exporterUrl: documented(
     {
@@ -289,7 +337,7 @@ const observabilityConfig = Config.all({
       description: 'OTLP HTTP traces endpoint used when tracing is enabled.',
       defaultValue: 'http://localhost:4318/v1/traces',
     },
-    (name) => Config.string(name).pipe(Config.withDefault('http://localhost:4318/v1/traces')),
+    (name) => Config.String(name).pipe(Config.withDefault('http://localhost:4318/v1/traces')),
   ),
   prometheusPort: documented(
     {
@@ -298,7 +346,7 @@ const observabilityConfig = Config.all({
       description: 'Port on which the Prometheus exporter serves /metrics.',
       defaultValue: '9080',
     },
-    (name) => Config.integer(name).pipe(Config.withDefault(9080)),
+    (name) => Config.Int(name).pipe(Config.withDefault(9080)),
   ),
 })
 
@@ -314,9 +362,14 @@ const rootConfig = Config.all({
 
 export type AppConfigValues = typeof rootConfig extends Config.Config<infer A> ? A : never
 
-export class AppConfig extends Context.Tag('AppConfig')<AppConfig, AppConfigValues>() {}
+export class AppConfig extends Context.Service<AppConfig, AppConfigValues>()('AppConfig') {}
 
-export const AppConfigLive = Layer.effect(AppConfig, rootConfig)
+export const AppConfigLive = Layer.effect(
+  AppConfig,
+  Effect.gen(function* () {
+    return yield* rootConfig
+  }),
+)
 
 /** Documentation metadata for every environment variable, in declaration order. */
 export const environmentVariableRegistry: ReadonlyArray<EnvironmentVariableSpec> = registry

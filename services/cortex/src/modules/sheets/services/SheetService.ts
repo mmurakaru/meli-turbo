@@ -31,7 +31,9 @@ Rules:
 - Generate at minimum 1 column and 1 row`
 
 const GENERATION_TIMEOUT = '120 seconds'
-const RETRY_POLICY = Schedule.exponential('1 second').pipe(Schedule.compose(Schedule.recurs(2)))
+// Exponential backoff (1s, 2s), at most 2 retries: recur while both schedules recur,
+// waiting the larger delay (Effect 3's `compose` of the same two schedules).
+const RETRY_POLICY = Schedule.max([Schedule.exponential('1 second'), Schedule.recurs(2)])
 
 export type SheetServiceApi = {
   readonly generateSheet: (
@@ -40,7 +42,9 @@ export type SheetServiceApi = {
   ) => Effect.Effect<Sheet, AiGenerationError>
 }
 
-export class SheetService extends Context.Tag('SheetService')<SheetService, SheetServiceApi>() {}
+export class SheetService extends Context.Service<SheetService, SheetServiceApi>()(
+  'SheetService',
+) {}
 
 export const SheetServiceLive = Layer.effect(
   SheetService,
@@ -88,7 +92,7 @@ export const SheetServiceLive = Layer.effect(
               schedule: RETRY_POLICY,
               while: (error) => error instanceof AiGenerationError,
             }),
-            Effect.catchTag('TimeoutException', () =>
+            Effect.catchTag('TimeoutError', () =>
               Effect.fail(
                 new AiGenerationError({
                   reason: `Generation timed out after ${GENERATION_TIMEOUT}`,

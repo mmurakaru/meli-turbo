@@ -1,5 +1,5 @@
-import { SqlClient } from '@effect/sql'
 import { Context, Effect, Layer } from 'effect'
+import { SqlClient } from 'effect/sql'
 import { RedisConnection } from './Redis.ts'
 
 export type HealthReport = {
@@ -7,10 +7,10 @@ export type HealthReport = {
   readonly checks: { readonly postgres: 'ok' | 'fail'; readonly redis: 'ok' | 'fail' }
 }
 
-export class Healthcheck extends Context.Tag('Healthcheck')<
+export class Healthcheck extends Context.Service<
   Healthcheck,
   { readonly report: Effect.Effect<HealthReport> }
->() {}
+>()('Healthcheck') {}
 
 export const HealthcheckLive = Layer.effect(
   Healthcheck,
@@ -21,19 +21,21 @@ export const HealthcheckLive = Layer.effect(
     const postgresCheck = sql`SELECT 1`.pipe(
       Effect.timeout('2 seconds'),
       Effect.as('ok' as const),
-      Effect.catchAll(() => Effect.succeed('fail' as const)),
+      Effect.catch(() => Effect.succeed('fail' as const)),
     )
     const redisCheck = Effect.tryPromise(() => redis.ping()).pipe(
       Effect.timeout('2 seconds'),
       Effect.as('ok' as const),
-      Effect.catchAll(() => Effect.succeed('fail' as const)),
+      Effect.catch(() => Effect.succeed('fail' as const)),
     )
 
     return {
       report: Effect.all({ postgres: postgresCheck, redis: redisCheck }, { concurrency: 2 }).pipe(
-        Effect.map((checks) => ({
-          healthy: checks.postgres === 'ok' && checks.redis === 'ok',
-          checks,
+        Effect.map(({ postgres, redis }) => ({
+          healthy: postgres === 'ok' && redis === 'ok',
+          // Rebuilt in a fixed order: Effect 4's concurrent Effect.all fills struct keys in
+          // completion order, which would make the JSON key order of /health vary.
+          checks: { postgres, redis },
         })),
       ),
     }

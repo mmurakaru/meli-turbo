@@ -1,14 +1,15 @@
-import * as PgDrizzle from '@effect/sql-drizzle/Pg'
 import { PgClient } from '@effect/sql-pg'
 import { Effect, Layer } from 'effect'
 import { AppConfig } from './config.ts'
+import * as PgDrizzle from './Drizzle.ts'
 
 /**
- * Postgres access as a scoped Layer: `PgClient.layer` owns the node-postgres pool
+ * Postgres access as a scoped Layer: `PgClient.layer` owns the connection pool
  * (acquired and released with the runtime scope), and `PgDrizzle.layer` exposes a
- * drizzle query builder whose queries are Effects failing with `SqlError`.
+ * drizzle query builder whose queries run as Effects (via `PgDrizzle.runQuery`)
+ * failing with `SqlError`.
  */
-export const DatabaseLive = Layer.unwrapEffect(
+export const DatabaseLive = Layer.unwrap(
   Effect.gen(function* () {
     const config = yield* AppConfig
     return PgDrizzle.layer.pipe(

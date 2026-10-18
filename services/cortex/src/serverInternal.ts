@@ -22,7 +22,7 @@ export type BuiltServer = { readonly app: FastifyInstance; readonly runtime: App
 
 /** Builds the Fastify shell around the Effect runtime, without listening. */
 export async function buildServer(runtime: AppRuntime = makeAppRuntime()): Promise<BuiltServer> {
-  const config = await runtime.runPromise(AppConfig)
+  const config = await runtime.runPromise(Effect.service(AppConfig))
   const isDevelopment = config.app.nodeEnv === 'development'
 
   const app = fastify({ logger: false })
@@ -77,9 +77,7 @@ export async function buildServer(runtime: AppRuntime = makeAppRuntime()): Promi
   registerErrorHandler(app, runtime)
 
   app.get('/health', async (_request, reply) => {
-    const report = await runtime.runPromise(
-      Effect.flatMap(Healthcheck, (healthcheck) => healthcheck.report),
-    )
+    const report = await runtime.runPromise(Healthcheck.use((healthcheck) => healthcheck.report))
     return reply.status(report.healthy ? 200 : 503).send({
       ...report,
       version: config.app.appVersion,
@@ -95,7 +93,7 @@ export async function buildServer(runtime: AppRuntime = makeAppRuntime()): Promi
 
 export async function startServer(): Promise<void> {
   const runtime = makeAppRuntime()
-  const config = await runtime.runPromise(AppConfig)
+  const config = await runtime.runPromise(Effect.service(AppConfig))
   const { app } = await buildServer(runtime)
 
   let shuttingDown = false

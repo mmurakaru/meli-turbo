@@ -43,7 +43,7 @@ export function fetchSource(url: string): Effect.Effect<FetchedContent, SourceFe
 
     return { url, contentType: resolveContentType(rawContentType, body), body }
   }).pipe(
-    Effect.catchTag('TimeoutException', () =>
+    Effect.catchTag('TimeoutError', () =>
       Effect.fail(new SourceFetchError({ url, reason: `Timed out after ${TIMEOUT_MS}ms` })),
     ),
   )
