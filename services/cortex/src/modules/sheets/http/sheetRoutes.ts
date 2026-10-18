@@ -19,6 +19,13 @@ export class QueueUnavailable extends Data.TaggedError('QueueUnavailable')<{
   readonly cause: unknown
 }> {}
 
+/**
+ * BullMQ waits for a Redis connection indefinitely before running a command, so an
+ * enqueue during a Redis outage would hang the request. Past this bound it is a 503.
+ */
+export const ENQUEUE_TIMEOUT = '5 seconds'
+const CACHE_READ_TIMEOUT = '1 second'
+
 const jobIdParamsSchema = z.object({ jobId: z.string() })
 const cacheKey = (jobId: string) => `sheet-job:${jobId}`
 
@@ -55,7 +62,15 @@ export function registerSheetRoutes(app: FastifyInstance, runtime: AppRuntime): 
                 correlationId,
               } satisfies SheetGenerationJobPayload),
             catch: (cause) => new QueueUnavailable({ cause }),
-          })
+          }).pipe(
+            Effect.timeoutOrElse({
+              duration: ENQUEUE_TIMEOUT,
+              orElse: () =>
+                Effect.fail(
+                  new QueueUnavailable({ cause: new Error('Timed out enqueueing sheet job') }),
+                ),
+            }),
+          )
           return { jobId }
         }).pipe(Effect.withSpan('POST /sheets/generate')),
       )
@@ -81,6 +96,7 @@ export function registerSheetRoutes(app: FastifyInstance, runtime: AppRuntime): 
           const repository = yield* SheetJobRepository
 
           const cached = yield* Effect.tryPromise(() => redis.get(cacheKey(jobId))).pipe(
+            Effect.timeout(CACHE_READ_TIMEOUT),
             Effect.catch(() => Effect.succeed(null)),
           )
           if (cached) {
