@@ -67,10 +67,7 @@ test.describe('CUJ 3 — Workspace Collaboration', () => {
 		await page.screenshot({ path: screenshotPath(3, 'access-control-redirect') })
 	})
 
-	// Known app gap: proxy.ts only protects /dashboard/*, so /workspace/* pages render for
-	// signed-out visitors (the server actions behind them still require a user). Kept as
-	// fixme so the expectation is recorded without changing app behaviour in a test PR.
-	test.fixme('3.4b — access control: unauthenticated /workspace/new redirects to sign-in', async ({
+	test('3.4b — access control: unauthenticated /workspace/new redirects to sign-in', async ({
 		page,
 	}) => {
 		await page.context().clearCookies()
