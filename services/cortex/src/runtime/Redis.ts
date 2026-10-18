@@ -23,8 +23,17 @@ export const RedisLive = Layer.scoped(
   }),
 )
 
+/**
+ * The subset of ioredis options we set. Kept narrow so it is assignable both to
+ * ioredis' RedisOptions and to BullMQ v6's backend-agnostic ConnectionOptions.
+ */
+export type BaseRedisOptions = Pick<
+  RedisOptions,
+  'host' | 'port' | 'maxRetriesPerRequest' | 'tls' | 'username' | 'password'
+>
+
 /** Base connection options, without any ioredis keyPrefix. */
-export function redisOptionsFromConfig(redis: AppConfigValues['redis']): RedisOptions {
+export function redisOptionsFromConfig(redis: AppConfigValues['redis']): BaseRedisOptions {
   return {
     host: redis.host,
     port: redis.port,

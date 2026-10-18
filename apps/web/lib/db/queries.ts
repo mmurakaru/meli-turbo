@@ -155,7 +155,7 @@ export async function getDocumentsForOwner(ownerId: string, ownerType: OwnerType
 export async function getAllDocuments(userId: string) {
 	const userWithWorkspace = await getUserWithWorkspace(userId)
 
-	if (!userWithWorkspace || !userWithWorkspace.workspaceId) {
+	if (!userWithWorkspace?.workspaceId) {
 		// If the user is not part of a workspace, only return their personal documents
 		return await db
 			.select({

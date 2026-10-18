@@ -3,7 +3,7 @@ import type { Document } from '@/lib/db/schema'
 import { normalizeDocument, normalizedDocuments } from './normalize-document.helper'
 
 const baseDocument: Document = {
-	id: 1,
+	id: '00000000-0000-7000-8000-000000000001',
 	ownerId: 'owner-123',
 	ownerType: 'workspace',
 	title: 'My Document',
@@ -69,8 +69,8 @@ describe('normalizedDocuments', () => {
 	it('maps each document through normalizeDocument', () => {
 		// Arrange
 		const documents: Document[] = [
-			{ ...baseDocument, id: 1, ownerType: 'workspace' },
-			{ ...baseDocument, id: 2, ownerType: 'user' },
+			{ ...baseDocument, id: '00000000-0000-7000-8000-000000000001', ownerType: 'workspace' },
+			{ ...baseDocument, id: '00000000-0000-7000-8000-000000000002', ownerType: 'user' },
 		]
 
 		// Act

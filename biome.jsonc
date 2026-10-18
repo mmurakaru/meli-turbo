@@ -59,7 +59,7 @@
 	},
 	"linter": {
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"performance": {
 				"noBarrelFile": "off"
 			},

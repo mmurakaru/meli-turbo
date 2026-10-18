@@ -124,7 +124,7 @@ export async function handleSubscriptionChange(subscription: Stripe.Subscription
 		await updateWorkspaceSubscription(workspace.id, {
 			stripeSubscriptionId: subscriptionId,
 			stripeProductId: plan?.product as string,
-			planName: (plan?.product as Stripe.Product).name,
+			planName: (plan?.product as Stripe.Product | undefined)?.name ?? null,
 			subscriptionStatus: status,
 		})
 	} else if (status === 'canceled' || status === 'unpaid') {

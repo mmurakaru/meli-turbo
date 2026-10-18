@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { ColumnType } from './infer-column-type'
 import {
 	addColumnToTable,
 	addRowToTable,
@@ -8,7 +9,7 @@ import {
 	renameColumnInTable,
 } from './table-mutations'
 
-type Column = { id: string; label: string; type?: string }
+type Column = { id: string; label: string; type?: ColumnType }
 type Row = Record<string, string>
 type TableModel = { columns: Column[]; rows: Row[] }
 
