@@ -8,9 +8,28 @@ import {
 } from '@/lib/db/queries'
 import type { Workspace } from '@/lib/db/schema'
 
-export const stripe = new Stripe(env.STRIPE_SECRET_KEY ?? '', {
-	apiVersion: '2026-02-25.clover',
-})
+const STRIPE_API_VERSION = '2026-02-25.clover'
+
+let stripeClient: Stripe | undefined
+
+/** True when STRIPE_SECRET_KEY is set. Billing UI degrades gracefully when it isn't. */
+export function isStripeConfigured(): boolean {
+	return Boolean(env.STRIPE_SECRET_KEY)
+}
+
+/**
+ * Lazily creates the Stripe client on first use, so importing this module (e.g. while
+ * `next build` collects pages) never needs a Stripe key. Throws a clear error when a
+ * Stripe API call is attempted without STRIPE_SECRET_KEY.
+ */
+export function getStripe(): Stripe {
+	const secretKey = env.STRIPE_SECRET_KEY
+	if (!secretKey) {
+		throw new Error('Stripe is not configured: set STRIPE_SECRET_KEY to enable billing.')
+	}
+	stripeClient ??= new Stripe(secretKey, { apiVersion: STRIPE_API_VERSION })
+	return stripeClient
+}
 
 export async function createCheckoutSession({
 	workspace,
@@ -25,7 +44,7 @@ export async function createCheckoutSession({
 		redirect(`/sign-up?redirect=checkout&priceId=${priceId}`)
 	}
 
-	const session = await stripe.checkout.sessions.create({
+	const session = await getStripe().checkout.sessions.create({
 		payment_method_types: ['card'],
 		line_items: [
 			{
@@ -54,17 +73,17 @@ export async function createCustomerPortalSession(workspace: Workspace) {
 	}
 
 	let configuration: Stripe.BillingPortal.Configuration
-	const configurations = await stripe.billingPortal.configurations.list()
+	const configurations = await getStripe().billingPortal.configurations.list()
 
 	if (configurations.data.length > 0) {
 		configuration = configurations.data[0]
 	} else {
-		const product = await stripe.products.retrieve(workspace.stripeProductId)
+		const product = await getStripe().products.retrieve(workspace.stripeProductId)
 		if (!product.active) {
 			throw new Error("Workspace's product is not active in Stripe")
 		}
 
-		const prices = await stripe.prices.list({
+		const prices = await getStripe().prices.list({
 			product: product.id,
 			active: true,
 		})
@@ -72,7 +91,7 @@ export async function createCustomerPortalSession(workspace: Workspace) {
 			throw new Error("No active prices found for the workspace's product")
 		}
 
-		configuration = await stripe.billingPortal.configurations.create({
+		configuration = await getStripe().billingPortal.configurations.create({
 			business_profile: {
 				headline: 'Manage your subscription',
 			},
@@ -100,7 +119,7 @@ export async function createCustomerPortalSession(workspace: Workspace) {
 		})
 	}
 
-	return stripe.billingPortal.sessions.create({
+	return getStripe().billingPortal.sessions.create({
 		customer: workspace.stripeCustomerId,
 		return_url: `${env.BASE_URL}/dashboard`,
 		configuration: configuration.id,
@@ -138,7 +157,7 @@ export async function handleSubscriptionChange(subscription: Stripe.Subscription
 }
 
 export async function getStripePrices() {
-	const prices = await stripe.prices.list({
+	const prices = await getStripe().prices.list({
 		expand: ['data.product'],
 		active: true,
 		type: 'recurring',
@@ -155,7 +174,7 @@ export async function getStripePrices() {
 }
 
 export async function getStripeProducts() {
-	const products = await stripe.products.list({
+	const products = await getStripe().products.list({
 		active: true,
 		expand: ['data.default_price'],
 	})
@@ -167,4 +186,32 @@ export async function getStripeProducts() {
 		defaultPriceId:
 			typeof product.default_price === 'string' ? product.default_price : product.default_price?.id,
 	}))
+}
+
+export type StripePrice = Awaited<ReturnType<typeof getStripePrices>>[number]
+export type StripeProduct = Awaited<ReturnType<typeof getStripeProducts>>[number]
+
+/**
+ * Prices and products for the pricing page. Never throws: when Stripe is unconfigured
+ * or unreachable (e.g. an invalid key during `next build`), it returns empty lists so
+ * the page falls back to its built-in plan defaults instead of crashing.
+ */
+export async function getPricingData(): Promise<{
+	prices: StripePrice[]
+	products: StripeProduct[]
+}> {
+	if (!isStripeConfigured()) {
+		return { prices: [], products: [] }
+	}
+	try {
+		const [prices, products] = await Promise.all([getStripePrices(), getStripeProducts()])
+		return { prices, products }
+	} catch (error) {
+		// biome-ignore lint/suspicious/noConsole: surface Stripe misconfiguration in server logs
+		console.warn(
+			'[pricing] Could not load Stripe prices, using default plans:',
+			error instanceof Error ? error.message : error,
+		)
+		return { prices: [], products: [] }
+	}
 }

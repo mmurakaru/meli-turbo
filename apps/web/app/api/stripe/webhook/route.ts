@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import type Stripe from 'stripe'
+import Stripe from 'stripe'
 import { env } from '@/env'
-import { handleSubscriptionChange, stripe } from '@/lib/payments/stripe'
+import { handleSubscriptionChange } from '@/lib/payments/stripe'
 
 export async function POST(request: NextRequest) {
 	const webhookSecret = env.STRIPE_WEBHOOK_SECRET
@@ -15,7 +15,8 @@ export async function POST(request: NextRequest) {
 	let event: Stripe.Event
 
 	try {
-		event = stripe.webhooks.constructEvent(payload, signature, webhookSecret)
+		// Signature verification is offline and only needs the webhook secret.
+		event = Stripe.webhooks.constructEvent(payload, signature, webhookSecret)
 	} catch (_err) {
 		return NextResponse.json({ error: 'Webhook signature verification failed.' }, { status: 400 })
 	}

@@ -3,7 +3,8 @@ import { loadEnvConfig } from '@next/env'
 loadEnvConfig(process.cwd())
 
 async function stripeSetup() {
-	const { stripe } = await import('../payments/stripe')
+	const { getStripe } = await import('../payments/stripe')
+	const stripe = getStripe()
 
 	console.log('Creating Stripe products and prices...')
 

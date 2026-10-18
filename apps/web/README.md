@@ -151,8 +151,8 @@ pnpm test:e2e
 
 Notes:
 
-- `/pricing` calls the live Stripe API, so its snapshot is skipped unless you set
-  `E2E_STRIPE=1` with a real test-mode `STRIPE_SECRET_KEY` in `.env.local`.
+- `/pricing` calls the live Stripe API. Without a valid `STRIPE_SECRET_KEY` it renders the
+  default Free/Base/Plus plans (and `next build` still succeeds), which is what the e2e run checks.
 - Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to use a different Chromium build, and
   `PLAYWRIGHT_BASE_URL` to test an already-running deployment.
 - Specs write screenshots to `tests/e2e/screenshots/`; don't commit those from routine runs.
