@@ -3,13 +3,14 @@ import { Context, Effect, Layer } from 'effect'
 import type { Redis } from 'ioredis'
 import { type ErrorReporter, reportFailures } from '../../../runtime/PostHog.ts'
 import { BullConnection } from '../../../runtime/Queue.ts'
-import { RedisConnection } from '../../../runtime/Redis.ts'
+import { boundedRelease, RedisConnection } from '../../../runtime/Redis.ts'
 import type { Sheet } from '../schemas/sheetSchemas.ts'
 import { SheetJobRepository } from '../services/SheetJobRepository.ts'
 import { SheetService } from '../services/SheetService.ts'
 
 export const SHEET_QUEUE_NAME = 'SheetGenerationJob'
 const RESULT_CACHE_TTL_SECONDS = 3600
+const WORKER_DRAIN_TIMEOUT = '10 seconds'
 
 export type SheetGenerationJobPayload = {
   readonly jobId: string
@@ -42,7 +43,7 @@ export const SheetJobQueueLive = Layer.effect(
             },
           }),
       ),
-      (queue) => Effect.promise(() => queue.close().catch(() => undefined)),
+      (queue) => boundedRelease(Effect.promise(() => queue.close().catch(() => undefined))),
     )
   }),
 )
@@ -132,7 +133,13 @@ export const SheetWorkerLive: Layer.Layer<
             { connection: bull.connection, prefix: bull.prefix, concurrency: bull.concurrency },
           ),
       ),
-      (worker) => Effect.promise(() => worker.close().catch(() => undefined)),
+      // Gives in-flight jobs time to finish; anything still running after that is
+      // picked up again by BullMQ's stalled-job recovery on the next start.
+      (worker) =>
+        boundedRelease(
+          Effect.promise(() => worker.close().catch(() => undefined)),
+          WORKER_DRAIN_TIMEOUT,
+        ),
     )
   }),
 )
