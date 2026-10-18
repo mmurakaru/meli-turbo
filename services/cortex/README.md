@@ -108,21 +108,21 @@ openssl genrsa -out scripts/keys/jwtRS256.key 4096
 openssl rsa -in scripts/keys/jwtRS256.key -pubout -out scripts/keys/jwtRS256.key.pub
 ```
 
-Then update `JWT_PUBLIC_KEY` in `.env` (and `.env.default`) with the newly generated public key:
-
-```bash
-pnpm run jwt:generate
-# Copy the "Public key:" output and paste it as JWT_PUBLIC_KEY in .env / .env.default
-```
-
-The script also prints a signed JWT. Copy it into `CORTEX_API_KEY` in `apps/web/.env.local` so the web app can authenticate against Cortex:
+Then put the public key in `JWT_PUBLIC_KEY` in `.env` (and `.env.default`), and the private key in `CORTEX_JWT_PRIVATE_KEY` in `apps/web/.env.local`. Both are multi-line PEM values, so wrap them in double quotes:
 
 ```env
-# apps/web/.env.local
-CORTEX_API_KEY=eyJhbGci...
+# services/cortex/.env  (contents of scripts/keys/jwtRS256.key.pub)
+JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+...
+-----END PUBLIC KEY-----"
+
+# apps/web/.env.local  (contents of scripts/keys/jwtRS256.key)
+CORTEX_JWT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+...
+-----END PRIVATE KEY-----"
 ```
 
-> The token does not expire by default in the dev config. Re-run `pnpm run jwt:generate` whenever you rotate the keypair.
+The web app signs a fresh token (1 minute expiry) for every Cortex request, so there is no token to copy or refresh. Update both values whenever you rotate the keypair.
 
 ### 6. Start the service
 

@@ -133,7 +133,7 @@ The response should be identical to before the restart. Redis is re-seeded autom
 
 ## 7. Web UI proxy (apps/web)
 
-With `apps/web` running (`pnpm run dev` from root) and `CORTEX_API_KEY` set in `apps/web/.env.local`:
+With `apps/web` running (`pnpm run dev` from root) and `CORTEX_JWT_PRIVATE_KEY` set in `apps/web/.env.local`:
 
 ```bash
 # Enqueue via Next.js proxy
@@ -184,9 +184,8 @@ Run this from `services/cortex/`:
 mkdir -p scripts/keys
 openssl genrsa -out scripts/keys/jwtRS256.key 4096
 openssl rsa -in scripts/keys/jwtRS256.key -pubout -out scripts/keys/jwtRS256.key.pub
-pnpm run jwt:generate
 ```
 
-Copy the printed **public key** into `JWT_PUBLIC_KEY` in `.env` and `.env.default`.  
-Copy the printed **token** into `CORTEX_API_KEY` in `apps/web/.env.local`.  
+Copy `scripts/keys/jwtRS256.key.pub` into `JWT_PUBLIC_KEY` in `.env` and `.env.default`.  
+Copy `scripts/keys/jwtRS256.key` into `CORTEX_JWT_PRIVATE_KEY` in `apps/web/.env.local` (quoted, multi-line PEM).  
 Restart both Cortex and `apps/web`.

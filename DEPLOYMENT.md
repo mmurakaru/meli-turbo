@@ -111,10 +111,10 @@ fly secrets set \
 fly deploy
 ```
 
-> **Note on JWT:** Cortex validates Bearer JWTs on all non-skipped routes. Web currently
-> sends `CORTEX_API_KEY` as a raw Bearer token. Before going live, either:
-> - Add `/sheets/generate` and `/sheets/jobs/:id` to the skip list in `jwtTokenPlugin`, or
-> - Have web mint a proper JWT signed with the corresponding private key
+> **Note on JWT:** Cortex validates an RS256 Bearer JWT on every route except health and
+> docs. Web mints a short-lived token per request, signed with `CORTEX_JWT_PRIVATE_KEY`, so
+> Cortex's `JWT_PUBLIC_KEY` must be the public half of that same keypair. Use a fresh
+> production keypair rather than the dev key committed in `.env.default`.
 
 ---
 
@@ -133,7 +133,7 @@ vercel --prod
 | `SESSION_SECRET` | Random 32+ char string (`openssl rand -base64 32`) |
 | `BASE_URL` | `https://yourdomain.com` |
 | `CORTEX_URL` | Your Fly.io Cortex URL |
-| `CORTEX_API_KEY` | Shared secret (must match JWT setup in Cortex) |
+| `CORTEX_JWT_PRIVATE_KEY` | PEM RS256 private key; its public key must be Cortex's `JWT_PUBLIC_KEY` |
 | `NODE_ENV` | `production` |
 | `STRIPE_SECRET_KEY` | Optional — skip if not using billing |
 | `STRIPE_WEBHOOK_SECRET` | Optional |
