@@ -3,16 +3,17 @@ import { cn } from '@workspace/ui/lib/utils'
 import { Check, Sparkle } from 'lucide-react'
 import Link from 'next/link'
 import { checkoutAction } from '@/lib/payments/actions'
-import { getStripePrices, getStripeProducts } from '@/lib/payments/stripe'
+import { getPricingData } from '@/lib/payments/stripe'
 import { SubmitButton } from './submit-button'
 
 const FREE_PLAN_ID = 'Free'
 const PLUS_PLAN_ID = 'Plus'
 
 // Prices are fresh for one hour max (see cached Stripe helpers)
+// Falls back to the default plans below when Stripe is unconfigured or unreachable.
 
 export default async function PricingPage() {
-	const [prices, products] = await Promise.all([getStripePrices(), getStripeProducts()])
+	const { prices, products } = await getPricingData()
 
 	const basePlan = products.find((product) => product.name === 'Base')
 	const plusPlan = products.find((product) => product.name === 'Plus')

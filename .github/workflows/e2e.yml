@@ -31,7 +31,7 @@ jobs:
 
     env:
       # Throwaway CI-only values. Cortex calls are mocked inside the specs and
-      # /pricing (live Stripe) is skipped unless E2E_STRIPE=1.
+      # /pricing falls back to the default plans with this placeholder Stripe key.
       POSTGRES_URL: postgres://meliuser:pass@localhost:5432/meli
       BASE_URL: http://localhost:3000
       SESSION_SECRET: ci-only-session-secret-0123456789abcdef

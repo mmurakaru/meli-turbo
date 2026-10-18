@@ -4,7 +4,7 @@ import type Stripe from 'stripe'
 import { getUser } from '@/lib/auth/dal'
 import { db } from '@/lib/db/drizzle'
 import { publicUsers, workspaceMembers, workspaces } from '@/lib/db/schema'
-import { stripe } from '@/lib/payments/stripe'
+import { getStripe } from '@/lib/payments/stripe'
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 			throw new Error('User not authenticated.')
 		}
 
-		const session = await stripe.checkout.sessions.retrieve(sessionId, {
+		const session = await getStripe().checkout.sessions.retrieve(sessionId, {
 			expand: ['customer', 'subscription'],
 		})
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 			throw new Error('No subscription found for this session.')
 		}
 
-		const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+		const subscription = await getStripe().subscriptions.retrieve(subscriptionId, {
 			expand: ['items.data.price.product'],
 		})
 
