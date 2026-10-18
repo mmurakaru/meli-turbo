@@ -62,7 +62,8 @@ jobs:
         working-directory: apps/web
         run: |
           pnpm db:migrate
-          pnpm db:seed
+          # `pnpm db:seed` shells out to `npx tsx`, and tsx isn't a dependency
+          pnpm dlx tsx lib/db/seed.ts
 
       - name: Run Playwright
         working-directory: apps/web
