@@ -48,7 +48,8 @@ test.describe('CUJ 2 — Document Editing & Persistence', () => {
 		await expect(page.locator('body')).toBeVisible()
 
 		// "Create new spreadsheet" link should be visible
-		await expect(page.getByText('Create new spreadsheet')).toBeVisible()
+		// (the sidebar also has an sr-only link with the same text, so pick the card)
+		await expect(page.getByRole('link', { name: /^Create new spreadsheet Start/ })).toBeVisible()
 
 		await page.screenshot({ path: screenshotPath(2, 'dashboard') })
 	})
@@ -67,7 +68,8 @@ test.describe('CUJ 2 — Document Editing & Persistence', () => {
 		await titleInput.fill('E2E Test Document — Editing')
 
 		// Workspace/Private radio group should be visible
-		await expect(page.getByText('Private')).toBeVisible()
+		// (scoped to the dialog: the sidebar also has a "Private" nav link)
+		await expect(page.getByRole('dialog').getByText('Private', { exact: true })).toBeVisible()
 
 		await page.screenshot({ path: screenshotPath(2, 'new-document-dialog') })
 	})
@@ -83,7 +85,8 @@ test.describe('CUJ 2 — Document Editing & Persistence', () => {
 	})
 
 	test('2.4 — sign-in form accepts credentials and redirects to dashboard', async ({ page }) => {
-		// Sign out first by going to sign-in directly
+		// Sign out first: a signed-in user visiting /sign-in is redirected to /dashboard
+		await page.context().clearCookies()
 		await page.goto('/sign-in')
 
 		// Fill credentials

@@ -3,10 +3,10 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * Playwright configuration for Critical User Journey (CUJ) end-to-end tests.
  *
- * Browsers: uses the system Playwright Chromium at /opt/pw-browsers when
- * available, falling back to the default downloaded build.
+ * Browsers: uses Playwright's own Chromium (`pnpm exec playwright install chromium`).
+ * Set PLAYWRIGHT_CHROMIUM_EXECUTABLE to point at a different Chromium build.
  */
-const systemChromiumPath = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+const chromiumExecutable = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined
 
 export default defineConfig({
 	testDir: './tests/e2e',
@@ -30,12 +30,9 @@ export default defineConfig({
 			name: 'chromium',
 			use: {
 				...devices['Desktop Chrome'],
-				// Use the pre-installed Playwright Chromium build (build 1194) rather
-				// than the version-matched headless-shell so tests work offline.
-				channel: undefined,
 				browserName: 'chromium',
 				launchOptions: {
-					executablePath: systemChromiumPath,
+					executablePath: chromiumExecutable,
 					args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
 				},
 				viewport: { width: 1280, height: 800 },
