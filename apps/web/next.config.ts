@@ -1,9 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-	// cacheComponents: true,
 	images: {
-remotePatterns: [
+		remotePatterns: [
 			{
 				protocol: 'https',
 				hostname: 'storage.googleapis.com',

@@ -3,12 +3,16 @@
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
+	columnFilteringFeature,
+	createFilteredRowModel,
+	createSortedRowModel,
+	filterFn_includesString,
 	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getSortedRowModel,
+	globalFilteringFeature,
+	rowSortingFeature,
 	type SortingState,
-	useReactTable,
+	tableFeatures,
+	useTable,
 } from '@tanstack/react-table'
 import { ArrowDown, ArrowUp, ArrowUpDown, Filter, Plus, Trash2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
@@ -19,6 +23,15 @@ export type Column = { id: string; label: string; type?: ColumnType }
 type Row = Record<string, string>
 
 const COLUMN_TYPE_OPTIONS: ColumnType[] = ['text', 'number', 'date', 'boolean', 'url', 'select']
+
+const spreadsheetTableFeatures = tableFeatures({
+	columnFilteringFeature,
+	globalFilteringFeature,
+	rowSortingFeature,
+	filteredRowModel: createFilteredRowModel(),
+	sortedRowModel: createSortedRowModel(),
+	filterFns: { includesString: filterFn_includesString },
+})
 
 interface SpreadsheetViewProps {
 	columns: Column[]
@@ -201,11 +214,12 @@ export function SpreadsheetView({
 	const [globalFilter, setGlobalFilter] = useState('')
 	const [isFilterRowVisible, setIsFilterRowVisible] = useState(false)
 
-	const columnDefinitions = useMemo<ColumnDef<Row>[]>(
+	const columnDefinitions = useMemo<ColumnDef<typeof spreadsheetTableFeatures, Row>[]>(
 		() =>
 			columns.map((column) => ({
 				accessorKey: column.id,
-				sortingFn: (rowA, rowB) => {
+				filterFn: 'includesString',
+				sortFn: (rowA, rowB) => {
 					const comparator = buildSortComparator(column.type ?? 'text')
 					return comparator(
 						(rowA.getValue(column.id) as string) ?? '',
@@ -223,9 +237,9 @@ export function SpreadsheetView({
 					) : (
 						column.label
 					),
-				cell: ({ getValue, row }) => (
+				cell: ({ row }) => (
 					<TypeAwareCell
-						value={(getValue() as string) ?? ''}
+						value={row.original[column.id] ?? ''}
 						columnType={column.type ?? 'text'}
 						editable={!!editable}
 						onBlur={(newValue) => onCellChange?.(row.index, column.id, newValue)}
@@ -235,16 +249,14 @@ export function SpreadsheetView({
 		[columns, editable, onCellChange, onRenameColumn, onDeleteColumn, onChangeColumnType],
 	)
 
-	const tableInstance = useReactTable({
+	const tableInstance = useTable({
+		features: spreadsheetTableFeatures,
 		data: rows,
 		columns: columnDefinitions,
 		state: { sorting, columnFilters, globalFilter },
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		onGlobalFilterChange: setGlobalFilter,
-		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
 	})
 
 	const visibleRowCount = tableInstance.getRowModel().rows.length
@@ -341,7 +353,7 @@ export function SpreadsheetView({
 					<tbody>
 						{tableInstance.getRowModel().rows.map((row) => (
 							<tr key={row.id} className="group even:bg-gray-50">
-								{row.getVisibleCells().map((cell) => (
+								{row.getAllCells().map((cell) => (
 									<td key={cell.id} className="border-b px-3 py-2">
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</td>

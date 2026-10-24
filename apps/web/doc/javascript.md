@@ -1,4 +1,5 @@
 ---
+
 stage: none
 group: unassigned
 info: Any user with at least the Maintainer role can merge updates to this content.
@@ -24,13 +25,13 @@ which aligns with [the Airbnb style guide](https://github.com/airbnb/javascript#
 ```javascript
 // bad
 users.forEach((user, index) => {
-  user.id = index;
-});
+	user.id = index
+})
 
 // good
 const usersWithId = users.map((user, index) => {
-  return Object.assign({}, user, { id: index });
-});
+	return Object.assign({}, user, { id: index })
+})
 ```
 
 ## Limit number of parameters
@@ -41,12 +42,12 @@ instead.
 ```javascript
 // bad
 function a(p1, p2, p3, p4) {
-  // ...
+	// ...
 }
 
 // good
 function a({ p1, p2, p3, p4 }) {
-  // ...
+	// ...
 }
 ```
 
@@ -58,22 +59,22 @@ using a function.
 ```javascript
 // bad
 class myClass {
-  constructor(config) {
-    this.config = config;
-  }
+	constructor(config) {
+		this.config = config
+	}
 
-  init() {
-    document.addEventListener('click', () => {});
-  }
+	init() {
+		document.addEventListener('click', () => {})
+	}
 }
 
 // good
 
 const myFunction = () => {
-  document.addEventListener('click', () => {
-    // handle callback here
-  });
-};
+	document.addEventListener('click', () => {
+		// handle callback here
+	})
+}
 ```
 
 ## Pass element container to constructor
@@ -84,16 +85,16 @@ This is more maintainable and performant.
 ```javascript
 // bad
 class a {
-  constructor() {
-    document.querySelector('.b');
-  }
+	constructor() {
+		document.querySelector('.b')
+	}
 }
 
 // good
 class a {
-  constructor(options) {
-    options.container.querySelector('.b');
-  }
+	constructor(options) {
+		options.container.querySelector('.b')
+	}
 }
 ```
 
@@ -105,21 +106,21 @@ When converting strings to integers, `Number` is semantic and can be more readab
 
 ```javascript
 // bad (missing radix argument)
-parseInt('10');
+parseInt('10')
 
 // good
-parseInt('106', 10);
+parseInt('106', 10)
 
 // good
-Number('106');
+Number('106')
 ```
 
 ```javascript
 // bad (missing radix argument)
-things.map(parseInt);
+things.map(parseInt)
 
 // good
-things.map(Number);
+things.map(Number)
 ```
 
 NOTE:
@@ -145,12 +146,12 @@ Prefer named exports, as they improve name consistency.
 
 ```javascript
 // bad (with exceptions, see below)
-export default SomeClass;
-import SomeClass from 'file';
+export default SomeClass
+import SomeClass from 'file'
 
 // good
-export { SomeClass };
-import { SomeClass } from 'file';
+export { SomeClass }
+import { SomeClass } from 'file'
 ```
 
 Using default exports is acceptable in a few particular circumstances:
@@ -166,12 +167,12 @@ Our Node configuration requires CommonJS module syntax. Prefer named exports.
 
 ```javascript
 // bad
-module.exports = SomeClass;
-const SomeClass = require('./some_class');
+module.exports = SomeClass
+const SomeClass = require('./some_class')
 
 // good
-module.exports = { SomeClass };
-const { SomeClass } = require('./some_class');
+module.exports = { SomeClass }
+const { SomeClass } = require('./some_class')
 ```
 
 ## Absolute vs relative paths for modules
@@ -180,20 +181,20 @@ Use relative paths if the module you are importing is less than two levels up.
 
 ```javascript
 // bad
-import GitLabStyleGuide from '~/guides/GitLabStyleGuide';
+import GitLabStyleGuide from '~/guides/GitLabStyleGuide'
 
 // good
-import GitLabStyleGuide from '../GitLabStyleGuide';
+import GitLabStyleGuide from '../GitLabStyleGuide'
 ```
 
 If the module you are importing is two or more levels up, use an absolute path instead:
 
 ```javascript
 // bad
-import GitLabStyleGuide from '../../../guides/GitLabStyleGuide';
+import GitLabStyleGuide from '../../../guides/GitLabStyleGuide'
 
 // good
-import GitLabStyleGuide from '~/GitLabStyleGuide';
+import GitLabStyleGuide from '~/GitLabStyleGuide'
 ```
 
 Additionally, **do not add to global namespace**.
@@ -227,12 +228,12 @@ Avoid adding to the global namespace.
 ```javascript
 // bad
 window.MyClass = class {
-  /* ... */
-};
+	/* ... */
+}
 
 // good
 export default class MyClass {
-  /* ... */
+	/* ... */
 }
 ```
 
@@ -260,24 +261,24 @@ avoids violating the [Single Responsibility Principle](https://en.wikipedia.org/
 ```javascript
 // bad
 class myClass {
-  constructor(config) {
-    this.config = config;
-    axios.get(this.config.endpoint);
-  }
+	constructor(config) {
+		this.config = config
+		axios.get(this.config.endpoint)
+	}
 }
 
 // good
 class myClass {
-  constructor(config) {
-    this.config = config;
-  }
+	constructor(config) {
+		this.config = config
+	}
 
-  makeRequest() {
-    axios.get(this.config.endpoint);
-  }
+	makeRequest() {
+		axios.get(this.config.endpoint)
+	}
 }
-const instance = new myClass();
-instance.makeRequest();
+const instance = new myClass()
+instance.makeRequest()
 ```
 
 ## Pure Functions and Data Mutation
@@ -286,30 +287,30 @@ Strive to write many small pure functions and minimize where mutations occur
 
 ```javascript
 // bad
-const values = { foo: 1 };
+const values = { foo: 1 }
 
 function impureFunction(items) {
-  const bar = 1;
+	const bar = 1
 
-  items.foo = items.a * bar + 2;
+	items.foo = items.a * bar + 2
 
-  return items.a;
+	return items.a
 }
 
-const c = impureFunction(values);
+const c = impureFunction(values)
 
 // good
-var values = { foo: 1 };
+var values = { foo: 1 }
 
 function pureFunction(foo) {
-  var bar = 1;
+	var bar = 1
 
-  foo = foo * bar + 2;
+	foo = foo * bar + 2
 
-  return foo;
+	return foo
 }
 
-var c = pureFunction(values.foo);
+var c = pureFunction(values.foo)
 ```
 
 ## Export constants as primitives
@@ -321,16 +322,16 @@ Only export the constants as a collection (array, or object) when there is a nee
 ```javascript
 // bad
 export const VARIANT = {
-  WARNING: 'warning',
-  ERROR: 'error',
-};
+	WARNING: 'warning',
+	ERROR: 'error',
+}
 
 // good
-export const VARIANT_WARNING = 'warning';
-export const VARIANT_ERROR = 'error';
+export const VARIANT_WARNING = 'warning'
+export const VARIANT_ERROR = 'error'
 
 // good, if the constants need to be iterated over
-export const VARIANTS = [VARIANT_WARNING, VARIANT_ERROR];
+export const VARIANTS = [VARIANT_WARNING, VARIANT_ERROR]
 ```
 
 ## Error handling

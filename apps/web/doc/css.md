@@ -1,4 +1,5 @@
 ---
+
 stage: none
 group: unassigned
 info: Any user with at least the Maintainer role can merge updates to this content.
@@ -98,12 +99,12 @@ extension. For HAML and custom `*-class` prop support these are the recommended 
 
 ```json
 {
-  "tailwindCSS.experimental.classRegex": [
-    ["class: [\"|']+([^\"|']*)[\"|']+", "([a-zA-Z0-9\\-:!/]+)"],
-    ["(\\.[\\w\\-.]+)[\\n\\=\\{\\s]", "([\\w\\-]+)"],
-    ["[a-z]+-class(?:es)?=\"([^'\"]*)\""]
-  ],
-  "tailwindCSS.emmetCompletions": true
+	"tailwindCSS.experimental.classRegex": [
+		["class: [\"|']+([^\"|']*)[\"|']+", "([a-zA-Z0-9\\-:!/]+)"],
+		["(\\.[\\w\\-.]+)[\\n\\=\\{\\s]", "([\\w\\-]+)"],
+		["[a-z]+-class(?:es)?=\"([^'\"]*)\""]
+	],
+	"tailwindCSS.emmetCompletions": true
 }
 ```
 
@@ -114,17 +115,17 @@ For full HAML and custom `*-class` prop support these are the recommended update
 
 ```json
 {
-  "includeLanguages": {
-    "haml": "html"
-  },
-  "emmetCompletions": true,
-  "experimental": {
-    "classRegex": [
-      ["class: [\"|']+([^\"|']*)[\"|']+", "([a-zA-Z0-9\\-:!/]+)"],
-      ["(\\.[\\w\\-.]+)[\\n\\=\\{\\s]", "([\\w\\-]+)"],
-      ["[a-z]+-class(?:es)?=\"([^'\"]*)\""]
-    ]
-  }
+	"includeLanguages": {
+		"haml": "html"
+	},
+	"emmetCompletions": true,
+	"experimental": {
+		"classRegex": [
+			["class: [\"|']+([^\"|']*)[\"|']+", "([a-zA-Z0-9\\-:!/]+)"],
+			["(\\.[\\w\\-.]+)[\\n\\=\\{\\s]", "([\\w\\-]+)"],
+			["[a-z]+-class(?:es)?=\"([^'\"]*)\""]
+		]
+	}
 }
 ```
 
@@ -343,17 +344,17 @@ CSS classes should use the `lowercase-hyphenated` format rather than
 ```scss
 // Bad
 .class_name {
-  color: #fff;
+	color: #fff;
 }
 
 // Bad
 .className {
-  color: #fff;
+	color: #fff;
 }
 
 // Good
 .class-name {
-  color: #fff;
+	color: #fff;
 }
 ```
 
@@ -363,14 +364,14 @@ searching for usages harder, and provides limited benefit.
 ```scss
 // Bad
 .class {
-  &-name {
-    color: orange;
-  }
+	&-name {
+		color: orange;
+	}
 }
 
 // Good
 .class-name {
-  color: #fff;
+	color: #fff;
 }
 ```
 
@@ -381,12 +382,12 @@ unintended elements in the hierarchy.
 ```scss
 // Bad
 ul {
-  color: #fff;
+	color: #fff;
 }
 
 // Good
 .class-name {
-  color: #fff;
+	color: #fff;
 }
 
 // Best
@@ -400,12 +401,12 @@ the page.
 ```scss
 // Bad
 #my-element {
-  padding: 0;
+	padding: 0;
 }
 
 // Good
 .my-element {
-  padding: 0;
+	padding: 0;
 }
 ```
 
@@ -417,26 +418,26 @@ makes things harder to override.
 ```scss
 // Bad
 .component-container {
-  .component-header {
-    /* ... */
-  }
+	.component-header {
+		/* ... */
+	}
 
-  .component-body {
-    /* ... */
-  }
+	.component-body {
+		/* ... */
+	}
 }
 
 // Good
 .component-container {
-  /* ... */
+	/* ... */
 }
 
 .component-header {
-  /* ... */
+	/* ... */
 }
 
 .component-body {
-  /* ... */
+	/* ... */
 }
 ```
 
@@ -457,12 +458,12 @@ maintainability and reduces the risk of bugs.
 ```scss
 // ❌ Bad
 .meli-mb-5 {
-  /* ... */
+	/* ... */
 }
 
 // ✅ Good
 .component-header {
-  /* ... */
+	/* ... */
 }
 ```
 
@@ -476,13 +477,13 @@ to different elements, without breaking styling.
 
 ```scss
 // Bad
-&[aria-expanded='false'] &-header {
-  border-bottom: 0;
+&[aria-expanded="false"] &-header {
+	border-bottom: 0;
 }
 
 // Good
 &.is-collapsed &-header {
-  border-bottom: 0;
+	border-bottom: 0;
 }
 ```
 

@@ -22,8 +22,7 @@ import {
 	SelectValue,
 } from '@workspace/ui/components/select'
 import * as React from 'react'
-import { Label, Pie, PieChart, Sector } from 'recharts'
-import type { PieSectorDataItem } from 'recharts/types/polar/Pie.js'
+import { Label, Pie, PieChart, type PieSectorShapeProps, Sector } from 'recharts'
 
 const desktopData = [
 	{ month: 'january', desktop: 186, fill: 'var(--color-january)' },
@@ -136,17 +135,20 @@ export function PieChartInteractive({
 							nameKey="month"
 							innerRadius={60}
 							strokeWidth={5}
-							activeIndex={activeIndex}
-							activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
-								<g>
-									<Sector {...props} outerRadius={outerRadius + 10} />
-									<Sector
-										{...props}
-										outerRadius={outerRadius + 25}
-										innerRadius={outerRadius + 12}
-									/>
-								</g>
-							)}
+							shape={({ outerRadius = 0, index, ...props }: PieSectorShapeProps) =>
+								index === activeIndex ? (
+									<g>
+										<Sector {...props} outerRadius={outerRadius + 10} />
+										<Sector
+											{...props}
+											outerRadius={outerRadius + 25}
+											innerRadius={outerRadius + 12}
+										/>
+									</g>
+								) : (
+									<Sector {...props} outerRadius={outerRadius} />
+								)
+							}
 						>
 							<Label
 								content={({ viewBox }) => {
