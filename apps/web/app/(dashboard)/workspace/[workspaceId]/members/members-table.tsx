@@ -2,11 +2,14 @@
 
 import {
 	type ColumnDef,
+	createSortedRowModel,
 	flexRender,
-	getCoreRowModel,
-	getSortedRowModel,
+	rowSortingFeature,
 	type SortingState,
-	useReactTable,
+	sortFn_alphanumeric,
+	sortFn_text,
+	tableFeatures,
+	useTable,
 } from '@tanstack/react-table'
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar'
 import {
@@ -29,7 +32,13 @@ type Member = WorkspaceMember & {
 	user: Pick<User, 'id' | 'name' | 'email'>
 }
 
-const columns: ColumnDef<Member>[] = [
+const membersTableFeatures = tableFeatures({
+	rowSortingFeature,
+	sortedRowModel: createSortedRowModel(),
+	sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+})
+
+const columns: ColumnDef<typeof membersTableFeatures, Member>[] = [
 	{
 		id: 'name',
 		accessorFn: (row) => row.user.name ?? row.user.email,
@@ -95,23 +104,19 @@ const columns: ColumnDef<Member>[] = [
 	{
 		accessorKey: 'role',
 		header: 'Role',
-		cell: ({ getValue }) => {
-			const role = getValue<string>()
-			return <span className="text-xs capitalize">{role}</span>
-		},
+		cell: ({ row }) => <span className="text-xs capitalize">{row.original.role}</span>,
 	},
 ]
 
 export function MembersTable({ members }: { members: Member[] }) {
 	const [sorting, setSorting] = useState<SortingState>([])
 
-	const table = useReactTable({
+	const table = useTable({
+		features: membersTableFeatures,
 		data: members,
 		columns,
 		state: { sorting },
 		onSortingChange: setSorting,
-		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
 	})
 
 	return (
@@ -134,7 +139,7 @@ export function MembersTable({ members }: { members: Member[] }) {
 				<TableBody>
 					{table.getRowModel().rows.map((row) => (
 						<TableRow key={row.id}>
-							{row.getVisibleCells().map((cell) => (
+							{row.getAllCells().map((cell) => (
 								<TableCell key={cell.id}>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</TableCell>

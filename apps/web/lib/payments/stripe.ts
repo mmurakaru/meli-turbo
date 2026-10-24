@@ -8,20 +8,14 @@ import {
 } from '@/lib/db/queries'
 import type { Workspace } from '@/lib/db/schema'
 
-const STRIPE_API_VERSION = '2026-02-25.clover'
+const STRIPE_API_VERSION = '2026-09-30.endive'
 
 let stripeClient: Stripe | undefined
 
-/** True when STRIPE_SECRET_KEY is set. Billing UI degrades gracefully when it isn't. */
 export function isStripeConfigured(): boolean {
 	return Boolean(env.STRIPE_SECRET_KEY)
 }
 
-/**
- * Lazily creates the Stripe client on first use, so importing this module (e.g. while
- * `next build` collects pages) never needs a Stripe key. Throws a clear error when a
- * Stripe API call is attempted without STRIPE_SECRET_KEY.
- */
 export function getStripe(): Stripe {
 	const secretKey = env.STRIPE_SECRET_KEY
 	if (!secretKey) {
@@ -45,7 +39,6 @@ export async function createCheckoutSession({
 	}
 
 	const session = await getStripe().checkout.sessions.create({
-		payment_method_types: ['card'],
 		line_items: [
 			{
 				price: priceId,
@@ -63,8 +56,10 @@ export async function createCheckoutSession({
 		},
 	})
 
-	// biome-ignore lint/style/noNonNullAssertion: todo
-	redirect(session.url!)
+	if (!session.url) {
+		throw new Error('Stripe checkout session did not return a redirect URL.')
+	}
+	redirect(session.url)
 }
 
 export async function createCustomerPortalSession(workspace: Workspace) {
@@ -134,7 +129,6 @@ export async function handleSubscriptionChange(subscription: Stripe.Subscription
 	const workspace = await getWorkspaceByStripeCustomerId(customerId)
 
 	if (!workspace) {
-		// console.error('Workspace not found for Stripe customer:', customerId)
 		return
 	}
 
@@ -191,11 +185,6 @@ export async function getStripeProducts() {
 export type StripePrice = Awaited<ReturnType<typeof getStripePrices>>[number]
 export type StripeProduct = Awaited<ReturnType<typeof getStripeProducts>>[number]
 
-/**
- * Prices and products for the pricing page. Never throws: when Stripe is unconfigured
- * or unreachable (e.g. an invalid key during `next build`), it returns empty lists so
- * the page falls back to its built-in plan defaults instead of crashing.
- */
 export async function getPricingData(): Promise<{
 	prices: StripePrice[]
 	products: StripeProduct[]

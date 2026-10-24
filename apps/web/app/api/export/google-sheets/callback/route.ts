@@ -14,12 +14,18 @@ export async function GET(request: Request) {
 	const codeVerifier = cookieStore.get('export_code_verifier')?.value
 	const exportPendingRaw = cookieStore.get('export_pending')?.value
 
-	// Clear export cookies regardless of outcome
 	cookieStore.delete('export_oauth_state')
 	cookieStore.delete('export_code_verifier')
 	cookieStore.delete('export_pending')
 
-	if (!code || !state || !storedState || !codeVerifier || state !== storedState || !exportPendingRaw) {
+	if (
+		!code ||
+		!state ||
+		!storedState ||
+		!codeVerifier ||
+		state !== storedState ||
+		!exportPendingRaw
+	) {
 		return NextResponse.redirect(`${origin}/create?error=export_failed`)
 	}
 
@@ -50,7 +56,6 @@ export async function GET(request: Request) {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		})
 
-		// Build values: header row + data rows
 		const headerRow = columns.map((col) => col.label)
 		const dataRows = rows.map((row) => columns.map((col) => row[col.id] ?? ''))
 		const values = [headerRow, ...dataRows]

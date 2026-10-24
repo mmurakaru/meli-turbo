@@ -53,7 +53,7 @@ describe('lib/payments/stripe', () => {
 		expect(getStripe()).toBe(getStripe())
 		expect(stripeConstructor).toHaveBeenCalledTimes(1)
 		expect(stripeConstructor).toHaveBeenCalledWith('sk_test_123', {
-			apiVersion: '2026-02-25.clover',
+			apiVersion: '2026-09-30.endive',
 		})
 	})
 

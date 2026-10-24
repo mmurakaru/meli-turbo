@@ -11,7 +11,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'project-tracker',
 		title: 'Project Tracker',
-		prompt: 'Create a project tracker with task name, assignee, status, priority, and due date columns',
+		prompt:
+			'Create a project tracker with task name, assignee, status, priority, and due date columns',
 		category: 'business',
 		previewColumns: [
 			{ id: 'c1', label: 'Task' },
@@ -29,7 +30,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'crm',
 		title: 'CRM Pipeline',
-		prompt: 'Create a CRM pipeline with company name, contact, deal stage, deal value, and close date',
+		prompt:
+			'Create a CRM pipeline with company name, contact, deal stage, deal value, and close date',
 		category: 'business',
 		previewColumns: [
 			{ id: 'c1', label: 'Company' },
@@ -57,7 +59,13 @@ export const TEMPLATES: Template[] = [
 			{ id: 'c5', label: 'Start Date' },
 		],
 		previewRows: [
-			{ c1: 'Alice Johnson', c2: 'Engineering', c3: 'Senior Dev', c4: 'alice@co.com', c5: 'Jan 2022' },
+			{
+				c1: 'Alice Johnson',
+				c2: 'Engineering',
+				c3: 'Senior Dev',
+				c4: 'alice@co.com',
+				c5: 'Jan 2022',
+			},
 			{ c1: 'Bob Williams', c2: 'Marketing', c3: 'Manager', c4: 'bob@co.com', c5: 'Mar 2021' },
 			{ c1: 'Carol Davis', c2: 'Design', c3: 'Lead', c4: 'carol@co.com', c5: 'Jun 2023' },
 		],
@@ -65,7 +73,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'budget-tracker',
 		title: 'Budget Tracker',
-		prompt: 'Create a monthly budget tracker with category, budgeted amount, actual spend, and variance',
+		prompt:
+			'Create a monthly budget tracker with category, budgeted amount, actual spend, and variance',
 		category: 'finance',
 		previewColumns: [
 			{ id: 'c1', label: 'Category' },
@@ -99,7 +108,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'job-applications',
 		title: 'Job Application Tracker',
-		prompt: 'Create a job application tracker with company, role, application date, status, and next steps',
+		prompt:
+			'Create a job application tracker with company, role, application date, status, and next steps',
 		category: 'personal',
 		previewColumns: [
 			{ id: 'c1', label: 'Company' },
@@ -116,7 +126,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'invoice-tracker',
 		title: 'Invoice Tracker',
-		prompt: 'Create an invoice tracker with client name, invoice number, amount, due date, and payment status',
+		prompt:
+			'Create an invoice tracker with client name, invoice number, amount, due date, and payment status',
 		category: 'finance',
 		previewColumns: [
 			{ id: 'c1', label: 'Client' },
@@ -134,7 +145,8 @@ export const TEMPLATES: Template[] = [
 	{
 		id: 'onboarding',
 		title: 'Onboarding Checklist',
-		prompt: 'Create an employee onboarding checklist with task, owner, due date, and completion status',
+		prompt:
+			'Create an employee onboarding checklist with task, owner, due date, and completion status',
 		category: 'hr',
 		previewColumns: [
 			{ id: 'c1', label: 'Task' },

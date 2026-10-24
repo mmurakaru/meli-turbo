@@ -1,4 +1,5 @@
 ---
+
 stage: none
 group: unassigned
 info: Any user with at least the Maintainer role can merge updates to this content.
@@ -50,23 +51,23 @@ libraries. This appears convenient at first. However, opting for a well-defined 
 ```typescript
 // Bad :(
 function handleMessage(data: any) {
-  console.log("We don't know what data is. This could blow up!", data.special.stuff);
+	console.log("We don't know what data is. This could blow up!", data.special.stuff)
 }
 
 // Good :)
 function handleMessage(data: unknown) {
-  console.log("Sometimes it's okay that it remains unknown.", JSON.stringify(data));
+	console.log("Sometimes it's okay that it remains unknown.", JSON.stringify(data))
 }
 
 // Also good :)
 function isFooMessage(data: unknown): data is { foo: string } {
-  return typeof data === 'object' && data && 'foo' in data;
+	return typeof data === 'object' && data && 'foo' in data
 }
 
 function handleMessage(data: unknown) {
-  if (isFooMessage(data)) {
-    console.log("We know it's a foo now. This is safe!", data.foo);
-  }
+	if (isFooMessage(data)) {
+		console.log("We know it's a foo now. This is safe!", data.foo)
+	}
 }
 ```
 
@@ -80,24 +81,24 @@ Type casting explicitly circumvents type-safety. Consider using
 ```typescript
 // Bad :(
 function handler(data: unknown) {
-  console.log((data as StuffContainer).stuff);
+	console.log((data as StuffContainer).stuff)
 }
 
 // Good :)
 function hasStuff(data: unknown): data is StuffContainer {
-  if (data && typeof data === 'object') {
-    return 'stuff' in data;
-  }
+	if (data && typeof data === 'object') {
+		return 'stuff' in data
+	}
 
-  return false;
+	return false
 }
 
 function handler(data: unknown) {
-  if (hasStuff(data)) {
-    // No casting needed :)
-    console.log(data.stuff);
-  }
-  throw new Error('Expected data to have stuff. Catastrophic consequences might follow...');
+	if (hasStuff(data)) {
+		// No casting needed :)
+		console.log(data.stuff)
+	}
+	throw new Error('Expected data to have stuff. Catastrophic consequences might follow...')
 }
 ```
 
@@ -116,12 +117,12 @@ so using `type` would restrict the usability of the structure.
 ```typescript
 // Bad :(
 type Fooer = {
-  foo: () => string;
-};
+	foo: () => string
+}
 
 // Good :)
 interface Fooer {
-  foo: () => string;
+	foo: () => string
 }
 ```
 
@@ -158,37 +159,37 @@ type PartialConfig = Partial<Config>;
 ```typescript
 // Bad :(
 interface Foo {
-  type: string;
+	type: string
 }
 interface FooBar extends Foo {
-  bar: string;
+	bar: string
 }
 interface FooZed extends Foo {
-  zed: string;
+	zed: string
 }
 
 const doThing = (foo: Foo) => {
-  if (foo.type === 'bar') {
-    // Casting bad :(
-    console.log((foo as FooBar).bar);
-  }
-};
+	if (foo.type === 'bar') {
+		// Casting bad :(
+		console.log((foo as FooBar).bar)
+	}
+}
 
 // Good :)
 interface FooBar {
-  type: 'bar';
-  bar: string;
+	type: 'bar'
+	bar: string
 }
 interface FooZed {
-  type: 'zed';
-  zed: string;
+	type: 'zed'
+	zed: string
 }
-type Foo = FooBar | FooZed;
+type Foo = FooBar | FooZed
 
 const doThing = (foo: Foo) => {
-  if (foo.type === 'bar') {
-    // No casting needed :) - TS knows we are FooBar now
-    console.log(foo.bar);
-  }
-};
+	if (foo.type === 'bar') {
+		// No casting needed :) - TS knows we are FooBar now
+		console.log(foo.bar)
+	}
+}
 ```

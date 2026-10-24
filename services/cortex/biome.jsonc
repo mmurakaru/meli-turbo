@@ -1,23 +1,23 @@
 {
-    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-    "root": false,
-    "extends": [
-        "./node_modules/@lokalise/biome-config/configs/biome-base.jsonc",
-        "./node_modules/@lokalise/biome-config/configs/biome-esm.jsonc"
-    ],
-    "linter": {
-        "rules": {}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": false,
+  "extends": [
+    "./node_modules/@lokalise/biome-config/configs/biome-base.jsonc",
+    "./node_modules/@lokalise/biome-config/configs/biome-esm.jsonc"
+  ],
+  "linter": {
+    "rules": {}
+  },
+  "overrides": [
+    {
+      // Module index files are the intended public boundary (see docs/adr/0002).
+      "includes": ["src/modules/*/index.ts"],
+      "linter": { "rules": { "performance": { "noBarrelFile": "off" } } }
     },
-    "overrides": [
-        {
-            // Module index files are the intended public boundary (see docs/adr/0002).
-            "includes": ["src/modules/*/index.ts"],
-            "linter": { "rules": { "performance": { "noBarrelFile": "off" } } }
-        },
-        {
-            // CLI scripts print to stdout.
-            "includes": ["scripts/**"],
-            "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
-        }
-    ]
+    {
+      // CLI scripts print to stdout.
+      "includes": ["scripts/**"],
+      "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+    }
+  ]
 }

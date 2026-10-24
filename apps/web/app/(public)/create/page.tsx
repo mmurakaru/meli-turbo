@@ -1,6 +1,6 @@
 'use client'
 
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { type ColumnDef, flexRender, tableFeatures, useTable } from '@tanstack/react-table'
 import { Extension } from '@tiptap/core'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
@@ -16,6 +16,8 @@ import { createDocument } from '@/app/(dashboard)/actions'
 import { downloadCsv, downloadXlsx } from '@/lib/export-table'
 import { fetchJobStatus, pollForJob } from '@/lib/poll-for-job'
 import { TemplateGallery } from './_components/TemplateGallery'
+
+const createTableFeatures = tableFeatures({})
 
 type TableColumn = {
 	id: string
@@ -482,7 +484,7 @@ export default function CreatePage() {
 		return () => window.removeEventListener('keydown', handleKeyDown, true)
 	}, [editor, isSheetSelected, isSheetVisible])
 
-	const columns = useMemo<ColumnDef<TableRow>[]>(
+	const columns = useMemo<ColumnDef<typeof createTableFeatures, TableRow>[]>(
 		() =>
 			table.columns.map((column) => ({
 				accessorKey: column.id,
@@ -498,10 +500,10 @@ export default function CreatePage() {
 		[table.columns, updateCell],
 	)
 
-	const tableInstance = useReactTable({
+	const tableInstance = useTable({
+		features: createTableFeatures,
 		data: table.rows,
 		columns,
-		getCoreRowModel: getCoreRowModel(),
 	})
 
 	return (
@@ -735,7 +737,7 @@ export default function CreatePage() {
 														<tbody>
 															{tableInstance.getRowModel().rows.map((row) => (
 																<tr key={row.id} className="even:bg-gray-50">
-																	{row.getVisibleCells().map((cell) => (
+																	{row.getAllCells().map((cell) => (
 																		<td key={cell.id} className="border-b px-2 py-2">
 																			{flexRender(cell.column.columnDef.cell, cell.getContext())}
 																		</td>

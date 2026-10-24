@@ -69,14 +69,14 @@ Copy the example file and fill in your values:
 cp apps/web/.env.local.example apps/web/.env.local
 ```
 
-| Variable | How to get it |
-|---|---|
-| `POSTGRES_URL` | `postgres://postgres:postgres@localhost:54322/postgres` for local Docker |
-| `SESSION_SECRET` | `openssl rand -base64 32` |
+| Variable                                    | How to get it                                                                                                                                                      |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `POSTGRES_URL`                              | `postgres://postgres:postgres@localhost:54322/postgres` for local Docker                                                                                           |
+| `SESSION_SECRET`                            | `openssl rand -base64 32`                                                                                                                                          |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | [console.cloud.google.com](https://console.cloud.google.com) — create an OAuth 2.0 client, add `http://localhost:3000/auth/callback` as an authorized redirect URI |
-| `STRIPE_SECRET_KEY` | [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys) |
-| `STRIPE_WEBHOOK_SECRET` | Printed by `stripe listen` in step 4 |
-| `BASE_URL` | `http://localhost:3000` for local development |
+| `STRIPE_SECRET_KEY`                         | [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys)                                                                                               |
+| `STRIPE_WEBHOOK_SECRET`                     | Printed by `stripe listen` in step 4                                                                                                                               |
+| `BASE_URL`                                  | `http://localhost:3000` for local development                                                                                                                      |
 
 > `NODE_ENV` is set automatically by Next.js — do not set it manually.
 
@@ -123,12 +123,12 @@ docker compose down
 
 ## Database
 
-| Script | Description |
-|---|---|
-| `pnpm db:generate` | Generate a new migration from schema changes |
-| `pnpm db:migrate` | Apply pending migrations |
-| `pnpm db:seed` | Seed a test user and team |
-| `pnpm db:studio` | Open Drizzle Studio |
+| Script              | Description                                  |
+| ------------------- | -------------------------------------------- |
+| `pnpm db:generate`  | Generate a new migration from schema changes |
+| `pnpm db:migrate`   | Apply pending migrations                     |
+| `pnpm db:seed`      | Seed a test user and team                    |
+| `pnpm db:studio`    | Open Drizzle Studio                          |
 | `pnpm stripe:setup` | Create Stripe products and prices (run once) |
 
 See [Drizzle migration docs](https://orm.drizzle.team/docs/migrations) for more options.
@@ -181,14 +181,14 @@ Use the following Stripe test card:
 2. Import the repository in Vercel and set the root directory to `apps/web`.
 3. Add the following environment variables:
 
-| Variable | Notes |
-|---|---|
-| `POSTGRES_URL` | Production database connection string |
-| `SESSION_SECRET` | `openssl rand -base64 32` |
+| Variable                                    | Notes                                                    |
+| ------------------------------------------- | -------------------------------------------------------- |
+| `POSTGRES_URL`                              | Production database connection string                    |
+| `SESSION_SECRET`                            | `openssl rand -base64 32`                                |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Add your production domain as an authorized redirect URI |
-| `STRIPE_SECRET_KEY` | Use the live key in production |
-| `STRIPE_WEBHOOK_SECRET` | From the production webhook above |
-| `BASE_URL` | e.g. `https://yourdomain.com` |
+| `STRIPE_SECRET_KEY`                         | Use the live key in production                           |
+| `STRIPE_WEBHOOK_SECRET`                     | From the production webhook above                        |
+| `BASE_URL`                                  | e.g. `https://yourdomain.com`                            |
 
 ## Testing the npm package locally
 

@@ -1,97 +1,97 @@
 {
-    "title": "Cortex",
-    "uid": "cortex-overview",
-    "schemaVersion": 38,
-    "version": 1,
-    "refresh": "15s",
-    "time": { "from": "now-30m", "to": "now" },
-    "panels": [
+  "title": "Cortex",
+  "uid": "cortex-overview",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "15s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "HTTP Request Rate (req/s)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
         {
-            "id": 1,
-            "title": "HTTP Request Rate (req/s)",
-            "type": "timeseries",
-            "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
-            "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "targets": [
-                {
-                    "expr": "sum by (route, method) (rate(http_request_duration_seconds_count[1m]))",
-                    "legendFormat": "{{method}} {{route}}"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "reqps",
-                    "custom": { "lineWidth": 2 }
-                }
-            }
-        },
-        {
-            "id": 2,
-            "title": "HTTP P95 Latency (s)",
-            "type": "timeseries",
-            "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
-            "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "targets": [
-                {
-                    "expr": "histogram_quantile(0.95, sum by (le, route, method) (rate(http_request_duration_seconds_bucket[1m])))",
-                    "legendFormat": "{{method}} {{route}}"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "s",
-                    "custom": { "lineWidth": 2 }
-                }
-            }
-        },
-        {
-            "id": 3,
-            "title": "Node.js Heap Used",
-            "type": "timeseries",
-            "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
-            "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "targets": [
-                {
-                    "expr": "nodejs_heap_size_used_bytes",
-                    "legendFormat": "heap used"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "bytes",
-                    "custom": { "lineWidth": 2 }
-                }
-            }
-        },
-        {
-            "id": 4,
-            "title": "HTTP Error Rate (4xx + 5xx)",
-            "type": "timeseries",
-            "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
-            "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "targets": [
-                {
-                    "expr": "sum by (route, status_code) (rate(http_request_duration_seconds_count{status_code=~\"4..|5..\"}[1m]))",
-                    "legendFormat": "{{status_code}} {{route}}"
-                }
-            ],
-            "fieldConfig": {
-                "defaults": {
-                    "unit": "reqps",
-                    "custom": { "lineWidth": 2 }
-                }
-            }
+          "expr": "sum by (route, method) (rate(http_request_duration_seconds_count[1m]))",
+          "legendFormat": "{{method}} {{route}}"
         }
-    ],
-    "templating": {
-        "list": [
-            {
-                "name": "datasource",
-                "type": "datasource",
-                "query": "prometheus",
-                "hide": 0,
-                "label": "Datasource"
-            }
-        ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "HTTP P95 Latency (s)",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, route, method) (rate(http_request_duration_seconds_bucket[1m])))",
+          "legendFormat": "{{method}} {{route}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Node.js Heap Used",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        {
+          "expr": "nodejs_heap_size_used_bytes",
+          "legendFormat": "heap used"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "HTTP Error Rate (4xx + 5xx)",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        {
+          "expr": "sum by (route, status_code) (rate(http_request_duration_seconds_count{status_code=~\"4..|5..\"}[1m]))",
+          "legendFormat": "{{status_code}} {{route}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": { "lineWidth": 2 }
+        }
+      }
     }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "query": "prometheus",
+        "hide": 0,
+        "label": "Datasource"
+      }
+    ]
+  }
 }
