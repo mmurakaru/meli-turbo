@@ -13,7 +13,7 @@
 		"format-and-lint:staged": "biome check --write --no-errors-on-unmatched --staged"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.6.3",
+		"@biomejs/biome": "^2.6.4",
 		"@changesets/cli": "^3.0.3",
 		"husky": "^9.1.7",
 		"turbo": "^2.11.10",
@@ -25,7 +25,9 @@
 			"@types/react": "19.3.0",
 			"@types/react-dom": "19.3.0",
 			"protobufjs": ">=8.6.0",
-			"postcss@<8.5.10": ">=8.5.10"
+			"postcss@<8.5.10": ">=8.5.10",
+			"valibot@<1.4.2": ">=1.4.2",
+			"@esbuild-kit/core-utils>esbuild": "^0.25.12"
 		}
 	},
 	"engines": {
