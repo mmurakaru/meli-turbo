@@ -13,7 +13,7 @@
 		"format-and-lint:staged": "biome check --write --no-errors-on-unmatched --staged"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.6.3",
+		"@biomejs/biome": "^2.6.4",
 		"@changesets/cli": "^3.0.3",
 		"husky": "^9.1.7",
 		"turbo": "^2.11.10",

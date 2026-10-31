@@ -8,7 +8,7 @@ import {
 } from '@/lib/db/queries'
 import type { Workspace } from '@/lib/db/schema'
 
-const STRIPE_API_VERSION = '2026-09-30.endive'
+const STRIPE_API_VERSION = '2026-10-28.endive'
 
 let stripeClient: Stripe | undefined
 
