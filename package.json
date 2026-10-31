@@ -26,7 +26,8 @@
 			"@types/react-dom": "19.3.0",
 			"protobufjs": ">=8.6.0",
 			"postcss@<8.5.10": ">=8.5.10",
-			"valibot@<1.4.2": ">=1.4.2"
+			"valibot@<1.4.2": ">=1.4.2",
+			"@esbuild-kit/core-utils>esbuild": "^0.25.12"
 		}
 	},
 	"engines": {
