@@ -43,7 +43,7 @@
 		"jose": "^6.2.14",
 		"lucide-react": "^1.66.0",
 		"meli.js": "1.0.10-alpha",
-		"next": "16.4.3",
+		"next": "16.4.5",
 		"papaparse": "^5.7.0",
 		"postcss": "^8.5.32",
 		"postgres": "^4.0.0",
