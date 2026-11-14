@@ -62,7 +62,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
     "@effect/vitest": "4.1.1",
-    "@lokalise/biome-config": "^4.0.0",
+    "@lokalise/biome-config": "^5.0.0",
     "@lokalise/tsconfig": "^5.0.0",
     "@types/node": "^26.6.6",
     "@types/pg": "8.23.1",

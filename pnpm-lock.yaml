@@ -382,8 +382,8 @@ importers:
         specifier: 4.1.1
         version: 4.1.1(effect@4.1.1)(vitest@5.0.5)
       '@lokalise/biome-config':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.0
+        version: 5.0.0(@biomejs/biome@2.6.4)
       '@lokalise/tsconfig':
         specifier: ^5.0.0
         version: 5.0.0
@@ -1279,8 +1279,10 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lokalise/biome-config@4.0.0':
-    resolution: {integrity: sha512-ShVhPJpEiXcEu+yhusmg6053YP4oHhMa5/Lzm9gPkIElpmGwsnoaclaKPOa9uMZYz2UfynRD3J3PKwts/nl46Q==}
+  '@lokalise/biome-config@5.0.0':
+    resolution: {integrity: sha512-ZtK58OBgMnSV0Ix5qxBW/csTiZNEMEplEu0WBpemStaWue1bc5bLCnoWqbZE6598Z1vGlBnqq83TWGlw6T5NMA==}
+    peerDependencies:
+      '@biomejs/biome': ^2.6.4
 
   '@lokalise/tsconfig@5.0.0':
     resolution: {integrity: sha512-nAE106uzG1+6ldEdmbFVIwkFTszkOFIxzCPaZhwqoChcXizvcCPuPGTE+PrlPiE6GhfAzlspLvmVwvzdaNimdw==}
@@ -4424,6 +4426,7 @@ packages:
 
   tldts-core@7.4.20:
     resolution: {integrity: sha512-C630TWXZCZmLq0F2bW4QqwnaaxCQ/svpAqvJwnC4JvgEM5ohhBnGsEzTLSOXcN+xjz+kEaHS5uoWIw2klnqd0A==}
+    deprecated: Partial release, see https://github.com/remusao/tldts/issues/2735. Use >=7.4.22.
 
   tldts@7.4.19:
     resolution: {integrity: sha512-48dH6aSpQnpbzDUc4vIQZ1VjB8tkK+e8c1yx05/SZK+rkssgjEOlxDd/yU8/a4vGYQ9vRgJr9dwMq9TJ0b3X2Q==}
@@ -5327,7 +5330,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@lokalise/biome-config@4.0.0': {}
+  '@lokalise/biome-config@5.0.0(@biomejs/biome@2.6.4)':
+    dependencies:
+      '@biomejs/biome': 2.6.4
 
   '@lokalise/tsconfig@5.0.0': {}
 
