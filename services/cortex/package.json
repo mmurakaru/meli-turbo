@@ -83,9 +83,9 @@
     "@esbuild/linux-arm64": "^0.28.2",
     "@esbuild/linux-x64": "^0.28.2",
     "@esbuild/win32-x64": "^0.28.2",
-    "@rollup/rollup-darwin-arm64": "^4.67.2",
-    "@rollup/rollup-linux-arm64-gnu": "^4.67.2",
-    "@rollup/rollup-linux-x64-gnu": "^4.67.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.67.2"
+    "@rollup/rollup-darwin-arm64": "^4.68.0",
+    "@rollup/rollup-linux-arm64-gnu": "^4.68.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.68.0",
+    "@rollup/rollup-win32-x64-msvc": "^4.68.0"
   }
 }
