@@ -60,7 +60,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.6",
     "@effect/vitest": "4.1.1",
     "@lokalise/biome-config": "^4.0.0",
     "@lokalise/tsconfig": "^5.0.0",
@@ -75,10 +75,10 @@
     "vitest": "^5.0.5"
   },
   "optionalDependencies": {
-    "@biomejs/cli-darwin-arm64": "^2.6.4",
-    "@biomejs/cli-linux-arm64": "^2.6.4",
-    "@biomejs/cli-linux-x64": "^2.6.4",
-    "@biomejs/cli-win32-x64": "^2.6.4",
+    "@biomejs/cli-darwin-arm64": "^2.6.6",
+    "@biomejs/cli-linux-arm64": "^2.6.6",
+    "@biomejs/cli-linux-x64": "^2.6.6",
+    "@biomejs/cli-win32-x64": "^2.6.6",
     "@esbuild/darwin-arm64": "^0.28.2",
     "@esbuild/linux-arm64": "^0.28.2",
     "@esbuild/linux-x64": "^0.28.2",
